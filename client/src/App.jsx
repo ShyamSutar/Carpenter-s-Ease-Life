@@ -1,6 +1,12 @@
+import Header from "./components/defaultComponents/Header";
+import Content from "./components/defaultComponents/Content";
+
 const App = () => {
   return (
-    <div>Hello World</div>
+    <>
+      <Header />
+      <Content/>
+    </>
   );
 };
 
