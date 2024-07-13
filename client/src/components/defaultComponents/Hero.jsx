@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 const Hero = () => {
   return (
     <div className="text-center h-screen flex justify-center items-center gap-4">
@@ -7,8 +9,12 @@ const Hero = () => {
               </div>
               <p className="mt-8 text-lg">Your one-stop solution for all carpentry needs. Manage your projects efficiently with our innovative tools and features.</p>
               <div className="flex justify-center gap-2 mt-8">
-                <button type="button" className="focus:outline-none text-white bg-myRed hover:bg-red-700 font-medium rounded text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Get Started</button>
-                <button type="button" className="focus:outline-none text-myRed border border-myRed hover:bg-gray-400 hover:border-gray-400 hover:text-white font-medium rounded text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 transition-all">Get Started</button>
+                <Link to='/register'>
+                  <button type="button" className="focus:outline-none text-white bg-myRed hover:bg-red-700 font-medium rounded text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Register</button>
+                </Link>
+                <Link to='/login'>
+                  <button type="button" className="focus:outline-none text-myRed border border-myRed hover:bg-gray-400 hover:border-gray-400 hover:text-white font-medium rounded text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 transition-all">Login</button>
+                </Link>
               </div>
             </div>
         </div>
