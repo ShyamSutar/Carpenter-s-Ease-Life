@@ -1,8 +1,6 @@
-import { useMediaQuery } from 'react-responsive';
+import { useMediaQuery } from "react-responsive";
 
 const Services = () => {
-  const isDesktop = useMediaQuery({ minWidth: 1024 });
-  const isTablet = useMediaQuery({ minWidth: 640, maxWidth: 1023 });
   const isMobile = useMediaQuery({ maxWidth: 639 });
 
   // Determine the image source based on the current screen size
@@ -11,7 +9,7 @@ const Services = () => {
   if (isMobile) {
     imageSrc = "/images/carpenter2Mobile.jpg";
     imageSrc2 = "/images/carpenter1Mobile.svg";
-  }else{
+  } else {
     imageSrc = "/images/carpenter2.jpg";
     imageSrc2 = "/images/carpenter1.svg";
   }
@@ -45,7 +43,9 @@ const Services = () => {
               </div>
 
               <div>
-                <h3 className="text-2xl md:text-3xl mt-4">Inventory Management</h3>
+                <h3 className="text-2xl md:text-3xl mt-4">
+                  Inventory Management
+                </h3>
                 <p className="mt-4 text-[0.9rem]">
                   Allow plywood and hardware shop owners to add, update, and
                   manage their inventory items. Track all materials received and
@@ -65,7 +65,7 @@ const Services = () => {
           </div>
           <div className=" sm:flex-1 flex justify-center items-center">
             <img
-            className='sm:w-[280px]  md:w-[400px] '
+              className="sm:w-[280px]  md:w-[400px] "
               src={imageSrc}
               width={400}
               alt="Carpenter Image 1"
@@ -78,7 +78,9 @@ const Services = () => {
           <div className="sm:flex-1 sm:order-2">
             <div className="px-12 pb-12 sm:p-2 ">
               <div>
-                <h3 className="text-2xl md:text-3xl mt-4">Client Progress Monitoring</h3>
+                <h3 className="text-2xl md:text-3xl mt-4">
+                  Client Progress Monitoring
+                </h3>
                 <p className="mt-4 text-[0.9rem]">
                   Clients can track the progress of their projects with updates
                   on milestones, completed tasks, and remaining work.
@@ -86,7 +88,9 @@ const Services = () => {
               </div>
 
               <div>
-                <h3 className="text-2xl md:text-3xl mt-4">Carpenter Selection Feature</h3>
+                <h3 className="text-2xl md:text-3xl mt-4">
+                  Carpenter Selection Feature
+                </h3>
                 <p className="mt-4 text-[0.9rem]">
                   Clients can browse a curated list of available carpenters,
                   filter by skills, experience, and ratings, and select the best
@@ -95,7 +99,9 @@ const Services = () => {
               </div>
 
               <div>
-                <h3 className="text-2xl md:text-3xl mt-4">Real-Time Chat Functionality</h3>
+                <h3 className="text-2xl md:text-3xl mt-4">
+                  Real-Time Chat Functionality
+                </h3>
                 <p className="mt-4 text-[0.9rem]">
                   {" "}
                   Integrated chat feature allows clients and carpenters to
@@ -118,7 +124,7 @@ const Services = () => {
             data-aos="fade-right"
           >
             <img
-            className='sm:w-[280px]  md:w-[400px]'
+              className="sm:w-[280px]  md:w-[400px]"
               src={imageSrc2}
               width={400}
               alt="Carpenter Image 1"
