@@ -8,15 +8,15 @@ import Contact from "./Contact";
 
 const Content = () => {
   useEffect(()=>{
-    AOS.init({duration: "1000"})
+    AOS.init({duration: "1300", once:true})
   }, [])
   return (
-    <>
+    <div>
         <Hero/>
         <Services/>
         <About/>
         <Contact/>
-    </>
+    </div>
   )
 }
 
