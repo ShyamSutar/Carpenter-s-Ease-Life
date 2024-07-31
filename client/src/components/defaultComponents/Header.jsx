@@ -1,27 +1,64 @@
-import {Link} from "react-router-dom"
+import axios from "axios";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { authActions } from "../../store/authentication";
 
 const Header = () => {
+  const status = useSelector((state) => state.auth.status);
+  const user = useSelector((state) => state.auth.userData?.role);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:5000/api/v1/users/logout",
+        {},
+        { withCredentials: true }
+      );
+      dispatch(authActions.logout());
+      navigate('/login')
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 ">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto ">
-          <Link to='/'
+          <Link
+            to="/"
             href="/"
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white text-myRed">
-              <img src="/images/logo.svg" alt="logo" width={65}/>
+              <img src="/images/logo.svg" alt="logo" width={65} />
             </span>
           </Link>
           <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse md:mr-1">
-            <Link to='/register'>
-              <button
-                type="button"
-                className="text-white bg-myRed hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 hover:transition-all"
-              >
-              Get started
-            </button>
-            </Link>
+            {!status ? (
+              <Link to={"/login"}>
+                <button
+                  type="button"
+                  className="text-white bg-myRed hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 hover:transition-all"
+                >
+                  Get started
+                </button>
+              </Link>
+            ) : (
+              <Link onClick={handleLogout}>
+                <button
+                  type="button"
+                  className="text-white bg-myRed hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 hover:transition-all"
+                >
+                  Logout
+                </button>
+              </Link>
+            )}
+
             <button
               data-collapse-toggle="navbar-sticky"
               type="button"
@@ -86,6 +123,22 @@ const Header = () => {
                   Contact
                 </Link>
               </li>
+              {user === "mistry" && (
+                <>
+                  <Link to="/mistry">
+                    <li className="text-red-500">mistry</li>
+                  </Link>
+                </>
+              )}
+
+
+              {user === "carpenter" && (
+                <>
+                  <Link to={'/carpenter'}>
+                    <li className="text-red-500">carpenter</li>
+                  </Link>
+                </>
+              )}
             </ul>
           </div>
         </div>

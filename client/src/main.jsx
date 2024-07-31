@@ -7,6 +7,10 @@ import { createBrowserRouter, Route, createRoutesFromElements, RouterProvider } 
 import Register from './pages/Register.jsx';
 import Login from './pages/Login.jsx';
 import Content from './components/defaultComponents/Content.jsx'
+import { Provider } from 'react-redux'
+import store from './store/index.js'
+import Carpenter from './components/carpenterComponents/Carpenter.jsx';
+import Mistry from './components/mistryComponents/Mistry.jsx';
 
 
 const router = createBrowserRouter(
@@ -15,12 +19,16 @@ const router = createBrowserRouter(
       <Route path='/' element={<Content/>} />
       <Route path='/register' element={<Register/>} />
       <Route path='/login' element={<Login/>} />
+      <Route path='/carpenter' element={<Carpenter/>} />
+      <Route path='/mistry' element={<Mistry/>} />
     </Route>
   )
 )
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <Provider store={store}>
+      <RouterProvider router={router}/>
+    </Provider>
   </React.StrictMode>,
 )

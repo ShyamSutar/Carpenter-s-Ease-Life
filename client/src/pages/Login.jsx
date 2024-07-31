@@ -1,6 +1,40 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios"
+import { useDispatch } from "react-redux";
+import { authActions } from "../store/authentication";
 
 const Login = () => {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [inputs, setInputs] = useState({
+    "email": '',
+    "password": ""
+  });
+
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+    setInputs({...inputs, [name]: value})
+  }
+
+  const getUser = async() => {
+    const user = await axios.get("http://localhost:5000/api/v1/users/getUser", {withCredentials: true});
+    dispatch(authActions.login({userData: user.data}))
+  }
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/v1/users/login", inputs, {withCredentials: true});
+      getUser()
+      navigate("/")
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900 mt-12">
@@ -18,10 +52,10 @@ const Login = () => {
           </Link>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              {/* <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Create an account
-              </h1>
-              <form className="space-y-4 md:space-y-6" action="#">
+              </h1> */}
+              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6" action="#">
                 <div>
                   <label
                     htmlFor="email"
@@ -36,6 +70,8 @@ const Login = () => {
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="name@company.com"
                     required=""
+                    onChange={handleChange}
+                    value={inputs.email}
                   />
                 </div>
                 <div>
@@ -52,23 +88,8 @@ const Login = () => {
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required=""
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
+                    onChange={handleChange}
+                    value={inputs.password}
                   />
                 </div>
 

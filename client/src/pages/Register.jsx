@@ -1,7 +1,14 @@
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { authActions } from "../store/authentication";
 
 const Register = () => {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [inputs, setInputs] = useState({
     username: "",
     email: "",
@@ -15,9 +22,16 @@ const Register = () => {
     setInputs({...inputs, [name]:value})
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log("submit");
+
+    try {
+      await axios.post("http://localhost:5000/api/v1/users/register", inputs, {withCredentials: true});
+      navigate("/login")
+    } catch (error) {
+      console.log(error);
+    }
+    
   }
 
   return (
@@ -33,9 +47,9 @@ const Register = () => {
           </Link>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              {/* <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Create an account
-              </h1>
+              </h1> */}
               <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6" action="#">
                 <div>
                   <label
