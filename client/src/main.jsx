@@ -11,6 +11,12 @@ import { Provider } from 'react-redux'
 import store from './store/index.js'
 import Carpenter from './components/carpenterComponents/Carpenter.jsx';
 import Mistry from './components/mistryComponents/Mistry.jsx';
+import Attendance from './components/mistryComponents/Attendance.jsx';
+import Notification from './components/mistryComponents/Notification.jsx';
+import ShowAttendance from './components/mistryComponents/ShowAttendance.jsx';
+import MistryHome from './components/mistryComponents/MistryHome.jsx';
+import CarpenterHome from './components/carpenterComponents/CarpenterHome.jsx';
+import CarpenterSearch from './components/carpenterComponents/CarpenterSearch.jsx';
 
 
 const router = createBrowserRouter(
@@ -19,8 +25,16 @@ const router = createBrowserRouter(
       <Route path='/' element={<Content/>} />
       <Route path='/register' element={<Register/>} />
       <Route path='/login' element={<Login/>} />
-      <Route path='/carpenter' element={<Carpenter/>} />
-      <Route path='/mistry' element={<Mistry/>} />
+      <Route path='/carpenter' element={<Carpenter/>} >
+        <Route path='' element={<CarpenterHome/>}/>
+        <Route path='search' element={<CarpenterSearch/>}/>
+      </Route>
+      <Route path='/mistry' element={<Mistry/>}>
+              <Route path='' element={<MistryHome/>}/>
+              <Route path='notifications' element={<Notification/>}/>
+              <Route path='show-attendance' element={<ShowAttendance/>}/>
+              <Route path='attendance/:id' element={<Attendance/>}/>
+      </Route>
     </Route>
   )
 )

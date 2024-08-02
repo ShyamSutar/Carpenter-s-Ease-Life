@@ -1,5 +1,4 @@
 import Header from "./components/defaultComponents/Header";
-import Footer from "./components/defaultComponents/Footer";
 import { Outlet, useNavigate } from "react-router-dom";
 import useScrollToHash from './components/useScrollToHash.jsx';
 import { useEffect } from "react";
@@ -23,11 +22,11 @@ const App = () => {
             dispatch(authActions.login({userData: user}))
           }else{
             dispatch(authActions.logout());
-            navigate("/login")
+            navigate("/")
           }
       } catch (error) {
         dispatch(authActions.logout());
-        navigate('/login')
+        navigate('/')
       }
     }
 
@@ -38,7 +37,6 @@ const App = () => {
     <div className="overflow-x-hidden">
       <Header />
       <Outlet />
-      <Footer/>
     </div>
   );
 };

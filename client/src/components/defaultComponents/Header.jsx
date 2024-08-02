@@ -1,7 +1,6 @@
 import axios from "axios";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { authActions } from "../../store/authentication";
 
 const Header = () => {
@@ -90,13 +89,13 @@ const Header = () => {
           >
             <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 transition-all">
               <li>
-                <Link
+                <NavLink
                   to="/"
-                  className="block py-2 px-3 text-white bg-myRed rounded md:bg-transparent md:text-myRed md:p-0 md:dark:text-blue-500"
+                  className={({isActive})=>`block py-2 px-3 text-white ${isActive ? 'bg-myRed' : 'text-black' } rounded md:bg-transparent ${isActive ? "md:text-myRed" : "md:text-black"}  md:p-0 md:dark:text-blue-500`}
                   aria-current="page"
                 >
                   Home
-                </Link>
+                </NavLink>
               </li>
 
               <li>
@@ -125,18 +124,18 @@ const Header = () => {
               </li>
               {user === "mistry" && (
                 <>
-                  <Link to="/mistry">
-                    <li className="text-red-500">mistry</li>
-                  </Link>
+                  <NavLink to="/mistry" className={({isActive})=>`${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900' }`}>
+                    <li className="block py-2 px-3 rounded  md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Mistry</li>
+                  </NavLink>
                 </>
               )}
 
 
               {user === "carpenter" && (
                 <>
-                  <Link to={'/carpenter'}>
-                    <li className="text-red-500">carpenter</li>
-                  </Link>
+                  <NavLink to={'/carpenter'} className={({isActive})=>`${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900' }`}>
+                    <li className="block py-2 px-3  rounded  md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Carpenter</li>
+                  </NavLink>
                 </>
               )}
             </ul>

@@ -5,6 +5,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css'; // You can also use <link> for styles
 import About from "./About";
 import Contact from "./Contact";
+import Footer from "./Footer";
 
 const Content = () => {
   useEffect(()=>{
@@ -16,6 +17,7 @@ const Content = () => {
         <Services/>
         <About/>
         <Contact/>
+        <Footer/>
     </div>
   )
 }
