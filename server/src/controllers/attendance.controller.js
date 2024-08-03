@@ -13,4 +13,14 @@ const findCarpenterById = asyncHandler(async(req, res)=>{
     res.status(200).json({carpenter})
 })
 
-export {showCarpenters, findCarpenterById}
+const showMistry = asyncHandler(async(req, res)=>{
+    const mistry = await Attendance.find({carpenter: req.user._id}).populate('mistry');
+    res.status(200).json({mistry})
+})
+
+const findMistryById = asyncHandler(async(req, res)=>{
+    const mistry = await Attendance.find({mistry: req.params.id, carpenter: req.user._id}).populate('mistry');
+    res.status(200).json({mistry})
+})
+
+export {showCarpenters, findCarpenterById, showMistry, findMistryById}
