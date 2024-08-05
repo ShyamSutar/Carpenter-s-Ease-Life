@@ -1,13 +1,19 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const NotificationList = ({ setRefresh, notification }) => {
   const handleApprove = async (carpenterId) => {
     try {
-      await axios.post(
+      const res = await axios.post(
         `http://localhost:5000/api/v1/notification/approveNotification/${carpenterId}`,
         {},
         { withCredentials: true }
       );
+      if(res.status === 200){
+        toast.success(res.data.message)
+      }else{
+        toast.error(res.data.message);
+      }
       setRefresh(true);
     } catch (error) {
       console.log(error);
@@ -16,10 +22,15 @@ const NotificationList = ({ setRefresh, notification }) => {
 
   const handleReject = async (carpenterId) => {
     try {
-      await axios.delete(
+      const res = await axios.delete(
         `http://localhost:5000/api/v1/notification/rejectNotification/${carpenterId}`,
         { withCredentials: true }
       );
+      if(res.status === 200){
+        toast.success(res.data.message)
+      }else{
+        toast.error(res.data.message);
+      }
       setRefresh(true);
     } catch (error) {
       console.log(error);

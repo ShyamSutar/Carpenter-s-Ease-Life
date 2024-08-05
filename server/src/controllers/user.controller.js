@@ -34,7 +34,7 @@ const login = asyncHandler(async (req, res) => {
 
   if (user && (await user.comparePassword(password))) {
     user.generateToken(res);
-    res.status(201).json({
+    res.status(200).json({
       message: "user loggedin successfully",
       _id: user._id,
       name: user.name,

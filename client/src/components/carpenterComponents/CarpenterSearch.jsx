@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import CarpenterSearchList from "./CarpenterSearchList";
+import { toast } from "react-toastify";
 
 const CarpenterSearch = () => {
 
@@ -17,9 +18,16 @@ const CarpenterSearch = () => {
         { withCredentials: true }
       );
 
-      setMistries(res.data);
+      if(res.status === 200){
+        setMistries(res.data);
+        toast.success(res.data.message);
+      }else{
+        toast.error(res.data.message)
+      }
+
     } catch (error) {
-      console.log(error);
+      const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
+      toast.error(errorMessage);
     }
   };
 
@@ -30,9 +38,16 @@ const CarpenterSearch = () => {
         { mistryId: mistry._id },
         { withCredentials: true }
       );
-      console.log(res);
+
+      if(res.status === 200){
+        toast.success(res.data.message);
+      }else{
+        toast.error(res.data.message)
+      }
+
     } catch (error) {
-      console.log(error);
+      const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
+      toast.error(errorMessage);
     }
   };
 

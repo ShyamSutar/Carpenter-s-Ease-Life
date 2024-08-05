@@ -1,12 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { authActions } from "../store/authentication";
+import { toast } from "react-toastify";
 
 const Register = () => {
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [inputs, setInputs] = useState({
@@ -26,10 +24,16 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:5000/api/v1/users/register", inputs, {withCredentials: true});
-      navigate("/login")
+      const res = await axios.post("http://localhost:5000/api/v1/users/register", inputs, {withCredentials: true});
+      if(res.status===201){
+        navigate("/login")
+        toast.success(res.data.message)
+      }else{
+        toast.error(res.data.message)
+      }
     } catch (error) {
-      console.log(error);
+      const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
+      toast.error(errorMessage)
     }
     
   }

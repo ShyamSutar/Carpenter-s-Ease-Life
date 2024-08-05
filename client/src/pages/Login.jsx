@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios"
 import { useDispatch } from "react-redux";
 import { authActions } from "../store/authentication";
+import { toast } from "react-toastify";
 
 const Login = () => {
 
@@ -29,10 +30,17 @@ const Login = () => {
 
     try {
       const res = await axios.post("http://localhost:5000/api/v1/users/login", inputs, {withCredentials: true});
-      getUser()
-      navigate("/")
+      
+      if(res.status === 200){
+        getUser()
+        navigate("/")
+        toast.success(res.data.message)
+      }else{
+        toast.error(res.data.message)
+      }
     } catch (error) {
-      console.log(error);
+      const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
+      toast.error(errorMessage)
     }
   }
   return (

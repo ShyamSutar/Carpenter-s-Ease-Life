@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import NotificationList from "./NotificationList";
+import {toast} from "react-toastify"
 
 const Notification = () => {
   
@@ -15,9 +16,12 @@ const Notification = () => {
           "http://localhost:5000/api/v1/notification/showNotification",
           { withCredentials: true }
         );
+        
         setNotifications(notifications.data);
+        
       } catch (error) {
-        console.log(error);
+        const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
+        toast.error(errorMessage);
       }
     })();
   }, [refresh]);

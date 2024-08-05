@@ -16,7 +16,7 @@ const notificationRequest = asyncHandler(async (req, res) => {
   }
 
   const notification = await Notification.create({ mistry: req.body.mistryId, carpenter: req.user._id});
-  res.json(notification)
+  res.status(200).json({message: "request successfully sent"})
 });
 
 const showNotification = asyncHandler(async(req, res)=>{
@@ -26,14 +26,14 @@ const showNotification = asyncHandler(async(req, res)=>{
 
 const rejectNotification = asyncHandler(async(req, res)=>{
   await Notification.findOneAndDelete({mistry: req.user._id, carpenter:req.params.carpenterId});
-  res.json({message: "request rejected successfully"})
+  res.status(200).json({message: "request rejected successfully"})
 })
 
 const approveNotification = asyncHandler(async(req, res)=>{
 
   await Attendance.create({mistry: req.user._id, carpenter: req.params.carpenterId});
   await Notification.findOneAndDelete({mistry: req.user._id, carpenter: req.params.carpenterId});
-  res.json({message: "request accepted successfully"})
+  res.status(200).json({message: "request accepted successfully"})
 })
 
 export { notificationRequest, approveNotification, showNotification, rejectNotification };
