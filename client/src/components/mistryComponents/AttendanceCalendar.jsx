@@ -4,7 +4,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const localizer = momentLocalizer(moment);
 
-const AttendanceCalendar = ({ events }) => {
+const AttendanceCalendar = ({ events, components, handleSelectSlot }) => {
   return (<>
     <div className='min-w-[420px] overflow-x-auto' style={{ height: 500}}>
       <Calendar
@@ -13,6 +13,9 @@ const AttendanceCalendar = ({ events }) => {
         startAccessor="start"
         endAccessor="end"
         style={{ height: '100%', margin: '50px' }}
+        components={components}
+        selectable={true}
+        onSelectSlot={handleSelectSlot}
       />
     </div>
 </>
