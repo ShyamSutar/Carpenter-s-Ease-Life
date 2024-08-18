@@ -36,8 +36,8 @@ const App = () => {
   },[dispatch, navigate])
   
   return (
-    <div className="overflow-x-hidden">
-      <Header />
+    <div className="overflow-x-auto">
+      <Header/>
       <Outlet />
       
       <ToastContainer

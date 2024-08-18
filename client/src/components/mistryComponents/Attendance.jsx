@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import AttendanceCalendar from "./AttendanceCalendar";
 
 const Attendance = () => {
     const id = useParams().id;
@@ -19,7 +20,9 @@ const Attendance = () => {
     },[id])
 
   return (
-    <div className="mt-16 min-h-screen">{data && data.carpenter.username}</div>
+    <div className="mt-24 min-h-screen">
+        <AttendanceCalendar />
+    </div>
   )
 }
 

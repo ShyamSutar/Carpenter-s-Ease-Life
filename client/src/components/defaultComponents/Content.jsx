@@ -12,7 +12,7 @@ const Content = () => {
     AOS.init({duration: "1300", once:true})
   }, [])
   return (
-    <div>
+    <div className="overflow-x-hidden">
         <Hero/>
         <Services/>
         <About/>
