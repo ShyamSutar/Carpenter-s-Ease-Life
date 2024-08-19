@@ -23,10 +23,12 @@ app.use(cookieParser());
 import userRoute from './routes/user.routes.js'
 import notificationRoute from './routes/notification.routes.js'
 import attendanceRoute from './routes/attendance.routes.js'
+import CalendarRoute from './routes/calendar.routes.js'
 
 app.use("/api/v1/users", userRoute)
 app.use("/api/v1/notification", notificationRoute)
 app.use("/api/v1/attendance", attendanceRoute)
+app.use("/api/v1/calendar", CalendarRoute)
 
 app.use(notFound)
 app.use(errorHandler)
