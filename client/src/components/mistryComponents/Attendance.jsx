@@ -56,12 +56,12 @@ const Attendance = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [refresh]);
+  }, [refresh, id]);
 
   const components = {
     event: (props) => {
       return (
-        <div onClick={() => console.log("clicked")}>{props.event.title}</div>
+        <div className="" onClick={() => console.log("clicked")}>{props.event.title}</div>
       );
     },
   };
@@ -122,7 +122,14 @@ const Attendance = () => {
 
   return (
     <>
-      <div className="mt-24 min-h-screen relative">
+
+    <div className="mt-24 p-4 bg-slate-200 rounded mr-4">
+        <h1 className="text-xl "><b>Name:</b> {data?.carpenter?.username}</h1>
+        <h1 className="text-xl "><b>Email:</b> {data?.carpenter?.email}</h1>
+        <h1 className="text-xl "><b>Total:</b> 42000/-</h1>
+    </div>
+
+      <div className="mt-4 min-h-screen relative">
         <AttendanceCalendar
           events={events}
           components={components}

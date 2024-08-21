@@ -32,4 +32,6 @@ html{
     }
   }
 
-  
+  .rbc-calendar .rbc-today {
+    @apply bg-red-100
+}

@@ -91,7 +91,7 @@ const Header = () => {
               <li>
                 <NavLink
                   to="/"
-                  className={({isActive})=>`block py-2 px-3 text-white ${isActive ? 'bg-myRed' : 'text-black' } rounded md:bg-transparent ${isActive ? "md:text-myRed" : "md:text-black"}  md:p-0 md:dark:text-blue-500`}
+                  className={({isActive})=>`block py-2 px-3  ${isActive ? 'bg-myRed text-white' : 'text-black' } rounded md:bg-transparent ${isActive ? "md:text-myRed" : "md:text-black"}  md:p-0 md:dark:text-blue-500`}
                   aria-current="page"
                 >
                   Home
