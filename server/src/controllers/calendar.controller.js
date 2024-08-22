@@ -4,16 +4,40 @@ import Calendar from "../models/calendar.model.js";
 const postEvent = asyncHandler(async(req, res)=>{
     const mistry = req.user._id
     const{carpenter, date, start, end, title} = req.body;
+    const advance = req.body.advance || 0;
 
-    await Calendar.create({mistry, carpenter, date, start, end, title})
+    await Calendar.create({mistry, carpenter, date, start, end, title, advance})
 
     res.status(200).json({message: "successfully applied"})
 })
 
+const updateEvent = asyncHandler(async(req, res)=>{
+    const {id} = req.params
+    const mistry = req.user._id
+    const{carpenter, date, start, end, title, advance} = req.body;
+
+    const event = await Calendar.findById(id);
+
+    if (!event) {
+        return res.status(404).json({ message: "Event not found" });
+    }
+
+    event.mistry = mistry || event.mistry;
+    event.carpenter = carpenter || event.carpenter;
+    event.date = date || event.date;
+    event.start = start || event.start;
+    event.end = end || event.end;
+    event.title = title || event.title;
+    event.advance = advance || event.advance;
+
+    await event.save();
+
+    res.status(200).json({message: "successfully updated"})
+})
+
 const getEvents = asyncHandler(async(req, res)=>{
     const events = await Calendar.find({mistry: req.user._id, carpenter: req.params.id});
-    console.log(events);
     res.status(200).json(events)
 })
 
-export {postEvent, getEvents}
+export {postEvent, getEvents, updateEvent}

@@ -17,6 +17,9 @@ const calendarSchema = new mongoose.Schema(
     title: {
         type: String
     },
+    advance: {
+      type: Number
+    },
     mistry: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

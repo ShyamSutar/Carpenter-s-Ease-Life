@@ -21,14 +21,14 @@ const eventPropGetter = (event) => {
 
 const AttendanceCalendar = ({ events, components, handleSelectSlot }) => {
   return (<>
-    <div className='min-w-[420px] overflow-x-auto' style={{ height: 500}}>
+    <div className='min-w-[420px] overflow-x-auto' style={{ height: '650px', padding: '20px'}}>
       <Calendar
         localizer={localizer}
         events={events}
         views={['month', 'week', 'day']} 
         startAccessor="start"
         endAccessor="end"
-        style={{ height: '100%', margin: '50px' }}
+        style={{ height: 'calc(100% - 50px)'}}
         components={components}
         selectable={true}
         onSelectSlot={handleSelectSlot}
