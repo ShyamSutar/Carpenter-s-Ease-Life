@@ -47,7 +47,7 @@ const CarpenterSlip = ({ events }) => {
               <th scope="row" className="px-6 py-3 text-base">
                 Total
               </th>
-              <td className="px-6 py-3">3</td>
+              <td className="px-6 py-3">{totalAttendance}</td>
               <td className="px-6 py-3">{totalAdvance}</td>
             </tr>
             <tr className="font-semibold text-gray-900 dark:text-white border-t-2">
