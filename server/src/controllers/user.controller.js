@@ -99,4 +99,17 @@ const updatePay = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "successfully updated" });
 });
 
-export { register, login, getUser, logout, mistrySearch, updatePay };
+const totalAmount = asyncHandler(async (req, res) => {
+  const {id} = req.params
+  
+  const user = await User.findById(id);
+  if(!user){
+    throw new Error("user not found")
+  }
+  user.totalAmount = req.body.totalAmount;
+  await user.save();
+
+  res.status(200).json({ message: "successfully updated" });
+});
+
+export { register, login, getUser, logout, mistrySearch, updatePay, totalAmount };

@@ -189,7 +189,7 @@ const Attendance = () => {
           <b>Email:</b> {data?.carpenter?.email}
         </h1>
         <h1 className="text-xl ">
-          <b>Total:</b> 42000/-
+          {/* <b>Total:</b> {data?.carpenter?.totalAmount || 0}/- */}
         </h1>
       </div>
 
@@ -209,7 +209,7 @@ const Attendance = () => {
         
       </div>
 
-      <CarpenterSlip events={events}/>
+      <CarpenterSlip events={events} data={data} id={id} refresh={refresh}/>
     </>
   );
 };

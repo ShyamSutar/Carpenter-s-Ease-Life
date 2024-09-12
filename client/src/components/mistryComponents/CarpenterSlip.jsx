@@ -1,5 +1,8 @@
-const CarpenterSlip = ({ events }) => {
-    const totalAdvance = events.reduce((sum, item) => sum + item.advance, 0);
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+const CarpenterSlip = ({ events, data, id, refresh }) => {
+    
 
     const attendancePoints = {
         "O": 1.5,
@@ -8,7 +11,26 @@ const CarpenterSlip = ({ events }) => {
         "A": 0
     };
     
-    const totalAttendance = events.reduce((sum, item) => sum + (attendancePoints[item.title] || 0), 0);
+    const [totalAdvance, setTotalAdvance] = useState(0);
+    const [totalAttendance, setTotalAttendance] = useState(0);
+    const [totalAmount, setTotalAmount] = useState(0);
+
+    useEffect(()=>{
+      try {
+
+        setTotalAdvance(events.reduce((sum, item) => sum + item.advance, 0));
+        setTotalAttendance(events.reduce((sum, item) => sum + (attendancePoints[item.title] || 0), 0));
+    
+        setTotalAmount((Number(totalAttendance) * Number(data?.carpenter?.pay || 0) - Number(totalAdvance || 0)).toFixed(2));
+        
+        (async()=>{
+          const response = await axios.patch(`http://localhost:5000/api/v1/users/totalAmount/${id}`, {totalAmount}, {withCredentials: true})
+          console.log(response);
+        })();
+      } catch (error) {
+        console.log(error);
+      }
+    },[totalAmount, events, data, id, refresh, totalAdvance, totalAttendance, attendancePoints])
     
 
   return (
@@ -55,7 +77,7 @@ const CarpenterSlip = ({ events }) => {
               <th scope="row" colSpan={2} className="px-6 py-3 text-right text-base">
                 Amount
               </th>
-              <td className="px-6 py-3 font-bold text-base">{totalAttendance*600 - totalAdvance}</td>
+              <td className="px-6 py-3 font-bold text-base"> {totalAmount}</td>
             </tr>
           </tfoot>
         </table>

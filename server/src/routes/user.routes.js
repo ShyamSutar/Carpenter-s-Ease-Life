@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login, getUser, logout, mistrySearch, updatePay } from "../controllers/user.controller.js";
+import { register, login, getUser, logout, mistrySearch, updatePay, totalAmount } from "../controllers/user.controller.js";
 import { protect } from "../middlewares/auth.middleware.js";
 
 const router = Router();
@@ -14,5 +14,7 @@ router.route('/logout').post(protect, logout);
 router.route('/mistrySearch').post(protect, mistrySearch);
 
 router.route('/updatePay/:id').patch(protect, updatePay);
+
+router.route('/totalAmount/:id').patch(protect, totalAmount)
 
 export default router;

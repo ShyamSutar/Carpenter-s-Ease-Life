@@ -5,6 +5,7 @@ import { useState } from "react";
 
 const ShowAttendanceList = ({ carpenter, setRefresh }) => {
   const [show, setShow] = useState(false);
+
   return (
     <>
       <div className="relative w-64 sm:w-80 bg-slate-100 rounded-md shadow-md p-4 py-6 hover:scale-105 transition-all">
@@ -14,7 +15,7 @@ const ShowAttendanceList = ({ carpenter, setRefresh }) => {
             <h3 className="font-semibold">Email: {carpenter.carpenter.email}</h3>
             <h3 className="font-semibold">Since: {new Date(carpenter.carpenter.createdAt).toISOString().split('T')[0]}</h3>
             <h3 className="font-semibold">Pay: ₹{carpenter.carpenter.pay}</h3>
-            <h3 className="font-bold">Total: ₹42000</h3>
+            <h3 className="font-bold">Total: ₹{carpenter?.carpenter?.totalAmount || 0}</h3>
         </Link>
             <div className="absolute -top-3 right-0 text-xl">
               <div className="text-green-500" onClick={()=>setShow(true)}><FaEdit/></div>

@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema(
 
     pay: {
       type: String
+    },
+
+    totalAmount: {
+      type: Number
     }
   },
   { timestamps: true }
