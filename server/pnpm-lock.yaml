@@ -26,6 +26,9 @@ dependencies:
   jsonwebtoken:
     specifier: ^9.0.2
     version: 9.0.2
+  mongodb:
+    specifier: ^6.8.1
+    version: 6.8.1
   mongoose:
     specifier: ^8.5.1
     version: 8.5.1
@@ -597,6 +600,38 @@ packages:
 
   /mongodb@6.7.0:
     resolution: {integrity: sha512-TMKyHdtMcO0fYBNORiYdmM25ijsHs+Njs963r4Tro4OQZzqYigAzYQouwWRg4OIaiLRUEGUh/1UAcH5lxdSLIA==}
+    engines: {node: '>=16.20.1'}
+    peerDependencies:
+      '@aws-sdk/credential-providers': ^3.188.0
+      '@mongodb-js/zstd': ^1.1.0
+      gcp-metadata: ^5.2.0
+      kerberos: ^2.0.1
+      mongodb-client-encryption: '>=6.0.0 <7'
+      snappy: ^7.2.2
+      socks: ^2.7.1
+    peerDependenciesMeta:
+      '@aws-sdk/credential-providers':
+        optional: true
+      '@mongodb-js/zstd':
+        optional: true
+      gcp-metadata:
+        optional: true
+      kerberos:
+        optional: true
+      mongodb-client-encryption:
+        optional: true
+      snappy:
+        optional: true
+      socks:
+        optional: true
+    dependencies:
+      '@mongodb-js/saslprep': 1.1.8
+      bson: 6.8.0
+      mongodb-connection-string-url: 3.0.1
+    dev: false
+
+  /mongodb@6.8.1:
+    resolution: {integrity: sha512-qsS+gl5EJb+VzJqUjXSZ5Y5rbuM/GZlZUEJ2OIVYP10L9rO9DQ0DGp+ceTzsmoADh6QYMWd9MSdG9IxRyYUkEA==}
     engines: {node: '>=16.20.1'}
     peerDependencies:
       '@aws-sdk/credential-providers': ^3.188.0

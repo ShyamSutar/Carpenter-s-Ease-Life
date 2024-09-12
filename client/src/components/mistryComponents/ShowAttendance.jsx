@@ -1,11 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ShowAttendanceList from "./ShowAttendanceList";
-import UpdateShowAttendance from "./UpdateShowAttendance";
 
 const ShowAttendance = () => {
   const [showCarpenters, setShowCarpenters] = useState([]);
-  const [show, setShow] = useState(false);
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     (async () => {
@@ -19,7 +18,7 @@ const ShowAttendance = () => {
         console.log(error);
       }
     })();
-  }, []);
+  }, [refresh]);
 
   return (
     <div className="mt-28 ml-4 min-h-screen">
@@ -27,13 +26,11 @@ const ShowAttendance = () => {
       <div className="mt-6 flex flex-wrap gap-4 justify-center">
         {showCarpenters &&
           showCarpenters.map((carpenter) => (
-            <ShowAttendanceList key={carpenter._id} carpenter={carpenter} setShow={setShow}/>
+            <ShowAttendanceList key={carpenter._id} carpenter={carpenter} setRefresh={setRefresh}/>
           ))}
       </div>
 
-      <div className={`${!show ? 'hidden' : ''} h-[90%] w-full flex justify-center z-50 fixed top-10 left-0`}>
-        <UpdateShowAttendance setShow={setShow}/>
-      </div>
+      
     </div>
   );
 };

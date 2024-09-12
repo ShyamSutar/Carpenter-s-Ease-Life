@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import User from "../models/user.model.js";
 
 const register = asyncHandler(async (req, res) => {
+  let pay;
   const { username, email, phone, password, role } = req.body;
 
   const userExists = await User.findOne({ email });
@@ -9,7 +10,18 @@ const register = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
-  const user = await User.create({ username, email, phone, password, role });
+  if (role === "carpenter") {
+    pay = 600;
+  }
+
+  const user = await User.create({
+    username,
+    email,
+    phone,
+    password,
+    role,
+    pay,
+  });
 
   if (!user) {
     res.status(400);
@@ -69,10 +81,22 @@ const logout = asyncHandler(async (req, res) => {
 
 //mistry search by carpenter
 const mistrySearch = asyncHandler(async (req, res) => {
-  const mistry = await User.find({username:req.body.username, role: "mistry" }).select("-password");
+  const mistry = await User.find({
+    username: req.body.username,
+    role: "mistry",
+  }).select("-password");
   res.status(200).json(mistry);
 });
 
+const updatePay = asyncHandler(async (req, res) => {
+  const {id} = req.params
+  const pay  = req.body;
 
+  const updateUser = await User.findByIdAndUpdate(req.params.id, pay, { new: true });
+  
+  if (!updateUser) return res.status(404).send("User not found");
 
-export { register, login, getUser, logout, mistrySearch };
+  res.status(200).json({ message: "successfully updated" });
+});
+
+export { register, login, getUser, logout, mistrySearch, updatePay };

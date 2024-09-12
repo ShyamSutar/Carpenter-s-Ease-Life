@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    pay: {
+      type: String
+    }
   },
   { timestamps: true }
 );
