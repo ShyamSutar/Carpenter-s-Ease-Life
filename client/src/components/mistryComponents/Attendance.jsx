@@ -188,9 +188,6 @@ const Attendance = () => {
         <h1 className="text-xl ">
           <b>Email:</b> {data?.carpenter?.email}
         </h1>
-        <h1 className="text-xl ">
-          {/* <b>Total:</b> {data?.carpenter?.totalAmount || 0}/- */}
-        </h1>
       </div>
 
       <div className="mt-4 min-h-screen relative">

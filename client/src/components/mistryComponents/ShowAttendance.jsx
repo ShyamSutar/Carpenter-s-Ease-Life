@@ -20,6 +20,7 @@ const ShowAttendance = () => {
     })();
   }, [refresh]);
 
+
   return (
     <div className="mt-28 ml-4 min-h-screen">
       <h1 className="font-bold text-2xl">Attendance</h1>

@@ -10,17 +10,12 @@ const register = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
-  if (role === "carpenter") {
-    pay = 600;
-  }
-
   const user = await User.create({
     username,
     email,
     phone,
     password,
     role,
-    pay,
   });
 
   if (!user) {
@@ -89,22 +84,24 @@ const mistrySearch = asyncHandler(async (req, res) => {
 });
 
 const updatePay = asyncHandler(async (req, res) => {
-  const {id} = req.params
-  const pay  = req.body;
+  const updateUser = await User.findByIdAndUpdate(req.params.id, {
+    $set: {
+      [`totalAmount.${req.user._id}`]: req.body.amount,
+      [`pay.${req.user._id}`]: req.body.pay
+    },
+  });
 
-  const updateUser = await User.findByIdAndUpdate(req.params.id, pay, { new: true });
-  
   if (!updateUser) return res.status(404).send("User not found");
 
   res.status(200).json({ message: "successfully updated" });
 });
 
 const totalAmount = asyncHandler(async (req, res) => {
-  const {id} = req.params
-  
+  const { id } = req.params;
+
   const user = await User.findById(id);
-  if(!user){
-    throw new Error("user not found")
+  if (!user) {
+    throw new Error("user not found");
   }
   user.totalAmount = req.body.totalAmount;
   await user.save();
@@ -112,4 +109,12 @@ const totalAmount = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "successfully updated" });
 });
 
-export { register, login, getUser, logout, mistrySearch, updatePay, totalAmount };
+export {
+  register,
+  login,
+  getUser,
+  logout,
+  mistrySearch,
+  updatePay,
+  totalAmount,
+};

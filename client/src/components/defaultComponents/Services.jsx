@@ -33,12 +33,10 @@ const Services = () => {
               </div>
 
               <div>
-                <h3 className="text-2xl md:text-3xl mt-4">Payment Gateway</h3>
+                <h3 className="text-2xl md:text-3xl mt-4">Ledger Management</h3>
                 <p className="mt-4 text-[0.9rem]">
                   {" "}
-                  Facilitate secure payments through a reliable payment gateway.
-                  Support advanced payments and manage financial transactions
-                  seamlessly.
+                  Tracks expenses, material purchases, and payments, providing transparent and real-time financial records for carpenters, clients, and suppliers.
                 </p>
               </div>
 

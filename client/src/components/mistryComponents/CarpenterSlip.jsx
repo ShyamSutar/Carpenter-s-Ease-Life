@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const CarpenterSlip = ({ events, data, id, refresh }) => {
-    
+
+  const user = useSelector(state => state?.auth?.userData?._id)
 
     const attendancePoints = {
         "O": 1.5,
@@ -15,24 +17,24 @@ const CarpenterSlip = ({ events, data, id, refresh }) => {
     const [totalAttendance, setTotalAttendance] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
 
+
     useEffect(()=>{
       try {
 
         setTotalAdvance(events.reduce((sum, item) => sum + item.advance, 0));
         setTotalAttendance(events.reduce((sum, item) => sum + (attendancePoints[item.title] || 0), 0));
     
-        setTotalAmount((Number(totalAttendance) * Number(data?.carpenter?.pay || 0) - Number(totalAdvance || 0)).toFixed(2));
+        setTotalAmount((Number(totalAttendance) * Number( data?.carpenter?.pay[user] || 600) - Number(totalAdvance || 0)).toFixed(2));
         
-        (async()=>{
-          const response = await axios.patch(`http://localhost:5000/api/v1/users/totalAmount/${id}`, {totalAmount}, {withCredentials: true})
-          console.log(response);
-        })();
+        // (async()=>{
+        //   const response = await axios.patch(`http://localhost:5000/api/v1/users/totalAmount/${id}`, {totalAmount}, {withCredentials: true})
+        //   console.log(response);
+        // })();
       } catch (error) {
         console.log(error);
       }
-    },[totalAmount, events, data, id, refresh, totalAdvance, totalAttendance, attendancePoints])
+    },[refresh, totalAdvance, totalAttendance, totalAmount, attendancePoints])
     
-
   return (
     <div>
       <div className="relative overflow-x-auto">
