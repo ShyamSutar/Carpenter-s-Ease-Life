@@ -86,13 +86,14 @@ const mistrySearch = asyncHandler(async (req, res) => {
 const updatePay = asyncHandler(async (req, res) => {
   const updateUser = await User.findByIdAndUpdate(req.params.id, {
     $set: {
-      [`totalAmount.${req.user._id}`]: req.body.amount,
+      [`totalAmount.${req.user._id}`]: req.body.totalAmount,
       [`pay.${req.user._id}`]: req.body.pay
     },
   });
 
   if (!updateUser) return res.status(404).send("User not found");
 
+  // res.status(200).json(updateUser);
   res.status(200).json({ message: "successfully updated" });
 });
 

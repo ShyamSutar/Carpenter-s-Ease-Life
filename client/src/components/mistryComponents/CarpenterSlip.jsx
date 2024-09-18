@@ -26,14 +26,19 @@ const CarpenterSlip = ({ events, data, id, refresh }) => {
     
         setTotalAmount((Number(totalAttendance) * Number( data?.carpenter?.pay[user] || 600) - Number(totalAdvance || 0)).toFixed(2));
         
-        // (async()=>{
-        //   const response = await axios.patch(`http://localhost:5000/api/v1/users/totalAmount/${id}`, {totalAmount}, {withCredentials: true})
-        //   console.log(response);
-        // })();
+        if(totalAmount!=0){
+        (async()=>{
+          const response = await axios.patch(`http://localhost:5000/api/v1/users/updatePay/${id}`, {totalAmount}, {withCredentials: true})
+          // console.log(response);
+        })();
+        // console.log(totalAmount);
+      }
+        
       } catch (error) {
         console.log(error);
       }
     },[refresh, totalAdvance, totalAttendance, totalAmount, attendancePoints])
+
     
   return (
     <div>

@@ -105,7 +105,7 @@ const Login = () => {
                   type="submit"
                   className="w-full text-white bg-myRed hover:bg-red-700  focus:outline-none focus:ring-myRed font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
-                  Create an account
+                  Login
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Don&apos;t have an account?{" "}

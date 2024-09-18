@@ -17,8 +17,8 @@ const ShowAttendanceList = ({ carpenter, setRefresh }) => {
             <h3 className="font-semibold">Name: {carpenter.carpenter.username}</h3>
             <h3 className="font-semibold">Email: {carpenter.carpenter.email}</h3>
             <h3 className="font-semibold">Since: {new Date(carpenter.carpenter.createdAt).toISOString().split('T')[0]}</h3>
-            <h3 className="font-semibold">Pay: ₹{carpenter?.carpenter?.pay[user]}</h3>
-            {/* <h3 className="font-bold">Total: ₹{carpenter?.carpenter?.totalAmount || 0}</h3> */}
+            <h3 className="font-semibold">Pay: ₹{carpenter?.carpenter?.pay[user] || 600}</h3>
+            <h3 className="font-bold">Total: ₹{carpenter?.carpenter?.totalAmount[user] || 0}</h3>
         </Link>
             <div className="absolute -top-3 right-0 text-xl">
               <div className="text-green-500" onClick={()=>setShow(true)}><FaEdit/></div>

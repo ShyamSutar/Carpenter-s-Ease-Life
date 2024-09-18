@@ -5,11 +5,13 @@ import AttendanceCalendar from "./AttendanceCalendar";
 import moment from "moment";
 import MistryModal from "./MistryModal";
 import CarpenterSlip from "./CarpenterSlip";
+import { useSelector } from "react-redux";
 
 const Attendance = () => {
   const id = useParams().id;
 
   const [refresh, setRefresh] = useState(false);
+  const user = useSelector(state => state?.auth?.userData?._id)
   const [data, setData] = useState(null);
   const [show, setShow] = useState(false);
   const [slot, setSlot] = useState();
@@ -187,6 +189,9 @@ const Attendance = () => {
         </h1>
         <h1 className="text-xl ">
           <b>Email:</b> {data?.carpenter?.email}
+        </h1>
+        <h1 className="text-xl ">
+          <b>Pay:</b> {data?.carpenter?.pay[user] || 600}
         </h1>
       </div>
 
