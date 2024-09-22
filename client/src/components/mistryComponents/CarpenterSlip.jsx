@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 const CarpenterSlip = ({ events, data, id, refresh }) => {
 
-  const user = useSelector(state => state?.auth?.userData?._id)
+  const user = useSelector(state => state?.auth?.userData)
 
     const attendancePoints = {
         "O": 1.5,
@@ -20,19 +20,23 @@ const CarpenterSlip = ({ events, data, id, refresh }) => {
 
     useEffect(()=>{
       try {
+        if(user){
+          if(user.role === "mistry"){
+            setTotalAdvance(events.reduce((sum, item) => sum + item.advance, 0));
+            setTotalAttendance(events.reduce((sum, item) => sum + (attendancePoints[item.title] || 0), 0));
+            setTotalAmount((Number(totalAttendance) * Number( data?.carpenter?.pay[user._id] || 600) - Number(totalAdvance || 0)).toFixed(2));
 
-        setTotalAdvance(events.reduce((sum, item) => sum + item.advance, 0));
-        setTotalAttendance(events.reduce((sum, item) => sum + (attendancePoints[item.title] || 0), 0));
-    
-        setTotalAmount((Number(totalAttendance) * Number( data?.carpenter?.pay[user] || 600) - Number(totalAdvance || 0)).toFixed(2));
-        
-        if(totalAmount!=0){
-        (async()=>{
-          const response = await axios.patch(`http://localhost:5000/api/v1/users/updatePay/${id}`, {totalAmount}, {withCredentials: true})
-          // console.log(response);
-        })();
-        // console.log(totalAmount);
-      }
+            if(totalAmount!=0){
+              (async()=>{
+                const response = await axios.patch(`http://localhost:5000/api/v1/users/updatePay/${id}`, {totalAmount}, {withCredentials: true})
+              })();
+            }
+        }else{
+            setTotalAdvance(events.reduce((sum, item) => sum + item.advance, 0));
+            setTotalAttendance(events.reduce((sum, item) => sum + (attendancePoints[item.title] || 0), 0));
+            setTotalAmount((Number(totalAttendance) * Number( data?.carpenter?.pay[id] || 600) - Number(totalAdvance || 0)).toFixed(2));
+        }
+}
         
       } catch (error) {
         console.log(error);

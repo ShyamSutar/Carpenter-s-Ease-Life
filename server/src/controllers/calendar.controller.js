@@ -40,4 +40,14 @@ const getEvents = asyncHandler(async(req, res)=>{
     res.status(200).json(events)
 })
 
-export {postEvent, getEvents, updateEvent}
+const getEvents2 = asyncHandler(async(req, res)=>{
+    const events = await Calendar.find({carpenter: req.user._id, mistry: req.params.id});
+    res.status(200).json(events)
+})
+
+const deleteAllCalendar = asyncHandler(async (req, res) => {
+    await Calendar.deleteMany({mistry: req.body.mistryId, carpenter: req.params.id})
+    res.status(200).json({message: "carpenter removed successfully"});
+  });
+
+export {postEvent, getEvents, updateEvent, getEvents2, deleteAllCalendar}

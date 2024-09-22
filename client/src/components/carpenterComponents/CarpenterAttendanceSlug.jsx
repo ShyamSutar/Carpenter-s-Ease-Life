@@ -2,10 +2,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CarpenterSlip from "../mistryComponents/CarpenterSlip";
+import { useSelector } from "react-redux";
 
 const CarpenterAttendanceSlug = () => {
   const id = useParams().id;
-
+  const user = useSelector(state => state?.auth?.userData)
   const [data, setData] = useState(null);
   const [events, setEvents] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -14,10 +15,10 @@ const CarpenterAttendanceSlug = () => {
     (async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/v1/attendance/findMistryById/${id}`,
+          `http://localhost:5000/api/v1/attendance/findCarpenterById2/${id}`,
           { withCredentials: true }
         );
-        setData(response.data.mistry[0]);
+        setData(response.data.carpenter[0]);
       } catch (error) {
         console.log(error);
       }
@@ -28,7 +29,7 @@ const CarpenterAttendanceSlug = () => {
     try {
       (async () => {
         const response = await axios.get(
-          `http://localhost:5000/api/v1/calendar/getEvents/${id}`,
+          `http://localhost:5000/api/v1/calendar/getEvents2/${id}`,
           { withCredentials: true }
         );
 
