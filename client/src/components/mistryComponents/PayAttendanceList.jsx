@@ -3,13 +3,41 @@ import { useState } from "react";
 
 const PayShowAttendance = ({ setShow3, carpenter, setRefresh }) => {
 
-  const [pay, setPay] = useState(carpenter.carpenter.pay);
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
+  const [events, setEvents] = useState([]);
 
   const handleApply = async(e) => {
     e.preventDefault();
+    let startDate = new Date(start).toLocaleDateString();
+    let endDate = new Date(end).toLocaleDateString();
+    
+    const startDateFormatted = new Date(startDate).setHours(0, 0, 0, 0);
+    const endDateFormatted = new Date(endDate).setHours(23, 59, 59, 999);
+    
+    const response = await axios.get(
+        `http://localhost:5000/api/v1/calendar/getEvents/${carpenter.carpenter._id}`,
+        { withCredentials: true }
+      );
 
-    const response = await axios.patch(`http://localhost:5000/api/v1/users/updatePay/${carpenter.carpenter._id}`, {pay}, {withCredentials: true})
-    // console.log(response);
+    const fetchedEvents = response.data;
+
+    const filteredIds = fetchedEvents
+    .filter(item => {
+        const itemStartDate = new Date(item.start).setHours(0, 0, 0, 0);
+        return itemStartDate >= startDateFormatted && itemStartDate <= endDateFormatted;
+    })
+    .map(item => item._id); // Get only the _id
+
+    
+    const response3 = await axios.post("http://localhost:5000/api/v1/calendar/fetchIds", {ids: filteredIds}, {withCredentials: true})
+    //ye response se salary slip banani hain.
+    
+    const response2 = await axios.delete(`http://localhost:5000/api/v1/calendar/deleteRange`, {
+        data: { ids: filteredIds },
+        withCredentials: true
+      })
+
     setRefresh(true)
 
     setShow3(false)
@@ -19,17 +47,33 @@ const PayShowAttendance = ({ setShow3, carpenter, setRefresh }) => {
     <div className="bg-slate-200 rounded shadow-sm w-full p-2 flex flex-col gap-4">
       <div className="mt-4">
         <label
-          htmlFor="time2"
+          htmlFor="start"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Edit:
+          Start:
         </label>
         <input
           className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          type="Number"
-          name="advance"
-            onChange={(e)=>setPay(e.target.value)}
-            value={pay}
+          type="date"
+          name="start"
+          onChange={(e)=>setStart(e.target.value)}
+          value={start}
+            
+        />
+      </div>
+      <div>
+        <label
+          htmlFor="end"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >
+          End:
+        </label>
+        <input
+          className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          type="date"
+          name="end"
+          onChange={(e)=>setEnd(e.target.value)}
+          value={end}
         />
       </div>
 

@@ -50,4 +50,17 @@ const deleteAllCalendar = asyncHandler(async (req, res) => {
     res.status(200).json({message: "carpenter removed successfully"});
   });
 
-export {postEvent, getEvents, updateEvent, getEvents2, deleteAllCalendar}
+  
+const deleteRange = asyncHandler(async (req, res) => {
+    const {ids} = req.body
+    const resp = await Calendar.deleteMany({_id: {$in: ids}})
+    res.status(200).json(resp);
+  });
+
+const fetchIds = asyncHandler(async (req, res)=>{
+    const {ids} = req.body;
+    const resp = await Calendar.find({_id: {$in: ids}})
+    res.status(200).json(resp);
+})
+
+export {postEvent, getEvents, updateEvent, getEvents2, deleteAllCalendar, deleteRange, fetchIds}
