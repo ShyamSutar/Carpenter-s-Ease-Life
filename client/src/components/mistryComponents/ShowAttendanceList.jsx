@@ -17,7 +17,7 @@ const ShowAttendanceList = ({ carpenter, setRefresh }) => {
 
   return (
     <>
-      <div className="relative w-64 sm:w-80 bg-slate-100 rounded-md shadow-md p-4 py-6 hover:scale-105 transition-all">
+      <div className={`relative w-64 sm:w-80 bg-slate-100 rounded-md shadow-md p-4 py-6 ${!show3?"hover:scale-105": ""}  transition-all`}>
           <div className="relative">
         <Link to={`/mistry/attendance/${carpenter.carpenter._id}`}>
             <h3 className="font-semibold">Name: {carpenter.carpenter.username}</h3>

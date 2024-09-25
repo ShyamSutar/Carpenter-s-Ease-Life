@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const paySchema = new mongoose.Schema(
+const slipSchema = new mongoose.Schema(
   {
     mistry: {
       type: mongoose.Schema.Types.ObjectId,
@@ -12,17 +12,21 @@ const paySchema = new mongoose.Schema(
       ref: "User",
     },
     totalAmount: {
-        type: number,
+        type: Number,
         default: 0
     },
-    pay: {
-        type: number,
-        default: 600
+    totalAdvance: {
+        type: Number,
+        default: 0
+    },
+    totalAttendance: {
+      type: Number,
+      default: 0
     }
   },
   { timestamps: true }
 );
 
-const Pay = mongoose.model('Pay', paySchema);
+const Slip = mongoose.model('Slip', slipSchema);
 
-export default Pay;
+export default Slip;

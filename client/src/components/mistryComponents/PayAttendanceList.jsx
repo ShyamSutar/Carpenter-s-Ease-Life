@@ -1,11 +1,21 @@
 import axios from "axios";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const PayShowAttendance = ({ setShow3, carpenter, setRefresh }) => {
 
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [events, setEvents] = useState([]);
+
+  const user = useSelector(state => state?.auth?.userData)
+
+  const attendancePoints = {
+    "O": 1.5,
+    "P": 1,
+    "H": 0.5,
+    "A": 0
+};
 
   const handleApply = async(e) => {
     e.preventDefault();
@@ -31,20 +41,31 @@ const PayShowAttendance = ({ setShow3, carpenter, setRefresh }) => {
 
     
     const response3 = await axios.post("http://localhost:5000/api/v1/calendar/fetchIds", {ids: filteredIds}, {withCredentials: true})
-    //ye response se salary slip banani hain.
+    
+    let events2 = response3.data;
+    
+    // ---
+    let totalAdvance = (events2.reduce((sum, item) => sum + item.advance, 0));
+    let totalAttendance = (events2.reduce((sum, item) => sum + (attendancePoints[item.title] || 0), 0));
+    let totalAmount = ((Number(totalAttendance) * Number( carpenter?.carpenter?.pay[user._id] || 600) - Number(totalAdvance || 0)).toFixed(2));
+
+    const response4 = await axios.post(`http://localhost:5000/api/v1/slip/addSlip/${carpenter.carpenter._id}`, {totalAdvance, totalAttendance, totalAmount}, {withCredentials: true})
+    console.log(response4)
     
     const response2 = await axios.delete(`http://localhost:5000/api/v1/calendar/deleteRange`, {
         data: { ids: filteredIds },
         withCredentials: true
       })
 
+
     setRefresh(true)
+    setRefresh(false)
 
     setShow3(false)
   };
 
   return (
-    <div className="bg-slate-200 rounded shadow-sm w-full p-2 flex flex-col gap-4">
+    <div className="bg-slate-200 rounded shadow-sm w-full p-2 flex flex-col gap-4 z-50">
       <div className="mt-4">
         <label
           htmlFor="start"

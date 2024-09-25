@@ -24,6 +24,8 @@ import CarpenterHome from "./components/carpenterComponents/CarpenterHome.jsx";
 import CarpenterSearch from "./components/carpenterComponents/CarpenterSearch.jsx";
 import { CarpenterAttendance } from "./components/carpenterComponents/CarpenterAttendance.jsx";
 import CarpenterAttendanceSlug from "./components/carpenterComponents/CarpenterAttendanceSlug.jsx";
+import Slip from "./components/mistryComponents/Slip.jsx";
+import CarpenterSlip from "./components/carpenterComponents/CarpenterSlip.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -36,12 +38,14 @@ const router = createBrowserRouter(
         <Route path="search" element={<CarpenterSearch />} />
         <Route path="attendance" element={<CarpenterAttendance />} />
         <Route path="attendance/:id" element={<CarpenterAttendanceSlug />} />
+        <Route path="slip" element={<CarpenterSlip />} />
       </Route>
       <Route path="/mistry" element={<Mistry />}>
         <Route path="" element={<MistryHome />} />
         <Route path="notifications" element={<Notification />} />
         <Route path="show-attendance" element={<ShowAttendance />} />
         <Route path="attendance/:id" element={<Attendance />} />
+        <Route path="slip" element={<Slip />} />
       </Route>
     </Route>
   )

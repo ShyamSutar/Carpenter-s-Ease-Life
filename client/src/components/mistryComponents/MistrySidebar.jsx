@@ -2,6 +2,7 @@ import { Link, NavLink } from "react-router-dom";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { MdCoPresent } from "react-icons/md";
 import { FaHome } from "react-icons/fa";
+import { AiFillCreditCard } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -82,6 +83,26 @@ const MistryHeader = () => {
                 <span className="hidden sm:block">Attendance</span>
               </div>{" "}
             </li>
+            
+          </NavLink>
+
+          <NavLink
+            to="slip"
+            className={({ isActive }) =>
+              `flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-90   ${
+                isActive ? "bg-myRed text-white" : "text-black"
+              } `
+            }
+          >
+            <li>
+              <div className="flex gap-2">
+                <span className="text-2xl">
+                  <AiFillCreditCard />
+                </span>{" "}
+                <span className="hidden sm:block">Slip</span>
+              </div>{" "}
+            </li>
+            
           </NavLink>
         </ol>
       </div>
