@@ -8,7 +8,7 @@ import axios from "axios";
 
 const MistryHeader = () => {
   const [notificationsLength, setNotificationsLength] = useState([]);
-  console.log(notificationsLength)
+  
 
   const fetchNotifications = async () => {
     try {
