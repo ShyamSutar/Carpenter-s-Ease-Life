@@ -26,7 +26,7 @@ const PayShowAttendance = ({ setShow3, carpenter, setRefresh }) => {
     const endDateFormatted = new Date(endDate).setHours(23, 59, 59, 999);
     
     const response = await axios.get(
-        `http://localhost:5000/api/v1/calendar/getEvents/${carpenter.carpenter._id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/getEvents/${carpenter.carpenter._id}`,
         { withCredentials: true }
       );
 
@@ -40,7 +40,7 @@ const PayShowAttendance = ({ setShow3, carpenter, setRefresh }) => {
     .map(item => item._id); // Get only the _id
 
     
-    const response3 = await axios.post("http://localhost:5000/api/v1/calendar/fetchIds", {ids: filteredIds}, {withCredentials: true})
+    const response3 = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/calendar/fetchIds`, {ids: filteredIds}, {withCredentials: true})
     
     let events2 = response3.data;
     
@@ -49,10 +49,10 @@ const PayShowAttendance = ({ setShow3, carpenter, setRefresh }) => {
     let totalAttendance = (events2.reduce((sum, item) => sum + (attendancePoints[item.title] || 0), 0));
     let totalAmount = ((Number(totalAttendance) * Number( carpenter?.carpenter?.pay[user._id] || 600) - Number(totalAdvance || 0)).toFixed(2));
 
-    const response4 = await axios.post(`http://localhost:5000/api/v1/slip/addSlip/${carpenter.carpenter._id}`, {totalAdvance, totalAttendance, totalAmount}, {withCredentials: true})
+    const response4 = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/slip/addSlip/${carpenter.carpenter._id}`, {totalAdvance, totalAttendance, totalAmount}, {withCredentials: true})
     console.log(response4)
     
-    const response2 = await axios.delete(`http://localhost:5000/api/v1/calendar/deleteRange`, {
+    const response2 = await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/v1/calendar/deleteRange`, {
         data: { ids: filteredIds },
         withCredentials: true
       })

@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
+
   //for navigating from register to /#...
   useScrollToHash();
 
@@ -18,7 +19,7 @@ const App = () => {
   useEffect(()=>{
     const getUser = async() => {
       try {
-          const res = await axios.get("http://localhost:5000/api/v1/users/getUser", {withCredentials: true})
+          const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/users/getUser`, {withCredentials: true})
           const user = res.data;
           if(user._id){
             dispatch(authActions.login({userData: user}))

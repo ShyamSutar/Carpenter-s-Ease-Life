@@ -8,11 +8,12 @@ import axios from "axios";
 
 const MistryHeader = () => {
   const [notificationsLength, setNotificationsLength] = useState([]);
+  console.log(notificationsLength)
 
   const fetchNotifications = async () => {
     try {
       const notifications = await axios.get(
-        "http://localhost:5000/api/v1/notification/showNotification",
+        `${import.meta.env.VITE_BASE_URL}/api/v1/notification/showNotification`,
         { withCredentials: true }
       );
       setNotificationsLength(notifications.data.length);

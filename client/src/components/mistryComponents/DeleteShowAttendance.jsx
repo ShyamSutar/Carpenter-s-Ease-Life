@@ -9,7 +9,7 @@ const DeleteShowAttendance = ({ setShow2, carpenter, setRefresh }) => {
     e.preventDefault();
 
     await axios.delete(
-        `http://localhost:5000/api/v1/attendance/removeCarpenter/${carpenter.carpenter._id}`, 
+        `${import.meta.env.VITE_BASE_URL}/api/v1/attendance/removeCarpenter/${carpenter.carpenter._id}`, 
         {
           data: { mistryId: user },
           withCredentials: true
@@ -17,7 +17,7 @@ const DeleteShowAttendance = ({ setShow2, carpenter, setRefresh }) => {
       );
 
     await axios.delete(
-        `http://localhost:5000/api/v1/calendar/deleteAllCalendar/${carpenter.carpenter._id}`, 
+        `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/deleteAllCalendar/${carpenter.carpenter._id}`, 
         {
           data: { mistryId: user },
           withCredentials: true

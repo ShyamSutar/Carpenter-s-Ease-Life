@@ -24,7 +24,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:5000/api/v1/users/register", inputs, {withCredentials: true});
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/register`, inputs, {withCredentials: true});
       if(res.status===201){
         navigate("/login")
         toast.success(res.data.message)

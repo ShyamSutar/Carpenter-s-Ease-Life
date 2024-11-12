@@ -13,7 +13,7 @@ const CarpenterSearch = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/v1/users/mistrySearch",
+        `${import.meta.env.VITE_BASE_URL}/api/v1/users/mistrySearch`,
         { username: search },
         { withCredentials: true }
       );
@@ -34,7 +34,7 @@ const CarpenterSearch = () => {
   const sendNotification = async (mistry) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/v1/notification/notificationRequest",
+        `${import.meta.env.VITE_BASE_URL}/api/v1/notification/notificationRequest`,
         { mistryId: mistry._id },
         { withCredentials: true }
       );

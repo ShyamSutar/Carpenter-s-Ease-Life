@@ -5,7 +5,7 @@ const NotificationList = ({ setRefresh, notification }) => {
   const handleApprove = async (carpenterId) => {
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/v1/notification/approveNotification/${carpenterId}`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/notification/approveNotification/${carpenterId}`,
         {},
         { withCredentials: true }
       );
@@ -23,7 +23,7 @@ const NotificationList = ({ setRefresh, notification }) => {
   const handleReject = async (carpenterId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:5000/api/v1/notification/rejectNotification/${carpenterId}`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/notification/rejectNotification/${carpenterId}`,
         { withCredentials: true }
       );
       if(res.status === 200){

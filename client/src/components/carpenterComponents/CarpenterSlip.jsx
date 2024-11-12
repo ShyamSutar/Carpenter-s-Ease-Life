@@ -11,7 +11,7 @@ const Slip = () => {
         (async () => {
           try {
             const slips = await axios.get(
-              "http://localhost:5000/api/v1/slip/showSlipCarpenter",
+              `${import.meta.env.VITE_BASE_URL}/api/v1/slip/showSlipCarpenter`,
               { withCredentials: true }
             );
             setSlips(slips.data);

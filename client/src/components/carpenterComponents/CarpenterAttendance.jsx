@@ -9,7 +9,7 @@ export const CarpenterAttendance = () => {
     (async () => {
       try {
         const showMistry = await axios.get(
-          "http://localhost:5000/api/v1/attendance/showMistry",
+          `${import.meta.env.VITE_BASE_URL}/api/v1/attendance/showMistry`,
           { withCredentials: true }
         );
         setShowMistry(showMistry.data.mistry);

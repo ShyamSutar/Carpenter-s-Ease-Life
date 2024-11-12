@@ -27,7 +27,7 @@ const CarpenterSlip = ({ events, data, id, refresh }) => {
             setTotalAmount((Number(totalAttendance) * Number( data?.carpenter?.pay[user._id] || 600) - Number(totalAdvance || 0)).toFixed(2));
 
               (async()=>{
-                const response = await axios.patch(`http://localhost:5000/api/v1/users/updatePay/${id}`, {totalAmount}, {withCredentials: true})
+                const response = await axios.patch(`${import.meta.env.VITE_BASE_URL}/api/v1/users/updatePay/${id}`, {totalAmount}, {withCredentials: true})
               })();
         }else{
             setTotalAdvance(events.reduce((sum, item) => sum + item.advance, 0));

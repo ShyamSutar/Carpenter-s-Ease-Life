@@ -15,7 +15,7 @@ const CarpenterAttendanceSlug = () => {
     (async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/v1/attendance/findCarpenterById2/${id}`,
+          `${import.meta.env.VITE_BASE_URL}/api/v1/attendance/findCarpenterById2/${id}`,
           { withCredentials: true }
         );
         setData(response.data.carpenter[0]);
@@ -29,7 +29,7 @@ const CarpenterAttendanceSlug = () => {
     try {
       (async () => {
         const response = await axios.get(
-          `http://localhost:5000/api/v1/calendar/getEvents2/${id}`,
+          `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/getEvents2/${id}`,
           { withCredentials: true }
         );
 

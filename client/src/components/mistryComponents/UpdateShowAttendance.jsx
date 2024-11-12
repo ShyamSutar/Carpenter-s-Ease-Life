@@ -8,7 +8,7 @@ const UpdateShowAttendance = ({ setShow, carpenter, setRefresh }) => {
   const handleApply = async(e) => {
     e.preventDefault();
 
-    const response = await axios.patch(`http://localhost:5000/api/v1/users/updatePay/${carpenter.carpenter._id}`, {pay}, {withCredentials: true})
+    const response = await axios.patch(`${import.meta.env.VITE_BASE_URL}/api/v1/users/updatePay/${carpenter.carpenter._id}`, {pay}, {withCredentials: true})
     // console.log(response);
     setRefresh(true)
 

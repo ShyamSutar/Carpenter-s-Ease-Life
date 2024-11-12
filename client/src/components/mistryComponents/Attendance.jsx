@@ -27,7 +27,7 @@ const Attendance = () => {
     (async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/v1/attendance/findCarpenterById/${id}`,
+          `${import.meta.env.VITE_BASE_URL}/api/v1/attendance/findCarpenterById/${id}`,
           { withCredentials: true }
         );
         setData(response.data.carpenter[0]);
@@ -43,7 +43,7 @@ const Attendance = () => {
     try {
       (async () => {
         const response = await axios.get(
-          `http://localhost:5000/api/v1/calendar/getEvents/${id}`,
+          `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/getEvents/${id}`,
           { withCredentials: true }
         );
 
@@ -136,7 +136,7 @@ const Attendance = () => {
 
     if(!isUpdate){
       const response = await axios.post(
-        "http://localhost:5000/api/v1/calendar/postEvent",
+        `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/postEvent`,
         {
           carpenter: id,
           start: startParsed,
@@ -150,7 +150,7 @@ const Attendance = () => {
     }else{
       console.log(inputs.id);
       const response = await axios.put(
-        `http://localhost:5000/api/v1/calendar/updateEvent/${inputs.id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/updateEvent/${inputs.id}`,
         {
           carpenter: id,
           start: startParsed,

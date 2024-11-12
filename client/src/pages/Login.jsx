@@ -21,7 +21,7 @@ const Login = () => {
   }
 
   const getUser = async() => {
-    const user = await axios.get("http://localhost:5000/api/v1/users/getUser", {withCredentials: true});
+    const user = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/users/getUser`, {withCredentials: true});
     dispatch(authActions.login({userData: user.data}))
   }
 
@@ -29,7 +29,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:5000/api/v1/users/login", inputs, {withCredentials: true});
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/login`, inputs, {withCredentials: true});
       
       if(res.status === 200){
         getUser()

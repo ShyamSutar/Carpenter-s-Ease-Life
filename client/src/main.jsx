@@ -26,13 +26,19 @@ import { CarpenterAttendance } from "./components/carpenterComponents/CarpenterA
 import CarpenterAttendanceSlug from "./components/carpenterComponents/CarpenterAttendanceSlug.jsx";
 import Slip from "./components/mistryComponents/Slip.jsx";
 import CarpenterSlip from "./components/carpenterComponents/CarpenterSlip.jsx";
+import ProtectedRoute from "./components/defaultComponents/ProtectedRoute.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+
       <Route path="/" element={<Content />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
+
+      {/* Protected Routes */}
+      {/* <Route element={<ProtectedRoute/>}> */}
+
       <Route path="/carpenter" element={<Carpenter />}>
         <Route path="" element={<CarpenterHome />} />
         <Route path="search" element={<CarpenterSearch />} />
@@ -47,7 +53,8 @@ const router = createBrowserRouter(
         <Route path="attendance/:id" element={<Attendance />} />
         <Route path="slip" element={<Slip />} />
       </Route>
-    </Route>
+      </Route>
+    // </Route>
   )
 );
 

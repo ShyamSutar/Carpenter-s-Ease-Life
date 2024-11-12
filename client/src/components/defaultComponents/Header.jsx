@@ -13,7 +13,7 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/api/v1/users/logout",
+        `${import.meta.env.VITE_BASE_URL}/api/v1/users/logout`,
         {},
         { withCredentials: true }
       );

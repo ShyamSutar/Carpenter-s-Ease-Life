@@ -10,7 +10,7 @@ const ShowAttendance = () => {
     (async () => {
       try {
         const showCarpenters = await axios.get(
-          "http://localhost:5000/api/v1/attendance/showCarpenters",
+          `${import.meta.env.VITE_BASE_URL}/api/v1/attendance/showCarpenters`,
           { withCredentials: true }
         );
         setShowCarpenters(showCarpenters.data.carpenters);
