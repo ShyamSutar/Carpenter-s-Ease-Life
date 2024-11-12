@@ -26,9 +26,6 @@ import attendanceRoute from './routes/attendance.routes.js'
 import CalendarRoute from './routes/calendar.routes.js'
 import slipRoute from './routes/slip.route.js'
 
-app.use("/", (req, res)=>{
-    res.send("hello world")
-})
 
 app.use("/api/v1/users", userRoute)
 app.use("/api/v1/notification", notificationRoute)
