@@ -217,7 +217,7 @@ const About = () => {
                   <a href="#">Mahesh Yenpure</a>
                 </h3>
                 <span className="text-gray-500 dark:text-gray-400">
-                  Presentation & Tester
+                  UIUX / Testing
                 </span>
                 <p className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">
                   Michael drives the technical strategy of the flowbite platform
@@ -312,7 +312,7 @@ const About = () => {
                   <a href="#">Pranay Mungre</a>
                 </h3>
                 <span className="text-gray-500 dark:text-gray-400">
-                  Designer & Tester
+                  UIUX / R&D
                 </span>
                 <p className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">
                   Lana drives the technical strategy of the flowbite platform
