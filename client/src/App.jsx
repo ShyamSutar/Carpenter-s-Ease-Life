@@ -9,7 +9,13 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "flowbite";
 
+
+
 const App = () => {
+
+  useEffect(() => {
+    import("flowbite").then((flowbite) => flowbite.initFlowbite());
+  }, []);
 
   //for navigating from register to /#...
   useScrollToHash();
