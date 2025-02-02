@@ -7,15 +7,15 @@ import { useDispatch } from "react-redux";
 import { authActions } from "./store/authentication.js";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import "flowbite";
+import "flowbite";
 
 
 
 const App = () => {
 
-  // useEffect(() => {
-  //   import("flowbite").then((flowbite) => flowbite.initFlowbite());
-  // }, []);
+  useEffect(() => {
+    import("flowbite").then((flowbite) => flowbite.initFlowbite());
+  }, []);
 
   //for navigating from register to /#...
   useScrollToHash();
