@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { authActions } from "./store/authentication.js";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import "flowbite";
 
 const App = () => {
 
