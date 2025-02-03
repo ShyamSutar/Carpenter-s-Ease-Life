@@ -8,6 +8,7 @@ import { authActions } from "./store/authentication.js";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "flowbite";
+import Loading from "./components/defaultComponents/Loading.jsx";
 
 
 
@@ -60,6 +61,8 @@ const App = () => {
         pauseOnHover
         theme="light"
       />
+
+      <div className="hidden"><Loading/></div>
     </div>
   );
 };
