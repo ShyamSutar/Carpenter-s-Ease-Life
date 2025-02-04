@@ -5,7 +5,8 @@ import AttendanceCalendar from "./AttendanceCalendar";
 import moment from "moment";
 import MistryModal from "./MistryModal";
 import CarpenterSlip from "./CarpenterSlip";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const Attendance = () => {
   const id = useParams().id;
@@ -22,17 +23,21 @@ const Attendance = () => {
     advance: "",
   });
   const [isUpdate, setIsUpdate] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
       try {
+        dispatch(toggle(true))
         const response = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/v1/attendance/findCarpenterById/${id}`,
           { withCredentials: true }
         );
         setData(response.data.carpenter[0]);
+        dispatch(toggle(false))
       } catch (error) {
         console.log(error);
+        dispatch(toggle(false))
       }
     })();
   }, [id]);
@@ -42,6 +47,7 @@ const Attendance = () => {
   useEffect(() => {
     try {
       (async () => {
+        dispatch(toggle(true))
         const response = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/getEvents/${id}`,
           { withCredentials: true }
@@ -57,8 +63,10 @@ const Attendance = () => {
             advance: record.advance,
           }));
           setEvents(formattedEvents);
+          dispatch(toggle(false))
         } else {
           console.error("Unexpected response format:", response.data);
+          dispatch(toggle(false))
         }
       })();
     } catch (error) {
@@ -135,6 +143,7 @@ const Attendance = () => {
     }
 
     if(!isUpdate){
+      dispatch(toggle(true))
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/postEvent`,
         {
@@ -163,6 +172,7 @@ const Attendance = () => {
       );
 
       setIsUpdate(false)
+      dispatch(toggle(false))
     }
 
     setInputs({

@@ -2,23 +2,28 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import SlipList from "./SlipList";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const Slip = () => {
 
-    const [slips, setSlips] = useState([])
+    const [slips, setSlips] = useState([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         (async () => {
           try {
+            dispatch(toggle(true))
             const slips = await axios.get(
               `${import.meta.env.VITE_BASE_URL}/api/v1/slip/showSlipMistry`,
               { withCredentials: true }
             );
             setSlips(slips.data);
-            
+            dispatch(toggle(false))
           } catch (error) {
             const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
             toast.error(errorMessage);
+            dispatch(toggle(false))
           }
         })();
       }, []);

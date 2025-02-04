@@ -2,7 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CarpenterSlip from "../mistryComponents/CarpenterSlip";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const CarpenterAttendanceSlug = () => {
   const id = useParams().id;
@@ -11,16 +12,21 @@ const CarpenterAttendanceSlug = () => {
   const [events, setEvents] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     (async () => {
+      dispatch(toggle(true))
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/v1/attendance/findCarpenterById2/${id}`,
           { withCredentials: true }
         );
         setData(response.data.carpenter[0]);
+        dispatch(toggle(false))
       } catch (error) {
         console.log(error);
+        dispatch(toggle(false))
       }
     })();
   }, [id]);

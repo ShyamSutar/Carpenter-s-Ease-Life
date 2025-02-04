@@ -1,18 +1,25 @@
 import axios from "axios";
 import { useState } from "react";
+import { toggle } from "../../store/hiddenSlice";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const UpdateShowAttendance = ({ setShow, carpenter, setRefresh }) => {
 
   const [pay, setPay] = useState(carpenter.carpenter.pay);
+  const dispatch = useDispatch();
 
   const handleApply = async(e) => {
     e.preventDefault();
+    dispatch(toggle(true))
 
     const response = await axios.patch(`${import.meta.env.VITE_BASE_URL}/api/v1/users/updatePay/${carpenter.carpenter._id}`, {pay}, {withCredentials: true})
-    // console.log(response);
+    
+    toast.success(response.data.message)
     setRefresh(true)
 
     setShow(false)
+    dispatch(toggle(false))
   };
 
   return (

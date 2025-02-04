@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
+import { toast } from "react-toastify";
 
 const PayShowAttendance = ({ setShow3, carpenter, setRefresh }) => {
 
@@ -9,6 +11,7 @@ const PayShowAttendance = ({ setShow3, carpenter, setRefresh }) => {
   const [events, setEvents] = useState([]);
 
   const user = useSelector(state => state?.auth?.userData)
+  const dispatch = useDispatch();
 
   const attendancePoints = {
     "O": 1.5,
@@ -19,6 +22,9 @@ const PayShowAttendance = ({ setShow3, carpenter, setRefresh }) => {
 
   const handleApply = async(e) => {
     e.preventDefault();
+
+    dispatch(toggle(true))
+
     let startDate = new Date(start).toLocaleDateString();
     let endDate = new Date(end).toLocaleDateString();
     
@@ -60,8 +66,9 @@ const PayShowAttendance = ({ setShow3, carpenter, setRefresh }) => {
 
     setRefresh(true)
     setRefresh(false)
-
+    toast.success(`Paid from ${startDate} to ${endDate}`)
     setShow3(false)
+    dispatch(toggle(false))
   };
 
   return (

@@ -1,21 +1,27 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ShowAttendanceList from "./ShowAttendanceList";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const ShowAttendance = () => {
   const [showCarpenters, setShowCarpenters] = useState([]);
   const [refresh, setRefresh] = useState(false)
+  const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
       try {
+        dispatch(toggle(true))
         const showCarpenters = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/v1/attendance/showCarpenters`,
           { withCredentials: true }
         );
         setShowCarpenters(showCarpenters.data.carpenters);
+        dispatch(toggle(false))
       } catch (error) {
         console.log(error);
+        dispatch(toggle(false))
       }
     })();
   }, [refresh]);

@@ -2,10 +2,12 @@ import axios from "axios";
 import { useState } from "react";
 import CarpenterSearchList from "./CarpenterSearchList";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const CarpenterSearch = () => {
 
-  
+  const dispatch = useDispatch();
 
   const [search, setSearch] = useState("");
   const [mistries, setMistries] = useState("");
@@ -14,6 +16,7 @@ const CarpenterSearch = () => {
     e.preventDefault();
 
     try {
+      dispatch(toggle(true))
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/users/mistrySearch`,
         { username: search },
@@ -26,15 +29,17 @@ const CarpenterSearch = () => {
       }else{
         toast.error(res.data.message)
       }
-
+      dispatch(toggle(false))
     } catch (error) {
       const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
       toast.error(errorMessage);
+      dispatch(toggle(false))
     }
   };
 
   const sendNotification = async (mistry) => {
     try {
+      dispatch(toggle(true))
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/notification/notificationRequest`,
         { mistryId: mistry._id },
@@ -46,10 +51,11 @@ const CarpenterSearch = () => {
       }else{
         toast.error(res.data.message)
       }
-
+      dispatch(toggle(false))
     } catch (error) {
       const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
       toast.error(errorMessage);
+      dispatch(toggle(false))
     }
   };
 

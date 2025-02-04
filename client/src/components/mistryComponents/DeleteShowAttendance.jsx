@@ -1,12 +1,16 @@
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
+import { toast } from "react-toastify";
 
 const DeleteShowAttendance = ({ setShow2, carpenter, setRefresh }) => {
 
-  const user = useSelector(state => state?.auth?.userData?._id)
+  const user = useSelector(state => state?.auth?.userData?._id);
+  const dispatch = useDispatch();
 
   const handleApply = async(e) => {
     e.preventDefault();
+    dispatch(toggle(true))
 
     await axios.delete(
         `${import.meta.env.VITE_BASE_URL}/api/v1/attendance/removeCarpenter/${carpenter.carpenter._id}`, 
@@ -26,8 +30,9 @@ const DeleteShowAttendance = ({ setShow2, carpenter, setRefresh }) => {
       
     setRefresh(true)
     setRefresh(false)
-
+    toast.success("Deleted Successfully")
     setShow2(false)
+    dispatch(toggle(false))
   };
 
   return (

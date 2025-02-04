@@ -1,20 +1,25 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import CarpenterAttendanceList from "./CarpenterAttendanceList";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 export const CarpenterAttendance = () => {
   const [showMistry, setShowMistry] = useState([]);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
       try {
+        dispatch(toggle(true))
         const showMistry = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/v1/attendance/showMistry`,
           { withCredentials: true }
         );
         setShowMistry(showMistry.data.mistry);
+        dispatch(toggle(false))
       } catch (error) {
         console.log(error);
+        dispatch(toggle(false))
       }
     })();
   }, []);
