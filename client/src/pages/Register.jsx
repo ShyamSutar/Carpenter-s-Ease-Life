@@ -2,8 +2,12 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { toggle } from "../store/hiddenSlice";
+import { useDispatch } from "react-redux";
 
 const Register = () => {
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [inputs, setInputs] = useState({
@@ -23,6 +27,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
+      dispatch(toggle(true))
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/users/register`,
         inputs,
@@ -34,10 +39,12 @@ const Register = () => {
       } else {
         toast.error(res.data.message);
       }
+      dispatch(toggle(false))
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred";
       toast.error(errorMessage);
+      dispatch(toggle(false))
     }
   };
 

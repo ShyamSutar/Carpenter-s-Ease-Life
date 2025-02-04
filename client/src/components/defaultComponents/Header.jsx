@@ -3,6 +3,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { authActions } from "../../store/authentication";
+import { toggle } from "../../store/hiddenSlice";
 
 const Header = () => {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
@@ -15,6 +16,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
+      dispatch(toggle(true))
       await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/users/logout`,
         {},
@@ -22,8 +24,10 @@ const Header = () => {
       );
       dispatch(authActions.logout());
       navigate('/login');
+      dispatch(toggle(false))
     } catch (error) {
       console.log(error);
+      dispatch(toggle(false))
     }
   };
 

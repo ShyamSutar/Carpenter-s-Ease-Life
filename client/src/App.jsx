@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import useScrollToHash from './components/useScrollToHash.jsx';
 import { useEffect } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "./store/authentication.js";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,6 +20,9 @@ const App = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const isLoading = useSelector((state) => state.hidden.hidden);
+
 
   useEffect(() => {
     const getUser = async () => {
@@ -68,7 +71,7 @@ const App = () => {
         theme="light"
       />
 
-      <div className="hidden"><Loading /></div>
+      {isLoading && <div><Loading /></div>}
     </div>
   );
 };

@@ -8,11 +8,11 @@ const hiddenSlice = createSlice({
   name: 'hidden',
   initialState,
   reducers: {
-    toggle: (state) => {
-      state.hidden = !state.hidden;
+    toggle: (state, action) => {
+      state.hidden = action.payload;
     },
   },
 });
 
 export const { toggle } = hiddenSlice.actions;
-export default hiddenSlice.reducer;
+export default hiddenSlice;
