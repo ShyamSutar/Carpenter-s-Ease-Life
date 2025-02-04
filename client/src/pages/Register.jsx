@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Register = () => {
-
   const navigate = useNavigate();
 
   const [inputs, setInputs] = useState({
@@ -16,31 +15,43 @@ const Register = () => {
   });
 
   const handleOnChange = (e) => {
-    const {name, value} = e.target;
-    setInputs({...inputs, [name]:value})
-  }
+    const { name, value } = e.target;
+    setInputs({ ...inputs, [name]: value });
+  };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/register`, inputs, {withCredentials: true});
-      if(res.status===201){
-        navigate("/login")
-        toast.success(res.data.message)
-      }else{
-        toast.error(res.data.message)
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/users/register`,
+        inputs,
+        { withCredentials: true }
+      );
+      if (res.status === 201) {
+        navigate("/login");
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
-      toast.error(errorMessage)
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred";
+      toast.error(errorMessage);
     }
-    
-  }
+  };
 
   return (
-    <>
-      <section className="bg-gray-50 dark:bg-gray-900 my-24">
+    <div className="relative">
+      {/* Animated Background */}
+      <div className="background">
+        <ul className="background">
+          {[...Array(35)].map((_, index) => (
+            <li key={index}></li>
+          ))}
+        </ul>
+      </div>
+      <section className=" my-24">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <Link
             to="/"
@@ -54,7 +65,11 @@ const Register = () => {
               {/* <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Create an account
               </h1> */}
-              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6" action="#">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-4 md:space-y-6"
+                action="#"
+              >
                 <div>
                   <label
                     htmlFor="username"
@@ -173,7 +188,7 @@ const Register = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

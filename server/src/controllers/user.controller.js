@@ -68,6 +68,8 @@ const getUser = asyncHandler(async (req, res) => {
 const logout = asyncHandler(async (req, res) => {
   res.cookie("jwt", "", {
     httpOnly: true,
+    secure: process.env.NODE_ENV !== "development",
+    sameSite: process.env.NODE_ENV==="production" ? "none" : "strict",
     expires: new Date(0),
   });
 

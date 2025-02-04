@@ -1,12 +1,15 @@
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { authActions } from "../../store/authentication";
 
 const Header = () => {
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+  const navbarRef = useRef(null);
+
   const status = useSelector((state) => state.auth.status);
   const user = useSelector((state) => state.auth.userData?.role);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,16 +21,35 @@ const Header = () => {
         { withCredentials: true }
       );
       dispatch(authActions.logout());
-      navigate('/login')
+      navigate('/login');
     } catch (error) {
       console.log(error);
     }
   };
 
+  // Close navbar if click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+        setIsNavbarOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Toggle navbar when hamburger icon is clicked
+  const toggleNavbar = () => {
+    setIsNavbarOpen(!isNavbarOpen);
+  };
+
   return (
     <>
       <nav className="bg-white dark:bg-gray-900 fixed w-full z-40 top-0 start-0 border-b border-gray-200 dark:border-gray-600 ">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto ">
+        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto " ref={navbarRef}>
           <Link
             to="/"
             href="/"
@@ -59,11 +81,9 @@ const Header = () => {
             )}
 
             <button
-              data-collapse-toggle="navbar-sticky"
               type="button"
               className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-              aria-controls="navbar-sticky"
-              aria-expanded="false"
+              onClick={toggleNavbar}
             >
               <span className="sr-only">Open main menu</span>
               <svg
@@ -84,14 +104,16 @@ const Header = () => {
             </button>
           </div>
           <div
-            className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+            className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${isNavbarOpen ? "block" : "hidden"}`}
             id="navbar-sticky"
           >
             <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 transition-all">
               <li>
                 <NavLink
                   to="/"
-                  className={({isActive})=>`block py-2 px-3  ${isActive ? 'bg-myRed text-white' : 'text-black' } rounded md:bg-transparent ${isActive ? "md:text-myRed" : "md:text-black"}  md:p-0 md:dark:text-blue-500`}
+                  className={({ isActive }) =>
+                    `block py-2 px-3 ${isActive ? 'bg-myRed text-white' : 'text-black'} rounded md:bg-transparent ${isActive ? "md:text-myRed" : "md:text-black"} md:p-0 md:dark:text-blue-500`
+                  }
                   aria-current="page"
                 >
                   Home
@@ -123,22 +145,15 @@ const Header = () => {
                 </Link>
               </li>
               {user === "mistry" && (
-                <>
-                  <NavLink to="/mistry" className={({isActive})=>`${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900' }`}>
-                    <li className="block py-2 px-3 rounded  md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Mistry</li>
-                  </NavLink>
-                </>
+                <NavLink to="/mistry" className={({ isActive }) => `${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900'}`}>
+                  <li className="block py-2 px-3 rounded md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Mistry</li>
+                </NavLink>
               )}
-
-
               {user === "carpenter" && (
-                <>
-                  <NavLink to={'/carpenter'} className={({isActive})=>`${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900' }`}>
-                    <li className="block py-2 px-3  rounded  md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Carpenter</li>
-                  </NavLink>
-                </>
+                <NavLink to={'/carpenter'} className={({ isActive }) => `${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900'}`}>
+                  <li className="block py-2 px-3 rounded md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Carpenter</li>
+                </NavLink>
               )}
-              
             </ul>
           </div>
         </div>
