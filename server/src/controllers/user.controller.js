@@ -85,6 +85,14 @@ const mistrySearch = asyncHandler(async (req, res) => {
   res.status(200).json(mistry);
 });
 
+const plywoodSearch = asyncHandler(async (req, res) => {
+  const plywood = await User.find({
+    username: req.body.username,
+    role: "plywood",
+  }).select("-password");
+  res.status(200).json(plywood);
+});
+
 const updatePay = asyncHandler(async (req, res) => {
   const updateUser = await User.findByIdAndUpdate(req.params.id, {
     $set: {
@@ -120,4 +128,5 @@ export {
   mistrySearch,
   updatePay,
   totalAmount,
+  plywoodSearch,
 };

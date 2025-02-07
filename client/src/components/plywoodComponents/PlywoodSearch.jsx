@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
-import CarpenterSearchList from "./CarpenterSearchList";
+import PlywoodSearchList from "./PlywoodSearchList";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { toggle } from "../../store/hiddenSlice";
 
-const CarpenterSearch = () => {
+const PlywoodSearch = () => {
 
   const dispatch = useDispatch();
 
@@ -63,16 +63,16 @@ const CarpenterSearch = () => {
     <div className="min-h-[93vh] mt-28">
     <div className="w-full flex justify-center">
         <form onSubmit={handleSubmit}>
-            <input type="text" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-[70vw] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light" value={search} onChange={(e)=>setSearch(e.target.value)} placeholder="Search Mistry"/>
+            <input type="text" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-[70vw] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light" value={search} onChange={(e)=>setSearch(e.target.value)}/>
             <button type="submit" className="bg-red-500 hover:bg-red-600 transition-all px-6 py-2 rounded text-white mt-2 w-full">search</button>
         </form>
     </div>
 
     <div>
-        {mistries && mistries.map((mistry)=>(<CarpenterSearchList key={mistry._id} mistry={mistry} sendNotification={sendNotification}/>))}
+        {mistries && mistries.map((mistry)=>(<PlywoodSearchList key={mistry._id} mistry={mistry} sendNotification={sendNotification}/>))}
     </div>
 </div>
   )
 }
 
-export default CarpenterSearch
+export default PlywoodSearch

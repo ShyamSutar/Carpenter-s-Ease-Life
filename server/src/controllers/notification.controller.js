@@ -19,6 +19,10 @@ const notificationRequest = asyncHandler(async (req, res) => {
   res.status(200).json({message: "request successfully sent"})
 });
 
+const notificationRequestPlywood = asyncHandler(async(req, res)=>{
+
+})
+
 const showNotification = asyncHandler(async(req, res)=>{
   const notifications = await Notification.find({mistry:req.user._id}).populate('carpenter')
   res.json(notifications)
@@ -36,4 +40,4 @@ const approveNotification = asyncHandler(async(req, res)=>{
   res.status(200).json({message: "request accepted successfully"})
 })
 
-export { notificationRequest, approveNotification, showNotification, rejectNotification };
+export { notificationRequest, approveNotification, showNotification, rejectNotification, notificationRequestPlywood };

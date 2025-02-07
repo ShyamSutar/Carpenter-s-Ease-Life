@@ -20,13 +20,18 @@ import Attendance from "./components/mistryComponents/Attendance.jsx";
 import Notification from "./components/mistryComponents/Notification.jsx";
 import ShowAttendance from "./components/mistryComponents/ShowAttendance.jsx";
 import MistryHome from "./components/mistryComponents/MistryHome.jsx";
+import ShowSite from "./components/mistryComponents/ShowSite.jsx";
 import CarpenterHome from "./components/carpenterComponents/CarpenterHome.jsx";
 import CarpenterSearch from "./components/carpenterComponents/CarpenterSearch.jsx";
 import { CarpenterAttendance } from "./components/carpenterComponents/CarpenterAttendance.jsx";
 import CarpenterAttendanceSlug from "./components/carpenterComponents/CarpenterAttendanceSlug.jsx";
 import Slip from "./components/mistryComponents/Slip.jsx";
 import CarpenterSlip from "./components/carpenterComponents/CarpenterSlip.jsx";
-import ProtectedRoute from "./components/defaultComponents/ProtectedRoute.jsx";
+// import ProtectedRoute from "./components/defaultComponents/ProtectedRoute.jsx";
+import Plywood from "./components/plywoodComponents/Plywood.jsx";
+import PlywoodHome from "./components/plywoodComponents/PlywoodHome.jsx";
+import PlywoodSearch from "./components/plywoodComponents/PlywoodSearch.jsx";
+import SiteSlug from "./components/mistryComponents/SiteSlug.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -52,9 +57,15 @@ const router = createBrowserRouter(
         <Route path="show-attendance" element={<ShowAttendance />} />
         <Route path="attendance/:id" element={<Attendance />} />
         <Route path="slip" element={<Slip />} />
+        <Route path="site" element={<ShowSite />} />
+        <Route path="siteSlug/:id" element={<SiteSlug />} />
+      </Route>
+      <Route path="/plywood" element={<Plywood/>}>
+        <Route path="" element={<PlywoodHome />}/>
+        <Route path="search" element={<PlywoodSearch />} />
       </Route>
       </Route>
-    // </Route>
+    //  </Route>
   )
 );
 
