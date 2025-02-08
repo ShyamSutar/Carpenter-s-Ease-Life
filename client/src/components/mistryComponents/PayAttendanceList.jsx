@@ -8,7 +8,6 @@ const PayShowAttendance = ({ setShow3, carpenter, setRefresh }) => {
 
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
-  const [events, setEvents] = useState([]);
 
   const user = useSelector(state => state?.auth?.userData)
   const dispatch = useDispatch();

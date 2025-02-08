@@ -6,38 +6,39 @@ import { toggle } from "../../store/hiddenSlice";
 
 const ShowAttendance = () => {
   const [showCarpenters, setShowCarpenters] = useState([]);
-  const [refresh, setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
       try {
-        dispatch(toggle(true))
-        const showCarpenters = await axios.get(
+        dispatch(toggle(true));
+        const response = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/v1/attendance/showCarpenters`,
           { withCredentials: true }
         );
-        setShowCarpenters(showCarpenters.data.carpenters);
-        dispatch(toggle(false))
+        setShowCarpenters(response.data.carpenters);
+        dispatch(toggle(false));
       } catch (error) {
         console.log(error);
-        dispatch(toggle(false))
+        dispatch(toggle(false));
       }
     })();
   }, [refresh]);
 
-
   return (
     <div className="mt-28 ml-4 min-h-screen">
-      <h1 className="font-bold text-2xl">Attendance</h1>
-      <div className="mt-6 flex flex-wrap gap-4 justify-center">
-        {showCarpenters &&
-          showCarpenters.map((carpenter) => (
-            <ShowAttendanceList key={carpenter._id} carpenter={carpenter} setRefresh={setRefresh}/>
-          ))}
-      </div>
-
+      <h1 className="font-bold text-center text-2xl text-[#ED2A4F]">Attendance</h1>
       
+      <div className="mt-6 flex flex-wrap gap-4 justify-center">
+        {showCarpenters.length > 0 ? (
+          showCarpenters.map((carpenter) => (
+            <ShowAttendanceList key={carpenter._id} carpenter={carpenter} setRefresh={setRefresh} />
+          ))
+        ) : (
+          <p className="text-gray-500">No carpenters found.</p>
+        )}
+      </div>
     </div>
   );
 };
