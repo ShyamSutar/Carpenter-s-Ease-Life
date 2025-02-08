@@ -13,7 +13,7 @@ const addSite = asyncHandler(async(req, res)=>{
     const response = await Site.create({mistry: req.user._id, siteName, location})
 
     res.status(200).json({
-        message: "successfull",
+        message: "successfully added site",
         response
     })
 })

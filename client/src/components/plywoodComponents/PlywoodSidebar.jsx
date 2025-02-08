@@ -1,8 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
-import { CiSearch } from "react-icons/ci";
+import { IoIosNotificationsOutline } from "react-icons/io";
+import { AiFillCreditCard } from "react-icons/ai";
 import { MdCoPresent } from "react-icons/md";
 import { FaHome } from "react-icons/fa";
-import { AiFillCreditCard } from "react-icons/ai";
 
 const PlywoodSidebar = () => {
 
@@ -21,7 +21,7 @@ const PlywoodSidebar = () => {
           </Link>
 
           <NavLink
-            to="search"
+            to="notification"
             className={({ isActive }) =>
               `relative flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-90   ${
                 isActive ? "bg-myRed text-white" : "text-black"
@@ -31,10 +31,10 @@ const PlywoodSidebar = () => {
             <li>
               <div className="flex gap-2">
                 <span className="text-2xl">
-                  <CiSearch />
+                  <IoIosNotificationsOutline />
                 </span>{" "}
                 <span className="hidden sm:block">
-                  Search{" "}
+                  Notification{" "}
                 </span>
               </div>
             </li>

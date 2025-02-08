@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ShowSiteList = () => {
   const [sites, setSites] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -37,14 +38,13 @@ const ShowSiteList = () => {
               <tr
                 key={site._id}
                 className="border-b hover:bg-gray-50 cursor-pointer"
+                onClick={() => navigate(`/mistry/siteSlug/${site._id}`)}
               >
-                <Link to={`/mistry/siteSlug/${site._id}`} className="contents">
-                  <td className="py-3 px-6">{site.siteName}</td>
-                  <td className="py-3 px-6">{site.location}</td>
-                  <td className="py-3 px-6">{site.plywoodDealer || "-"}</td>
-                  <td className="py-3 px-6">{site.hardwareDealer || "-"}</td>
-                  <td className="py-3 px-6">{site.client || "-"}</td>
-                </Link>
+                <td className="py-3 px-6">{site.siteName}</td>
+                <td className="py-3 px-6">{site.location}</td>
+                <td className="py-3 px-6">{site.plywoodDealer || "-"}</td>
+                <td className="py-3 px-6">{site.hardwareDealer || "-"}</td>
+                <td className="py-3 px-6">{site.client || "-"}</td>
               </tr>
             ))}
           </tbody>

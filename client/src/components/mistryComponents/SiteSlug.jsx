@@ -60,7 +60,7 @@ const SiteSlug = () => {
           !showPlywoodModel ? "hidden" : ""
         } h-[90%] w-full flex justify-center z-50 fixed top-10 left-0`}
       >
-        <AddPlywoodModel setShowPlywoodModel={setShowPlywoodModel}/>
+        <AddPlywoodModel setShowPlywoodModel={setShowPlywoodModel} site={site}/>
       </div>
     </div>
   );

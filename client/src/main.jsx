@@ -30,7 +30,7 @@ import CarpenterSlip from "./components/carpenterComponents/CarpenterSlip.jsx";
 // import ProtectedRoute from "./components/defaultComponents/ProtectedRoute.jsx";
 import Plywood from "./components/plywoodComponents/Plywood.jsx";
 import PlywoodHome from "./components/plywoodComponents/PlywoodHome.jsx";
-import PlywoodSearch from "./components/plywoodComponents/PlywoodSearch.jsx";
+import NotificationPlywood from "./components/plywoodComponents/NotificationPlywood.jsx";
 import SiteSlug from "./components/mistryComponents/SiteSlug.jsx";
 
 const router = createBrowserRouter(
@@ -62,7 +62,7 @@ const router = createBrowserRouter(
       </Route>
       <Route path="/plywood" element={<Plywood/>}>
         <Route path="" element={<PlywoodHome />}/>
-        <Route path="search" element={<PlywoodSearch />} />
+        <Route path="notification" element={<NotificationPlywood />} />
       </Route>
       </Route>
     //  </Route>

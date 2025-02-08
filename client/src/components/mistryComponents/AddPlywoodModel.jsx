@@ -3,13 +3,13 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import AddPlywoodModelList from "../plywoodComponents/AddPlywoodModelList";
 
-const AddPlywoodModel = ({ setShowPlywoodModel }) => {
+const AddPlywoodModel = ({ setShowPlywoodModel, site }) => {
   const [search, setSearch] = useState("");
   const [plywood, setPlywood] = useState([]);
 
   const handleOnClose = () => {
     setShowPlywoodModel(false);
-
+    setPlywood([]);
     setSearch("");
   };
 
@@ -37,21 +37,21 @@ const AddPlywoodModel = ({ setShowPlywoodModel }) => {
   };
 
   const sendNotification = async (plywood) => {
-    // try {
-    //   const res = await axios.post(
-    //     `${import.meta.env.VITE_BASE_URL}/api/v1/notification/notificationRequest`,
-    //     { mistryId: mistry._id },
-    //     { withCredentials: true }
-    //   );
-    //   if(res.status === 200){
-    //     toast.success(res.data.message);
-    //   }else{
-    //     toast.error(res.data.message)
-    //   }
-    // } catch (error) {
-    //   const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
-    //   toast.error(errorMessage);
-    // }
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/notification/notificationRequestPlywood`,
+        { plywoodId: plywood._id, site: site.siteName },
+        { withCredentials: true }
+      );
+      if(res.status === 200){
+        toast.success(res.data.message);
+      }else{
+        toast.error(res.data.message)
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
+      toast.error(errorMessage);
+    }
   };
 
   return (
