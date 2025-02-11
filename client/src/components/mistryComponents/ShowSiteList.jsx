@@ -22,15 +22,16 @@ const ShowSiteList = () => {
 
   return (
     <div className="p-6">
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+      {/* Table should scroll horizontally on small screens */}
+      <div className="max-w-full overflow-x-auto">
+        <table className="min-w-[800px] w-full bg-white border border-gray-200 rounded-lg shadow-md">
           <thead>
             <tr className="bg-gray-100 text-gray-700">
-              <th className="py-3 px-6 text-left">Site Name</th>
-              <th className="py-3 px-6 text-left">Location</th>
-              <th className="py-3 px-6 text-left">Plywood Dealer</th>
-              <th className="py-3 px-6 text-left">Hardware Dealer</th>
-              <th className="py-3 px-6 text-left">Client</th>
+              <th className="py-3 px-6 text-left whitespace-nowrap">Site Name</th>
+              <th className="py-3 px-6 text-left whitespace-nowrap">Location</th>
+              <th className="py-3 px-6 text-left whitespace-nowrap">Plywood Dealer</th>
+              <th className="py-3 px-6 text-left whitespace-nowrap">Hardware Dealer</th>
+              <th className="py-3 px-6 text-left whitespace-nowrap">Client</th>
             </tr>
           </thead>
           <tbody>
@@ -40,11 +41,11 @@ const ShowSiteList = () => {
                 className="border-b hover:bg-gray-50 cursor-pointer"
                 onClick={() => navigate(`/mistry/siteSlug/${site._id}`)}
               >
-                <td className="py-3 px-6">{site.siteName}</td>
-                <td className="py-3 px-6">{site.location}</td>
-                <td className="py-3 px-6">{site.plywoodDealer || "-"}</td>
-                <td className="py-3 px-6">{site.hardwareDealer || "-"}</td>
-                <td className="py-3 px-6">{site.client || "-"}</td>
+                <td className="py-3 px-6 whitespace-nowrap">{site.siteName}</td>
+                <td className="py-3 px-6 whitespace-nowrap">{site.location}</td>
+                <td className="py-3 px-6 whitespace-nowrap">{site.plywoodDealer || "-"}</td>
+                <td className="py-3 px-6 whitespace-nowrap">{site.hardwareDealer || "-"}</td>
+                <td className="py-3 px-6 whitespace-nowrap">{site.client || "-"}</td>
               </tr>
             ))}
           </tbody>
