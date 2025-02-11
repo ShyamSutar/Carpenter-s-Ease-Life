@@ -28,14 +28,12 @@ const CarpenterCard = ({ carpenter, setRefresh }) => {
   return (
     <div className="w-80" >
       <div className="relative w-full bg-white rounded-xl shadow-md p-6 border-l-4 border-[#ED2A4F] flex flex-col items-center transition-all hover:shadow-lg hover:scale-105 overflow-hidden">
-      <button
-          onClick={() => {
-            navigate(`/mistry/attendance/${carpenter.carpenter._id}`);
-          }}
+      <Link 
+          to={`/mistry/attendance/${carpenter.carpenter._id}`}
           className="absolute top-3 right-3 text-myRed hover:text-red-400 transition text-xl"
         >
           <FaArrowRight />
-        </button>
+        </Link>
         {/* Avatar */}
         <div className="w-16 h-16 flex items-center justify-center rounded-full bg-[#ED2A4F] text-white text-2xl font-bold mb-3 shadow-md">
           {firstLetter}
@@ -51,7 +49,7 @@ const CarpenterCard = ({ carpenter, setRefresh }) => {
           </p>
           <p className="flex items-center mt-1">
             <PhoneIcon className="w-4 h-4 mr-2 text-[#ED2A4F]" />
-            {carpenter.carpenter.contact || "N/A"}
+            {carpenter.carpenter.phone || "N/A"}
           </p>
           <p className="flex items-center mt-1">
             <CalendarIcon className="w-4 h-4 mr-2 text-[#ED2A4F]" />

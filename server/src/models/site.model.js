@@ -20,24 +20,32 @@ const siteSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
         },
-        plywoodType: {
+        total: {
           type: String,
+          default: 0,
         },
-        brand: {
-          type: String,
-        },
-        thickness: {
-          type: Number,
-        },
-        size: {
-          type: String,
-        },
-        quantity: {
-          type: Number,
-        },
-        ratePerSheet: {
-          type: Number,
-        },
+        plywoodDetails: [
+          {
+            plywoodType: {
+              type: String,
+            },
+            brand: {
+              type: String,
+            },
+            thickness: {
+              type: Number,
+            },
+            size: {
+              type: String,
+            },
+            quantity: {
+              type: Number,
+            },
+            ratePerSheet: {
+              type: Number,
+            },
+          },
+        ],
       },
     ],
   },

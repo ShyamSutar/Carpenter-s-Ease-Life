@@ -33,6 +33,7 @@ import PlywoodHome from "./components/plywoodComponents/PlywoodHome.jsx";
 import NotificationPlywood from "./components/plywoodComponents/NotificationPlywood.jsx";
 import SiteSlug from "./components/mistryComponents/SiteSlug.jsx";
 import PlywoodSupply from "./components/plywoodComponents/PlywoodSupply.jsx";
+import PlywoodSlug from "./components/plywoodComponents/PlywoodSlug.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -65,6 +66,7 @@ const router = createBrowserRouter(
         <Route path="" element={<PlywoodHome />}/>
         <Route path="notification" element={<NotificationPlywood />} />
         <Route path="supply" element={<PlywoodSupply />} />
+        <Route path="plywoodSlug/:id" element={<PlywoodSlug />} />
       </Route>
       </Route>
     //  </Route>

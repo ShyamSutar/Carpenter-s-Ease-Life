@@ -43,56 +43,48 @@ const AddPlywoodModel = ({ setShowPlywoodModel, site }) => {
         { plywoodId: plywood._id, site: site.siteName },
         { withCredentials: true }
       );
-      if(res.status === 200){
+      if (res.status === 200) {
         toast.success(res.data.message);
-      }else{
-        toast.error(res.data.message)
+      } else {
+        toast.error(res.data.message);
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
+      const errorMessage = error.response?.data?.message || "An unexpected error occurred";
       toast.error(errorMessage);
     }
   };
 
   return (
-    <div className="bg-slate-200 rounded shadow-sm mb-8 w-[95%] p-2 flex flex-col gap-4">
-      <div className="">
-        <div className="w-full flex justify-center">
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-[70vw] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
-              onChange={(e) => setSearch(e.target.value)}
-              value={search}
-              placeholder="Search Plywood Dealer"
-            />
-            <button
-              type="submit"
-              className="bg-red-500 hover:bg-red-600 transition-all px-6 py-2 rounded text-white mt-2 w-full"
-            >
-              search
-            </button>
-          </form>
-        </div>
+    <div className="bg-white rounded-lg shadow-lg p-6 w-[95%] max-w-lg mx-auto border-t-4 border-[#ED2A4F]">
+      <h2 className="text-xl font-bold text-[#ED2A4F] text-center mb-4">Search Plywood Dealer</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          type="text"
+          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#ED2A4F] focus:outline-none"
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          placeholder="Enter dealer's name"
+        />
+        <button
+          type="submit"
+          className="w-full py-2 bg-[#ED2A4F] text-white rounded-lg font-semibold hover:bg-[#c81e3c] transition-all"
+        >
+          Search
+        </button>
+      </form>
+
+      <div className="mt-4 space-y-3">
+        {plywood.map((ply) => (
+          <AddPlywoodModelList key={ply._id} plywood={ply} sendNotification={sendNotification} />
+        ))}
       </div>
 
-      <div>
-        {plywood &&
-          plywood.map((plywood) => (
-            <AddPlywoodModelList
-              key={plywood._id}
-              plywood={plywood}
-              sendNotification={sendNotification}
-            />
-          ))}
-      </div>
-
-      <div className="flex gap-4">
-        <button className="py-2 px-6 bg-green-500 rounded text-white font-semibold hover:scale-105 transition-all">
+      <div className="flex justify-between mt-6">
+        <button className="py-2 px-6 bg-green-500 text-white font-semibold rounded-lg hover:scale-105 transition-all">
           Apply
         </button>
         <button
-          className="py-2 px-6 bg-red-500 rounded text-white font-semibold hover:scale-105 transition-all"
+          className="py-2 px-6 bg-gray-400 text-white font-semibold rounded-lg hover:bg-gray-500 transition-all"
           onClick={handleOnClose}
         >
           Close

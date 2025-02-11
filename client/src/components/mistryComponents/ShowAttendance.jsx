@@ -28,7 +28,7 @@ const ShowAttendance = () => {
 
   return (
     <div className="mt-28 ml-4 min-h-screen">
-      <h1 className="font-bold text-center text-2xl text-[#ED2A4F]">Attendance</h1>
+      <h1 className="font-bold mb-6 text-center text-2xl">Attendance</h1>
       
       <div className="mt-6 flex flex-wrap gap-4 justify-center">
         {showCarpenters.length > 0 ? (
