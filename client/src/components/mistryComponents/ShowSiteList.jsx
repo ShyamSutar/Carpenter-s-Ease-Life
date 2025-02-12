@@ -21,10 +21,10 @@ const ShowSiteList = () => {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="p-6">
       {/* Ensure only the table scrolls horizontally */}
-      <div className="w-full overflow-x-auto rounded-lg shadow-md">
-        <table className="w-full bg-white border border-gray-200">
+      <div className="overflow-x-auto w-full">
+        <table className="min-w-[800px] bg-white border border-gray-200 rounded-lg shadow-md w-full">
           <thead>
             <tr className="bg-gray-100 text-gray-700">
               <th className="py-3 px-6 text-left whitespace-nowrap">Site Name</th>

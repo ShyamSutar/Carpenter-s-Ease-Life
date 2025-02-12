@@ -61,7 +61,7 @@ const ShowSite = () => {
         </form>
       </div>
 
-      <div className="mt-8 max-w-4xl mx-auto">
+      <div className="mt-8">
         <ShowSiteList />
       </div>
     </div>

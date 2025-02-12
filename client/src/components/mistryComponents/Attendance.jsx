@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AttendanceCalendar from "./AttendanceCalendar";
 import moment from "moment";
@@ -9,13 +9,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggle } from "../../store/hiddenSlice";
 
 const Attendance = () => {
-  const id = useParams().id;
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state?.auth?.userData?._id);
 
   const [refresh, setRefresh] = useState(false);
-  const user = useSelector(state => state?.auth?.userData?._id)
   const [data, setData] = useState(null);
   const [show, setShow] = useState(false);
-  const [slot, setSlot] = useState();
+  const [slot, setSlot] = useState(null);
+  const [events, setEvents] = useState([]);
   const [inputs, setInputs] = useState({
     start: "",
     end: "",
@@ -23,206 +25,149 @@ const Attendance = () => {
     advance: "",
   });
   const [isUpdate, setIsUpdate] = useState(false);
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
-        dispatch(toggle(true))
+        dispatch(toggle(true));
         const response = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/v1/attendance/findCarpenterById/${id}`,
           { withCredentials: true }
         );
         setData(response.data.carpenter[0]);
-        dispatch(toggle(false))
       } catch (error) {
-        console.log(error);
-        dispatch(toggle(false))
+        console.error(error);
+      } finally {
+        dispatch(toggle(false));
       }
-    })();
-  }, [id]);
-
-  const [events, setEvents] = useState([]);
+    };
+    fetchData();
+  }, [id, dispatch]);
 
   useEffect(() => {
-    try {
-      (async () => {
-        dispatch(toggle(true))
+    const fetchEvents = async () => {
+      try {
+        dispatch(toggle(true));
         const response = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/getEvents/${id}`,
           { withCredentials: true }
         );
-
         if (Array.isArray(response.data)) {
-          const formattedEvents = response.data.map((record) => ({
-            _id: record._id,
-            title: record.title,
-            start: new Date(record.start),
-            end: new Date(record.end),
-            date: record.date,
-            advance: record.advance,
-          }));
-          setEvents(formattedEvents);
-          dispatch(toggle(false))
+          setEvents(
+            response.data.map((record) => ({
+              _id: record._id,
+              title: record.title,
+              start: new Date(record.start),
+              end: new Date(record.end),
+              date: record.date,
+              advance: record.advance,
+            }))
+          );
         } else {
           console.error("Unexpected response format:", response.data);
-          dispatch(toggle(false))
         }
-      })();
-    } catch (error) {
-      console.log(error);
-    }
-  }, [refresh, id]);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        dispatch(toggle(false));
+      }
+    };
+    fetchEvents();
+  }, [refresh, id, dispatch]);
 
-  const handleUpdate = async (props) => {
+  const handleUpdate = (props) => {
     setShow(true);
     setSlot(props.event.date);
-    setIsUpdate(true)
-    const time12HourStart = new Date(props.event.start).toLocaleTimeString();
-    const time12HourEnd = new Date(props.event.end).toLocaleTimeString();
+    setIsUpdate(true);
     setInputs({
       id: props.event._id,
-      start: moment(time12HourStart, "hh:mm:ss A").format("HH:mm"),
-      end: moment(time12HourEnd, "hh:mm:ss A").format("HH:mm"),
+      start: moment(props.event.start).format("HH:mm"),
+      end: moment(props.event.end).format("HH:mm"),
       status: props.event.title,
       advance: props.event.advance,
     });
   };
 
-  const handleClose = () => {
-    setShow(false);
-    setInputs({
-      start: "",
-      end: "",
-      status: "",
-      advance: "",
-    });
-
-    setIsUpdate(false);
-  };
-
-  const components = {
-    event: (props) => {
-      return (
-        <div onClick={() => handleUpdate(props)}>
-          <div>{props.event.title}</div>
-          <div>{props.event.advance}</div>
-        </div>
-      );
-    },
-  };
-
-  const handleSelectSlot = (slot) => {
-    const slotDate = new Date(slot.slots).toLocaleDateString("en-GB");
-
-    const isDateMatched = events.some((event) => slotDate === event.date);
-    if (!isDateMatched) {
-      setSlot(new Date(slot.slots).toLocaleDateString("en-GB"));
-      setShow(true);
-    }
-  };
-
   const handleApply = async (e) => {
     e.preventDefault();
-
-    let startParsed = new Date(
-      `${moment(slot, "DD/MM/YYYY").format("YYYY-MM-DD")}T${inputs.start}`
-    );
-
-    let endParsed = new Date(
-      `${moment(slot, "DD/MM/YYYY").format("YYYY-MM-DD")}T${inputs.end}`
-    );
-
-    if (inputs.status == "A") {
-      startParsed = new Date(
-        `${moment(slot, "DD/MM/YYYY").format("YYYY-MM-DD")}T00:00:00`
-      );
-      endParsed = new Date(
-        `${moment(slot, "DD/MM/YYYY").format("YYYY-MM-DD")}T00:00:00`
-      );
+    try {
+      dispatch(toggle(true));
+      const requestData = {
+        carpenter: id,
+        start: moment(`${slot} ${inputs.start}`, "DD/MM/YYYY HH:mm").toDate(),
+        end: moment(`${slot} ${inputs.end}`, "DD/MM/YYYY HH:mm").toDate(),
+        date: slot,
+        title: inputs.status,
+        advance: inputs.advance,
+      };
+      if (isUpdate) {
+        await axios.put(
+          `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/updateEvent/${inputs.id}`,
+          requestData,
+          { withCredentials: true }
+        );
+      } else {
+        await axios.post(
+          `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/postEvent`,
+          requestData,
+          { withCredentials: true }
+        );
+      }
+      setRefresh((prev) => !prev);
+      setShow(false);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      dispatch(toggle(false));
     }
-
-    if(!isUpdate){
-      dispatch(toggle(true))
-      const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/postEvent`,
-        {
-          carpenter: id,
-          start: startParsed,
-          end: endParsed,
-          date: slot,
-          title: inputs.status,
-          advance: inputs.advance,
-        },
-        { withCredentials: true }
-      );
-    }else{
-      console.log(inputs.id);
-      const response = await axios.put(
-        `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/updateEvent/${inputs.id}`,
-        {
-          carpenter: id,
-          start: startParsed,
-          end: endParsed,
-          date: slot,
-          title: inputs.status,
-          advance: inputs.advance,
-        },
-        { withCredentials: true }
-      );
-
-      setIsUpdate(false)
-      dispatch(toggle(false))
-    }
-
-    setInputs({
-      start: "",
-      end: "",
-      status: "",
-      advance: "",
-    });
-
-    setRefresh(true);
-    setShow(false);
-  };
-
-  const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    setInputs({ ...inputs, [name]: value });
   };
 
   return (
-    <>
-      <div className="mt-24 p-4 bg-slate-200 rounded mr-4">
-        <h1 className="text-xl ">
-          <b>Name:</b> {data?.carpenter?.username}
-        </h1>
-        <h1 className="text-xl ">
-          <b>Email:</b> {data?.carpenter?.email}
-        </h1>
-        <h1 className="text-xl ">
-          <b>Pay:</b> {data?.carpenter?.pay[user] || 600}
-        </h1>
+    <div className="mt-24 p-6 max-w-5xl mx-auto space-y-6 bg-white shadow-md rounded-lg">
+      <div className="p-4 bg-gray-100 rounded-lg shadow">
+        <h2 className="text-2xl font-semibold text-gray-800">Carpenter Details</h2>
+        <p className="text-lg text-gray-700"><b>Name:</b> {data?.carpenter?.username}</p>
+        <p className="text-lg text-gray-700"><b>Email:</b> {data?.carpenter?.email}</p>
+        <p className="text-lg text-gray-700"><b>Phone:</b> {data?.carpenter?.phone}</p>
+        <p className="text-lg text-gray-700"><b>Pay:</b> {data?.carpenter?.pay[user] || 600}</p>
       </div>
 
-      <div className="mt-4 min-h-screen relative">
+      <div className="overflow-x-auto bg-gray-50 p-4 rounded-lg shadow-md">
         <AttendanceCalendar
           events={events}
-          components={components}
-          handleSelectSlot={handleSelectSlot}
+          components={{ event: (props) => (
+            <div
+              onClick={() => handleUpdate(props)}
+              className="p-2 cursor-pointer  rounded-md text-center shadow-md"
+            >
+              <p className="font-semibold">{props.event.title}</p>
+              <p className="text-sm">{props.event.advance}</p>
+            </div>
+          )}}
+          handleSelectSlot={(slot) => {
+            const slotDate = new Date(slot.slots).toLocaleDateString("en-GB");
+            if (!events.some((event) => slotDate === event.date)) {
+              setSlot(slotDate);
+              setShow(true);
+            }
+          }}
         />
       </div>
-      <div
-        className={` ${
-          !show ? "hidden" : ""
-        } h-[90%] w-full flex justify-center z-50 fixed top-10 left-0`}
-      >
-        <MistryModal slot={slot} handleOnChange={handleOnChange} inputs={inputs} handleApply={handleApply} handleClose={handleClose}/>
-        
-      </div>
 
-      <CarpenterSlip events={events} data={data} id={id} refresh={refresh}/>
-    </>
+      {show && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+          <MistryModal
+            slot={slot}
+            inputs={inputs}
+            handleOnChange={(e) => setInputs({ ...inputs, [e.target.name]: e.target.value })}
+            handleApply={handleApply}
+            handleClose={() => setShow(false)}
+          />
+        </div>
+      )}
+
+      <CarpenterSlip events={events} data={data} id={id} refresh={refresh} />
+    </div>
   );
 };
 
