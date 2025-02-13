@@ -168,6 +168,11 @@ const Header = () => {
                   <li className="block py-2 px-3 rounded md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Hardware</li>
                 </NavLink>
               )}
+              {user === "client" && (
+                <NavLink to={'/client'} className={({ isActive }) => `${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900'}`}>
+                  <li className="block py-2 px-3 rounded md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Client</li>
+                </NavLink>
+              )}
             </ul>
           </div>
         </div>

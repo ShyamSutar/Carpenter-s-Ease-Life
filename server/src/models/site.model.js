@@ -82,6 +82,14 @@ const siteSchema = new mongoose.Schema(
         ],
       },
     ],
+    client: [
+      {
+        client: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

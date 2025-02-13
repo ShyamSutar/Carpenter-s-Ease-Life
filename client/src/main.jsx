@@ -39,6 +39,9 @@ import HardwareHome from "./components/hardware/HardwareHome.jsx";
 import NotificationHardware from "./components/hardware/NotificationHardware.jsx";
 import HardwareSupply from "./components/hardware/HardwareSupply.jsx";
 import HardwareSlug from "./components/hardware/HardwareSlug.jsx";
+import Client from "./components/client/Client.jsx";
+import ClientHome from "./components/client/ClientHome.jsx";
+import NotificationClient from "./components/client/NotificationClient.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -78,6 +81,10 @@ const router = createBrowserRouter(
         <Route path="notification" element={<NotificationHardware />} />
         <Route path="supply" element={<HardwareSupply />} />
         <Route path="hardwareSlug/:id" element={<HardwareSlug />} />
+      </Route>
+      <Route path="/client" element={<Client/>}>
+        <Route path="" element={<ClientHome />}/>
+        <Route path="notification" element={<NotificationClient />}/>
       </Route>
       </Route>
     //  </Route>

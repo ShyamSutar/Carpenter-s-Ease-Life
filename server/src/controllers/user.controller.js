@@ -101,6 +101,14 @@ const hardwareSearch = asyncHandler(async (req, res) => {
   res.status(200).json(plywood);
 });
 
+const clientSearch = asyncHandler(async (req, res) => {
+  const client = await User.find({
+    username: req.body.username,
+    role: "client",
+  }).select("-password");
+  res.status(200).json(client);
+});
+
 const updatePay = asyncHandler(async (req, res) => {
   const updateUser = await User.findByIdAndUpdate(req.params.id, {
     $set: {
@@ -138,4 +146,5 @@ export {
   totalAmount,
   plywoodSearch,
   hardwareSearch,
+  clientSearch
 };

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { protect } from "../middlewares/auth.middleware.js";
-import { notificationRequest, showNotification, rejectNotification, approveNotification, notificationRequestPlywood, showNotificationPlywood, rejectNotificationPlywood, approveNotificationPlywood, notificationRequestHardware, showNotificationHardware, rejectNotificationHardware, approveNotificationHardware } from "../controllers/notification.controller.js";
+import { notificationRequest, showNotification, rejectNotification, approveNotification, notificationRequestPlywood, showNotificationPlywood, rejectNotificationPlywood, approveNotificationPlywood, notificationRequestHardware, showNotificationHardware, rejectNotificationHardware, approveNotificationHardware, notificationRequestClient, showNotificationClient, rejectNotificationClient, approveNotificationClient } from "../controllers/notification.controller.js";
 
 const router = Router();
 
@@ -20,5 +20,11 @@ router.route('/notificationRequestHardware').post(protect, notificationRequestHa
 router.route('/showNotificationHardware').get(protect, showNotificationHardware)
 router.route('/rejectNotificationHardware/:mistryId/:site').delete(protect, rejectNotificationHardware)
 router.route('/approveNotificationHardware/:mistryId/:site').patch(protect, approveNotificationHardware)
+
+//client
+router.route('/notificationRequestClient').post(protect, notificationRequestClient)
+router.route('/showNotificationClient').get(protect, showNotificationClient)
+router.route('/rejectNotificationClient/:mistryId/:site').delete(protect, rejectNotificationClient)
+router.route('/approveNotificationClient/:mistryId/:site').patch(protect, approveNotificationClient)
 
 export default router;

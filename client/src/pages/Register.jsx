@@ -172,6 +172,7 @@ const Register = () => {
                     <option value="carpenter">Carpenter</option>
                     <option value="plywood">Plywood Dealer</option>
                     <option value="hardware">Hardware Material</option>
+                    <option value="client">Client</option>
                   </select>
                 </div>
 

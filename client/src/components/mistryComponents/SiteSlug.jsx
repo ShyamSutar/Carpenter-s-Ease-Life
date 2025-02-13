@@ -6,6 +6,7 @@ import SiteSlugSlip from "./SiteSlugSlip";
 import { toast } from "react-toastify";
 import AddHardwareModel from "./AddHardwareModel";
 import SiteSlugSlipHardware from "./SiteSlugSlipHardware";
+import AddClientModel from "./AddClientModel";
 
 const SiteSlug = () => {
   const id = useParams().id;
@@ -15,6 +16,7 @@ const SiteSlug = () => {
   const [site, setSite] = useState("");
   const [showPlywoodModel, setShowPlywoodModel] = useState(false);
   const [showHardwareModel, setShowHardwareModel] = useState(false);
+  const [showClientModel, setShowClientModel] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [profitPercentage, setProfitPercentage] = useState(35);
@@ -23,6 +25,13 @@ const SiteSlug = () => {
     siteName: "",
     location: "",
   });
+
+    // Dummy Payment Data
+    const payments = [
+      { id: 1, date: "2025-02-01", amount: 5000 },
+      { id: 2, date: "2025-02-10", amount: 3000 },
+      { id: 3, date: "2025-02-15", amount: 7000 },
+    ];
 
   useEffect(() => {
     (async () => {
@@ -46,6 +55,10 @@ const SiteSlug = () => {
     setShowHardwareModel(true);
   }
 
+  const handleAddClient = () => {
+    setShowClientModel(true)
+  }
+
   const totalGrandTotalPlywood = site?.plywood?.reduce((total, item) => {
     return (
       total +
@@ -65,6 +78,10 @@ const SiteSlug = () => {
       )
     );
   }, 0);
+
+  const totalAmount = totalGrandTotalPlywood + totalGrandTotalHardware;
+  const totalPaid = payments.reduce((acc, payment) => acc + payment.amount, 0);
+  const remainingBalance = totalAmount - totalPaid;
 
   const carpenterProfit = ((totalGrandTotalPlywood + totalGrandTotalHardware) * profitPercentage) / 100;
 
@@ -128,7 +145,10 @@ const SiteSlug = () => {
         >
           Add Hardware
         </button>
-        <button className="w-full sm:w-auto px-6 py-2 bg-[#ED2A4F] text-white font-semibold rounded-lg shadow-md hover:bg-[#c92040] transition">
+        <button
+          onClick={handleAddClient}
+          className="w-full sm:w-auto px-6 py-2 bg-[#ED2A4F] text-white font-semibold rounded-lg shadow-md hover:bg-[#c92040] transition"
+        >
           Add Client
         </button>
         <button
@@ -164,13 +184,48 @@ const SiteSlug = () => {
           <div
             key={item.hardware._id}
             className="mt-6 p-4 bg-white rounded-lg shadow-md border border-gray-200"
-          >{console.log(item)}
+          >
             <h1 className="font-bold text-lg text-[#ED2A4F]">
               {item.hardware.username}
             </h1>
             <SiteSlugSlipHardware data={item.hardwareDetails} />
           </div>
         ))}
+      </div>
+      
+      <div className="h-2 w-full bg-gray-500 border-2 border-t-red-500 border-b-red-500 mt-8"></div>
+
+            {/* Payment Slip Section */}
+            <div className="mt-6 p-6 border-2 border-gray-300 bg-white rounded-lg shadow-md">
+        <h2 className="text-xl font-bold text-[#ED2A4F]">Payment Slip</h2>
+        <div className="mt-4">
+          {payments.length > 0 ? (
+            <table className="w-full border-collapse border border-gray-300">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="border border-gray-300 px-4 py-2">Date</th>
+                  <th className="border border-gray-300 px-4 py-2">Amount Paid</th>
+                </tr>
+              </thead>
+              <tbody>
+                {payments.map((payment) => (
+                  <tr key={payment.id} className="text-center">
+                    <td className="border border-gray-300 px-4 py-2">{payment.date}</td>
+                    <td className="border border-gray-300 px-4 py-2">₹{payment.amount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="text-gray-600 text-center">No payments made yet.</p>
+          )}
+        </div>
+        <h2 className="mt-4 text-lg font-bold text-right text-[#ED2A4F]">
+          Total Paid: ₹{totalPaid}
+        </h2>
+        <h2 className="text-lg font-bold text-right text-[#ED2A4F]">
+          Remaining Balance: ₹{remainingBalance}
+        </h2>
       </div>
 
       {/* Carpenter's Profit Calculation */}
@@ -212,6 +267,17 @@ const SiteSlug = () => {
       >
         <AddHardwareModel
           setShowHardwareModel={setShowHardwareModel}
+          site={site}
+        />
+      </div>
+
+      <div
+        className={` ${
+          !showClientModel ? "hidden" : ""
+        } h-[90%] w-full flex justify-center z-50 fixed top-10 left-0 bg-gray-900 bg-opacity-50`}
+      >
+        <AddClientModel
+          setShowClientModel={setShowClientModel}
           site={site}
         />
       </div>
