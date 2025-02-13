@@ -34,6 +34,11 @@ import NotificationPlywood from "./components/plywoodComponents/NotificationPlyw
 import SiteSlug from "./components/mistryComponents/SiteSlug.jsx";
 import PlywoodSupply from "./components/plywoodComponents/PlywoodSupply.jsx";
 import PlywoodSlug from "./components/plywoodComponents/PlywoodSlug.jsx";
+import Hardware from "./components/hardware/Hardware.jsx";
+import HardwareHome from "./components/hardware/HardwareHome.jsx";
+import NotificationHardware from "./components/hardware/NotificationHardware.jsx";
+import HardwareSupply from "./components/hardware/HardwareSupply.jsx";
+import HardwareSlug from "./components/hardware/HardwareSlug.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -67,6 +72,12 @@ const router = createBrowserRouter(
         <Route path="notification" element={<NotificationPlywood />} />
         <Route path="supply" element={<PlywoodSupply />} />
         <Route path="plywoodSlug/:id" element={<PlywoodSlug />} />
+      </Route>
+      <Route path="/hardware" element={<Hardware/>}>
+        <Route path="" element={<HardwareHome />}/>
+        <Route path="notification" element={<NotificationHardware />} />
+        <Route path="supply" element={<HardwareSupply />} />
+        <Route path="hardwareSlug/:id" element={<HardwareSlug />} />
       </Route>
       </Route>
     //  </Route>

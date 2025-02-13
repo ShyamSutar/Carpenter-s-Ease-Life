@@ -2,7 +2,7 @@ import { Card } from "flowbite-react";
 import { PhoneIcon, EnvelopeIcon, MapPinIcon, CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import {Link} from "react-router-dom";
 
-const PlywoodSupplyCard = ({ sites }) => {
+const HardwareSupplyCard = ({ sites }) => {
   // Group sites by mistry._id
   const groupedSites = sites.reduce((acc, site) => {
     const { mistry } = site;
@@ -38,7 +38,7 @@ const PlywoodSupplyCard = ({ sites }) => {
           {/* Sites List */}
           <div className="mt-4">
             {sites.map((site) => (
-              <Link to={`/plywood/plywoodSlug/${site._id}`} key={site._id} >
+              <Link to={`/hardware/hardwareSlug/${site._id}`} key={site._id} >
                 <div className="border-t pt-3 mt-3">
                 <h4 className="text-md font-semibold flex items-center gap-1">
                   <MapPinIcon className="w-4 h-4 text-[#ED2A4F]" />
@@ -72,4 +72,4 @@ const PlywoodSupplyCard = ({ sites }) => {
   );
 };
 
-export { PlywoodSupplyCard };
+export default HardwareSupplyCard;

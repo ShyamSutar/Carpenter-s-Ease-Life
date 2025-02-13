@@ -48,6 +48,40 @@ const siteSchema = new mongoose.Schema(
         ],
       },
     ],
+    hardware: [
+      {
+        hardware: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+        total: {
+          type: String,
+          default: 0,
+        },
+        hardwareDetails: [
+          {
+            itemName: {
+              type: String,
+            },
+            brand: {
+              type: String,
+            },
+            size: {
+              type: String, // Example: "10mm", "5 inch", "M8 Bolt"
+            },
+            quantity: {
+              type: Number,
+            },
+            unit: {
+              type: String, // Example: "pieces", "kg", "meter"
+            },
+            ratePerUnit: {
+              type: Number,
+            },
+          },
+        ],
+      },
+    ],
   },
   { timestamps: true }
 );

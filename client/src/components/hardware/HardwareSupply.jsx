@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { PlywoodSupplyCard } from "./PlywoodSupplyCard";
 import { toast } from "react-toastify";
 import axios from "axios";
+import HardwareSupplyCard from "./HardwareSupplyCard";
 
-const PlywoodSupply = () => {
+const HardwareSupply = () => {
 
       const [sites, setSites] = useState([])
 
@@ -11,12 +11,13 @@ const PlywoodSupply = () => {
         (async()=>{
           try {
             const res = await axios.get(
-              `${import.meta.env.VITE_BASE_URL}/api/v1/site/fetchSitesPlywood`,
+              `${import.meta.env.VITE_BASE_URL}/api/v1/site/fetchSitesHardware`,
               { withCredentials: true }
             );
       
             if(res.status === 200){
               setSites(res.data);
+              console.log(res.data)
             }else{
               toast.error(res.data.message)
             }
@@ -31,9 +32,9 @@ const PlywoodSupply = () => {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-6 text-[#ED2A4F]">Mistries Connected to You</h2>
-      <PlywoodSupplyCard sites={sites} />
+      <HardwareSupplyCard sites={sites} />
     </div>
   )
 }
 
-export default PlywoodSupply
+export default HardwareSupply

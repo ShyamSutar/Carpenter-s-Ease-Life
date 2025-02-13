@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 const ShowSite = () => {
   const [siteName, setSiteName] = useState("");
   const [siteLocation, setSiteLocation] = useState("");
+  const [refresh, setRefresh] = useState(false);
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
@@ -16,9 +17,10 @@ const ShowSite = () => {
         { siteName, location: siteLocation },
         { withCredentials: true }
       );
-      toast.success(site.message);
+      toast.success(site.data.message);
       setSiteName("");
       setSiteLocation("");
+      setRefresh(prev=>!prev)
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred";
@@ -62,7 +64,7 @@ const ShowSite = () => {
       </div>
 
       <div className="mt-8">
-        <ShowSiteList />
+        <ShowSiteList refresh={refresh}/>
       </div>
     </div>
   );
