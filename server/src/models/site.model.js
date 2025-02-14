@@ -20,10 +20,17 @@ const siteSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
         },
-        total: {
-          type: String,
-          default: 0,
-        },
+        paid: [
+          {
+            amount: {
+              type: String,
+            },
+            paidDate: {
+              type: Date,
+              default: Date.now
+            },
+          },
+        ],
         plywoodDetails: [
           {
             plywoodType: {
@@ -54,10 +61,17 @@ const siteSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
         },
-        total: {
-          type: String,
-          default: 0,
-        },
+        paid: [
+          {
+            amount: {
+              type: String,
+            },
+            paidDate: {
+              type: Date,
+              default: Date.now
+            },
+          },
+        ],
         hardwareDetails: [
           {
             itemName: {

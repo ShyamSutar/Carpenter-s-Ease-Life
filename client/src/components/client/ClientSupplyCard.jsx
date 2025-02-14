@@ -38,7 +38,7 @@ const ClientSupplyCard = ({ sites }) => {
           {/* Sites List */}
           <div className="mt-4">
             {sites.map((site) => (
-              <Link to={`/hardware/hardwareSlug/${site._id}`} key={site._id} >
+              <Link to={`/client/clientSlug/${site._id}`} key={site._id} >
                 <div className="border-t pt-3 mt-3">
                 <h4 className="text-md font-semibold flex items-center gap-1">
                   <MapPinIcon className="w-4 h-4 text-[#ED2A4F]" />

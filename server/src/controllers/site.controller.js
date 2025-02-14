@@ -170,6 +170,24 @@ const updateTotal = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "updatedSuccessfully" });
 });
 
+const paymentPlywood = asyncHandler(async (req, res) => {
+  const updated = await Site.updateOne(
+    { _id: req.body.id, "plywood.plywood": req.body.plywoodId },
+    {
+      $push: {"plywood.$.paid": {amount: req.body.amount, paidDate: new Date() }},
+    },
+    { new: true }
+  );
+
+  if (updated.modifiedCount === 0) {
+    return res.status(404).json({ message: "Plywood entry not found" });
+  }
+
+  res.status(200).json({ message: "Payment added successfully" });
+
+
+});
+
 const deletePlywood = asyncHandler(async (req, res) => {
   await Site.deleteOne({ _id: req.params.id });
 
@@ -205,4 +223,5 @@ export {
   fetchSiteHardware,
   fetchHardwareDetails,
   fetchSitesClient,
+  paymentPlywood,
 };

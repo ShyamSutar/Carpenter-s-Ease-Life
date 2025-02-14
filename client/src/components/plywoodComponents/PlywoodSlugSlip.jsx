@@ -1,36 +1,33 @@
-import axios from "axios";
-import { useEffect, useRef } from "react";
-import { toast } from "react-toastify";
 
-const PlywoodSlugSlip = ({ data, id }) => {
-  const hasUpdated = useRef(false); // Track API call to prevent infinite loops
+const PlywoodSlugSlip = ({ data }) => {
+  // const hasUpdated = useRef(false); // Track API call to prevent infinite loops
 
-  useEffect(() => {
-    if (data.plywood?.length > 0) {
-      const totalAmount = data.plywood[0].plywoodDetails.reduce(
-        (acc, item) => acc + item.quantity * item.ratePerSheet,
-        0
-      );
+  // useEffect(() => {
+  //   if (data.plywood?.length > 0) {
+  //     const totalAmount = data.plywood[0].plywoodDetails.reduce(
+  //       (acc, item) => acc + item.quantity * item.ratePerSheet,
+  //       0
+  //     );
 
-      if (totalAmount > 0 && !hasUpdated.current) {
-        // hasUpdated.current = true; // Prevent multiple API calls
+  //     if (totalAmount > 0 && !hasUpdated.current) {
+  //       // hasUpdated.current = true; // Prevent multiple API calls
 
-        (async () => {
-          try {
-            await axios.post(
-              `${import.meta.env.VITE_BASE_URL}/api/v1/site/updateTotal/${id}`,
-              { total: totalAmount }, // Send calculated total directly
-              { withCredentials: true }
-            );
-          } catch (error) {
-            const errorMessage =
-              error.response?.data?.message || "An unexpected error occurred";
-            toast.error(errorMessage);
-          }
-        })();
-      }
-    }
-  }, [data.plywood, id]); // Depend on `data.plywood` instead of `total`
+  //       (async () => {
+  //         try {
+  //           await axios.post(
+  //             `${import.meta.env.VITE_BASE_URL}/api/v1/site/updateTotal/${id}`,
+  //             { total: totalAmount }, // Send calculated total directly
+  //             { withCredentials: true }
+  //           );
+  //         } catch (error) {
+  //           const errorMessage =
+  //             error.response?.data?.message || "An unexpected error occurred";
+  //           toast.error(errorMessage);
+  //         }
+  //       })();
+  //     }
+  //   }
+  // }, [data.plywood, id]); // Depend on `data.plywood` instead of `total`
 
   return (
     <div className="overflow-x-auto">

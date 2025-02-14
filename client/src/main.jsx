@@ -43,6 +43,7 @@ import Client from "./components/client/Client.jsx";
 import ClientHome from "./components/client/ClientHome.jsx";
 import NotificationClient from "./components/client/NotificationClient.jsx";
 import ClientSupply from "./components/client/ClientSupply.jsx";
+import ClientSlug from "./components/client/ClientSlug.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -87,6 +88,7 @@ const router = createBrowserRouter(
         <Route path="" element={<ClientHome />}/>
         <Route path="notification" element={<NotificationClient />}/>
         <Route path="supply" element={<ClientSupply />} />
+        <Route path="clientSlug/:id" element={<ClientSlug />} />
       </Route>
       </Route>
     //  </Route>
