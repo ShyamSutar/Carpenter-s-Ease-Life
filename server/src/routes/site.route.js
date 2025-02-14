@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { protect } from "../middlewares/auth.middleware.js";
-import { addSite, fetchSites, fetchSite, fetchSitesPlywood, addPlywoodDetails, fetchPlywoodDetails, updateTotal, deletePlywood, editPlywood, fetchSitesHardware, addHardwareDetails, fetchSiteHardware, fetchHardwareDetails } from "../controllers/site.controller.js";
+import { addSite, fetchSites, fetchSite, fetchSitesPlywood, addPlywoodDetails, fetchPlywoodDetails, updateTotal, deletePlywood, editPlywood, fetchSitesHardware, addHardwareDetails, fetchSiteHardware, fetchHardwareDetails, fetchSitesClient } from "../controllers/site.controller.js";
 
 const router = Router();
 
@@ -18,6 +18,8 @@ router.route("/editPlywood/:id").patch(protect, editPlywood)
 router.route("/fetchSitesHardware").get(protect, fetchSitesHardware)
 router.route("/addHardwareDetails").patch(protect, addHardwareDetails)
 router.route("/fetchHardwareDetails/:id").get(protect, fetchHardwareDetails)
+
+router.route("/fetchSitesClient").get(protect, fetchSitesClient)
 
 
 

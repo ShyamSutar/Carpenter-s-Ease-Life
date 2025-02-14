@@ -56,11 +56,11 @@ const notificationRequestHardware = asyncHandler(async(req, res)=>{
 
 const notificationRequestClient = asyncHandler(async(req, res)=>{
   
-  // const alreadyApproved = await Site.findOne({siteName: req.body.site, mistry: req.user._id, "hardware.hardware": req.body.hardwareId})
+  const alreadyApproved = await Site.findOne({siteName: req.body.site, mistry: req.user._id, "client.client": req.body.clientId})
   
-  // if(alreadyApproved){
-  //   return res.status(400).json({message: "already approved"})
-  // }
+  if(alreadyApproved){
+    return res.status(400).json({message: "already approved"})
+  }
 
   const exists = await Notification.findOne({site: req.body.site, role: "client", mistry: req.user._id, client: req.body.clientId});
   if(exists){

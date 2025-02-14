@@ -57,14 +57,21 @@ const fetchSiteHardware = asyncHandler(async (req, res) => {
 const fetchSitesPlywood = asyncHandler(async (req, res) => {
   const sites = await Site.find({ "plywood.plywood": req.user._id })
     .populate("mistry")
-    .select("-hardware");
+    .select("-hardware -client");
   res.status(200).json(sites);
 });
 
 const fetchSitesHardware = asyncHandler(async (req, res) => {
   const sites = await Site.find({ "hardware.hardware": req.user._id })
     .populate("mistry")
-    .select("-plywood");
+    .select("-plywood -client");
+  res.status(200).json(sites);
+});
+
+const fetchSitesClient = asyncHandler(async (req, res) => {
+  const sites = await Site.find({ "client.client": req.user._id })
+    .populate("mistry")
+    .select("-plywood -hardware");
   res.status(200).json(sites);
 });
 
@@ -197,4 +204,5 @@ export {
   addHardwareDetails,
   fetchSiteHardware,
   fetchHardwareDetails,
+  fetchSitesClient,
 };

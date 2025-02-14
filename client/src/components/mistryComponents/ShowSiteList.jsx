@@ -41,7 +41,7 @@ const ShowSiteList = ({refresh}) => {
               <strong>Hardware Dealer:</strong> {site.hardwareDealer || "-"}
             </p>
             <p className="text-sm text-gray-500">
-              <strong>Client:</strong> {site.client || "-"}
+              <strong>Client:</strong> {"-"}
             </p>
           </div>
         ))}

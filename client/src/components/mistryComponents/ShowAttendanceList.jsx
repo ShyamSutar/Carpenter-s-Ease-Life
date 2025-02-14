@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import UpdateShowAttendance from "./UpdateShowAttendance";
 import DeleteShowAttendance from "./DeleteShowAttendance";
 import PayAttendanceList from "./PayAttendanceList";
-import { useNavigate } from "react-router-dom";
 
 const CarpenterCard = ({ carpenter, setRefresh }) => {
   const [show, setShow] = useState(false);
@@ -17,7 +16,6 @@ const CarpenterCard = ({ carpenter, setRefresh }) => {
   const [show3, setShow3] = useState(false);
   const user = useSelector((state) => state?.auth?.userData?._id);
 
-  const navigate = useNavigate();
 
   // Get first letter for avatar
   const firstLetter = carpenter.carpenter.username.charAt(0).toUpperCase();

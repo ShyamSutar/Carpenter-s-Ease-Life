@@ -42,6 +42,7 @@ import HardwareSlug from "./components/hardware/HardwareSlug.jsx";
 import Client from "./components/client/Client.jsx";
 import ClientHome from "./components/client/ClientHome.jsx";
 import NotificationClient from "./components/client/NotificationClient.jsx";
+import ClientSupply from "./components/client/ClientSupply.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -85,6 +86,7 @@ const router = createBrowserRouter(
       <Route path="/client" element={<Client/>}>
         <Route path="" element={<ClientHome />}/>
         <Route path="notification" element={<NotificationClient />}/>
+        <Route path="supply" element={<ClientSupply />} />
       </Route>
       </Route>
     //  </Route>
