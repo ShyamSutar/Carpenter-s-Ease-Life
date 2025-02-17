@@ -2,7 +2,7 @@ import asyncHandler from "express-async-handler";
 import Site from "../models/site.model.js";
 
 const addSite = asyncHandler(async (req, res) => {
-  const { siteName, location } = req.body;
+  const { siteName, location, profitPercentage } = req.body;
 
   const exists = await Site.findOne({ mistry: req.user._id, siteName });
 
@@ -14,6 +14,7 @@ const addSite = asyncHandler(async (req, res) => {
     mistry: req.user._id,
     siteName,
     location,
+    profitPercentage,
   });
 
   res.status(200).json({
@@ -40,7 +41,8 @@ const fetchSite = asyncHandler(async (req, res) => {
       populate: {
         path: "hardware",
       },
-    });
+    })
+    .populate("mistry")
   res.status(200).json(sites);
 });
 
@@ -188,6 +190,42 @@ const paymentPlywood = asyncHandler(async (req, res) => {
 
 });
 
+const paymentHardware = asyncHandler(async (req, res) => {
+  const updated = await Site.updateOne(
+    { _id: req.body.id, "hardware.hardware": req.body.hardwareId },
+    {
+      $push: {"hardware.$.paid": {amount: req.body.amount, paidDate: new Date() }},
+    },
+    { new: true }
+  );
+
+  if (updated.modifiedCount === 0) {
+    return res.status(404).json({ message: "Hardware entry not found" });
+  }
+
+  res.status(200).json({ message: "Hardware added successfully" });
+
+
+});
+
+const paymentMistry = asyncHandler(async (req, res) => {
+  const updated = await Site.updateOne(
+    { _id: req.body.id },
+    {
+      $push: {paid: {amount: req.body.amount, paidDate: new Date() }},
+    },
+    { new: true }
+  );
+
+  if (updated.modifiedCount === 0) {
+    return res.status(404).json({ message: "Mistry entry not found" });
+  }
+
+  res.status(200).json({ message: "Mistry added successfully" });
+
+
+});
+
 const deletePlywood = asyncHandler(async (req, res) => {
   await Site.deleteOne({ _id: req.params.id });
 
@@ -224,4 +262,6 @@ export {
   fetchHardwareDetails,
   fetchSitesClient,
   paymentPlywood,
+  paymentHardware,
+  paymentMistry,
 };

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 const ShowSite = () => {
   const [siteName, setSiteName] = useState("");
   const [siteLocation, setSiteLocation] = useState("");
+  const [profitPercentage, setProfitPercentage] = useState("");
   const [refresh, setRefresh] = useState(false);
 
   const handleOnSubmit = async (e) => {
@@ -14,7 +15,7 @@ const ShowSite = () => {
     try {
       const site = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/site/addSite`,
-        { siteName, location: siteLocation },
+        { siteName, location: siteLocation, profitPercentage },
         { withCredentials: true }
       );
       toast.success(site.data.message);
@@ -52,6 +53,14 @@ const ShowSite = () => {
             placeholder="Site Location"
             value={siteLocation}
             onChange={(e) => setSiteLocation(e.target.value)}
+            required
+          />
+          <input
+            type="number"
+            className="border-2 border-[#ED2A4F] focus:ring-[#ED2A4F] focus:border-[#ED2A4F] rounded-lg p-3 w-full text-gray-700"
+            placeholder="Mistry Profit Percentage"
+            value={profitPercentage}
+            onChange={(e) => setProfitPercentage(e.target.value)}
             required
           />
           <button

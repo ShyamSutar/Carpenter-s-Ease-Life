@@ -14,6 +14,21 @@ const siteSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    profitPercentage: {
+      type: Number,
+      required: true,
+    },
+    paid: [
+          {
+            amount: {
+              type: String,
+            },
+            paidDate: {
+              type: Date,
+              default: Date.now
+            },
+          },
+        ],
     plywood: [
       {
         plywood: {

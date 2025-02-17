@@ -19,7 +19,6 @@ const SiteSlug = () => {
   const [showClientModel, setShowClientModel] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [profitPercentage, setProfitPercentage] = useState(35);
 
   const [editModalDetails, setEditModalDetails] = useState({
     siteName: "",
@@ -83,7 +82,7 @@ const SiteSlug = () => {
   const totalPaid = payments.reduce((acc, payment) => acc + payment.amount, 0);
   const remainingBalance = totalAmount - totalPaid;
 
-  const carpenterProfit = ((totalGrandTotalPlywood + totalGrandTotalHardware) * profitPercentage) / 100;
+  const carpenterProfit = ((totalGrandTotalPlywood + totalGrandTotalHardware) * site.profitPercentage) / 100;
 
   const handleDelete = async () => {
     try {
@@ -235,13 +234,7 @@ const SiteSlug = () => {
         </h2>
 
         <div className="flex items-center justify-end pr-4 mt-2">
-          <label className="font-semibold mr-2">Profit %:</label>
-          <input
-            type="number"
-            value={profitPercentage}
-            onChange={(e) => setProfitPercentage(Number(e.target.value))}
-            className="border border-gray-400 px-2 py-1 w-16 rounded-md text-center focus:ring-2 focus:ring-[#ED2A4F]"
-          />
+          <label className="font-semibold mr-2">Profit: {site.profitPercentage}%</label>
         </div>
 
         <h2 className="text-lg font-semibold text-right pr-4 mt-2 text-[#ED2A4F]">
