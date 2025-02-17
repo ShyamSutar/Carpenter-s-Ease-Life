@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import HardwareSupplyCard from "./HardwareSupplyCard";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const HardwareSupply = () => {
 
+      const dispatch = useDispatch();
       const [sites, setSites] = useState([])
 
       useEffect(()=>{
         (async()=>{
+          dispatch(toggle(true))
           try {
             const res = await axios.get(
               `${import.meta.env.VITE_BASE_URL}/api/v1/site/fetchSitesHardware`,
@@ -25,6 +29,8 @@ const HardwareSupply = () => {
           } catch (error) {
             const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
             toast.error(errorMessage);
+          } finally{
+            dispatch(toggle(false))
           }
         })();
       }, [])

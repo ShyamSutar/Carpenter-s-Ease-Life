@@ -1,9 +1,15 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const NotificationList = ({ setRefresh, notification }) => {
+
+  const dispatch = useDispatch();
+
   const handleApprove = async (carpenterId) => {
     try {
+      dispatch(toggle(true))
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/notification/approveNotification/${carpenterId}`,
         {},
@@ -17,11 +23,14 @@ const NotificationList = ({ setRefresh, notification }) => {
       setRefresh(true);
     } catch (error) {
       console.log(error);
+    } finally{
+      dispatch(toggle(false))
     }
   };
 
   const handleReject = async (carpenterId) => {
     try {
+      dispatch(toggle(true))
       const res = await axios.delete(
         `${import.meta.env.VITE_BASE_URL}/api/v1/notification/rejectNotification/${carpenterId}`,
         { withCredentials: true }
@@ -34,6 +43,8 @@ const NotificationList = ({ setRefresh, notification }) => {
       setRefresh(true);
     } catch (error) {
       console.log(error);
+    } finally{
+      dispatch(toggle(false))
     }
   };
 

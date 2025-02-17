@@ -30,7 +30,7 @@ const ShowAttendance = () => {
     <div className="mt-28 ml-4 min-h-screen">
       <h1 className="font-bold mb-6 text-center text-2xl">Attendance</h1>
       
-      <div className="mt-6 flex flex-wrap gap-4 justify-center">
+      <div className="mt-6 flex flex-wrap gap-4 justify-center mr-2">
         {showCarpenters.length > 0 ? (
           showCarpenters.map((carpenter) => (
             <ShowAttendanceList key={carpenter._id} carpenter={carpenter} setRefresh={setRefresh} />

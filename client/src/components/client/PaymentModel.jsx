@@ -11,6 +11,10 @@ const PaymentModel = ({
         setPaymentAmount("")
     }
 
+    const normalizeAmount = (amount) => {
+      return parseInt(amount, 10) || 0;
+    };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-80">
@@ -25,7 +29,7 @@ const PaymentModel = ({
             onChange={(e) => {
               const newValue = e.target.value;
               if (newValue === "" || Number(newValue) <= maxAmount) {
-                setPaymentAmount(newValue);
+                setPaymentAmount(normalizeAmount(newValue));
               }
             }}
             max= {maxAmount}
@@ -41,6 +45,7 @@ const PaymentModel = ({
           <button
             onClick={handlePayment}
             className="bg-blue-500 text-white px-4 py-2 rounded"
+            disabled={paymentAmount<=0}
           >
             Pay {paymentAmount && `₹${paymentAmount}`}
           </button>

@@ -3,7 +3,6 @@ import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 
 const HardwareSlugSlip = ({ data, id }) => {
-  const hasUpdated = useRef(false); // Track API call to prevent infinite loops
 
   useEffect(() => {
     if (data.hardware?.length > 0) {
@@ -11,24 +10,6 @@ const HardwareSlugSlip = ({ data, id }) => {
         (acc, item) => acc + item.quantity * item.ratePerUnit,
         0
       );
-
-      if (totalAmount > 0 && !hasUpdated.current) {
-        // hasUpdated.current = true; // Prevent multiple API calls
-
-        // (async () => {
-        //   try {
-        //     await axios.post(
-        //       `${import.meta.env.VITE_BASE_URL}/api/v1/site/updateTotal/${id}`,
-        //       { total: totalAmount }, // Send calculated total directly
-        //       { withCredentials: true }
-        //     );
-        //   } catch (error) {
-        //     const errorMessage =
-        //       error.response?.data?.message || "An unexpected error occurred";
-        //     toast.error(errorMessage);
-        //   }
-        // })();
-      }
     }
   }, [data.hardware, id]); // Depend on `data.plywood` instead of `total`
 

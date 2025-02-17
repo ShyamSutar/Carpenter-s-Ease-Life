@@ -1,13 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import PlywoodSlip from "./PlywoodSlip";
 import HardwareSlip from "./HardwareSlip";
 import PaymentModel from "./PaymentModel";
 import { toast } from "react-toastify";
+import { toggle } from "../../store/hiddenSlice";
 
 const ClientSlug = () => {
   const id = useParams().id;
+  const dispatch = useDispatch();
 
   const [site, setSite] = useState();
   const [refresh, setRefresh] = useState(false);
@@ -16,6 +19,7 @@ const ClientSlug = () => {
 
   useEffect(() => {
     (async () => {
+      dispatch(toggle(true))
       try {
         const site = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/v1/site/fetchSite/${id}`,
@@ -24,6 +28,8 @@ const ClientSlug = () => {
         setSite(site.data);
       } catch (error) {
         console.log(error);
+      } finally{
+        dispatch(toggle(false))
       }
     })();
   }, [id, refresh]);
@@ -35,6 +41,7 @@ const ClientSlug = () => {
   const handlePayment = async() => {
     // Here, you can handle the payment logic
     try {
+      dispatch(toggle(true))
       const res = await axios.patch(
         `${import.meta.env.VITE_BASE_URL}/api/v1/site/paymentMistry`,
         {id, amount: paymentAmount},
@@ -51,6 +58,8 @@ const ClientSlug = () => {
     } catch (error) {
       const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
       toast.error(errorMessage);
+    } finally{
+      dispatch(toggle(false))
     }
 
     setPaymentAmount("");
@@ -156,14 +165,14 @@ const ClientSlug = () => {
         </div>
 
         <h2 className="text-lg font-semibold text-right pr-4 mt-2 text-[#ED2A4F]">
-          Carpenter&apos;s Profit: ₹{carpenterProfit.toFixed(2)}
+          Carpenter&apos;s Profit: ₹{Math.round(carpenterProfit)}
         </h2>
         <div className="text-right font-bold text-lg mt-3">
           Amount Paid: <span className="text-green-600">₹{amountPaid}</span>
         </div>
         <div className="text-right font-bold text-lg mt-3">
           Amount Remaing:{" "}
-          <span className="text-green-600">₹{totalAmount - amountPaid}</span>
+          <span className="text-green-600">₹{Math.round(carpenterProfit - amountPaid)}</span>
         </div>
         <div className="text-right pr-4 mt-2">
           <button
@@ -173,6 +182,9 @@ const ClientSlug = () => {
             Pay {site?.mistry?.username}
           </button>
         </div>
+
+        
+
       </div>
       {/* Modal */}
       {isModalOpen && (
@@ -181,7 +193,7 @@ const ClientSlug = () => {
           setPaymentAmount={setPaymentAmount}
           setIsModalOpen={setIsModalOpen}
           handlePayment={handlePayment}
-          maxAmount={totalAmount - amountPaid}
+          maxAmount={carpenterProfit - amountPaid}
         />
       )}
     </div>

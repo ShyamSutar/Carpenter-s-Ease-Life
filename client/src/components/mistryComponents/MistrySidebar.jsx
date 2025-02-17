@@ -6,13 +6,17 @@ import { AiFillCreditCard } from "react-icons/ai";
 import { GiWoodBeam } from "react-icons/gi";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const MistryHeader = () => {
   const [notificationsLength, setNotificationsLength] = useState([]);
-  
+
+  const dispatch = useDispatch();
 
   const fetchNotifications = async () => {
     try {
+      dispatch(toggle(true))
       const notifications = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/api/v1/notification/showNotification`,
         { withCredentials: true }
@@ -20,6 +24,8 @@ const MistryHeader = () => {
       setNotificationsLength(notifications.data.length);
     } catch (error) {
       console.log(error);
+    } finally{
+      dispatch(toggle(false))
     }
   };
 

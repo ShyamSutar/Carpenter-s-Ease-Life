@@ -2,10 +2,14 @@ import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import AddClientModelList from "../client/AddClientModelList";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const AddClientModel = ({ setShowClientModel, site }) => {
   const [search, setSearch] = useState("");
   const [plywood, setPlywood] = useState([]);
+
+  const dispatch = useDispatch();
 
   const handleOnClose = () => {
     setShowClientModel(false);
@@ -17,6 +21,7 @@ const AddClientModel = ({ setShowClientModel, site }) => {
     e.preventDefault();
 
     try {
+      dispatch(toggle(true))
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/users/clientSearch`,
         { username: search },
@@ -33,11 +38,14 @@ const AddClientModel = ({ setShowClientModel, site }) => {
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred";
       toast.error(errorMessage);
+    } finally{
+      dispatch(toggle(false))
     }
   };
 
   const sendNotification = async (client) => {
     try {
+      dispatch(toggle(true))
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/notification/notificationRequestClient`,
         { clientId: client._id, site: site.siteName },
@@ -51,6 +59,8 @@ const AddClientModel = ({ setShowClientModel, site }) => {
     } catch (error) {
       const errorMessage = error.response?.data?.message || "An unexpected error occurred";
       toast.error(errorMessage);
+    } finally{
+      dispatch(toggle(false))
     }
   };
 

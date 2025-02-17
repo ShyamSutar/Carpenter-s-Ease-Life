@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import { PlywoodSupplyCard } from "./PlywoodSupplyCard";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const PlywoodSupply = () => {
 
+      const dispatch = useDispatch();
       const [sites, setSites] = useState([])
 
       useEffect(()=>{
         (async()=>{
+          dispatch(toggle(true))
           try {
             const res = await axios.get(
               `${import.meta.env.VITE_BASE_URL}/api/v1/site/fetchSitesPlywood`,
@@ -24,6 +28,8 @@ const PlywoodSupply = () => {
           } catch (error) {
             const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
             toast.error(errorMessage);
+          } finally{
+            dispatch(toggle(false))
           }
         })();
       }, [])

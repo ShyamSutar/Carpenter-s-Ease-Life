@@ -1,9 +1,15 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const NotificationHardwareList = ({ setRefresh, notification }) => {
+
+  const dispatch = useDispatch();
+
   const handleApprove = async (mistryId) => {
     try {
+      dispatch(toggle(true))
       const res = await axios.patch(
         `${import.meta.env.VITE_BASE_URL}/api/v1/notification/approveNotificationHardware/${mistryId}/${notification.site}`,
         {},
@@ -17,11 +23,14 @@ const NotificationHardwareList = ({ setRefresh, notification }) => {
       setRefresh(true);
     } catch (error) {
       console.log(error);
+    } finally{
+      dispatch(toggle(false))
     }
   };
 
   const handleReject = async (mistryId) => {
     try {
+      dispatch(toggle(true))
       const res = await axios.delete(
         `${import.meta.env.VITE_BASE_URL}/api/v1/notification/rejectNotificationHardware/${mistryId}/${notification.site}`,
         { withCredentials: true }
@@ -34,6 +43,8 @@ const NotificationHardwareList = ({ setRefresh, notification }) => {
       setRefresh(true);
     } catch (error) {
       console.log(error);
+    } finally{
+      dispatch(toggle(false))
     }
   };
 

@@ -1,14 +1,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const ShowSiteList = ({refresh}) => {
   const [sites, setSites] = useState([]);
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     (async () => {
       try {
+        dispatch(toggle(true))
         const showCarpenters = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/v1/site/fetchSites`,
           { withCredentials: true }
@@ -16,6 +21,8 @@ const ShowSiteList = ({refresh}) => {
         setSites(showCarpenters.data);
       } catch (error) {
         console.log(error);
+      } finally{
+        dispatch(toggle(false))
       }
     })();
   }, [refresh]);

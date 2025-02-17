@@ -1,9 +1,13 @@
 import axios from "axios";
 import { useEffect, useState, useMemo } from "react";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const CarpenterSlip = ({ events, data, id, refresh }) => {
   const user = useSelector((state) => state?.auth?.userData);
+
+  const dispatch = useDispatch();
 
   const attendancePoints = useMemo(() => ({
     O: 1.5,
@@ -40,6 +44,7 @@ const CarpenterSlip = ({ events, data, id, refresh }) => {
     const updatePay = async () => {
       try {
         if (user && user.role === "mistry") {
+          dispatch(toggle(true))
           await axios.patch(
             `${import.meta.env.VITE_BASE_URL}/api/v1/users/updatePay/${id}`,
             { totalAmount },
@@ -48,6 +53,8 @@ const CarpenterSlip = ({ events, data, id, refresh }) => {
         }
       } catch (error) {
         console.error("Error updating pay:", error);
+      } finally{
+        dispatch(toggle(false))
       }
     };
 
@@ -62,9 +69,9 @@ const CarpenterSlip = ({ events, data, id, refresh }) => {
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" className="px-6 py-3 rounded-s-lg">Date</th>
-              <th scope="col" className="px-6 py-3">Attendance</th>
-              <th scope="col" className="px-6 py-3 rounded-e-lg">Advance</th>
+              <th scope="col" className="px-4 py-3 rounded-s-lg sm:px-6">Date</th>
+              <th scope="col" className="px-4 py-3 sm:px-6">Attendance</th>
+              <th scope="col" className="px-4 py-3 rounded-e-lg sm:px-6">Advance</th>
             </tr>
           </thead>
           <tbody>
@@ -72,24 +79,24 @@ const CarpenterSlip = ({ events, data, id, refresh }) => {
               <tr key={event._id} className="bg-white dark:bg-gray-800">
                 <th
                   scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white sm:px-6"
                 >
                   {event.date}
                 </th>
-                <td className="px-6 py-4">{event.title}</td>
-                <td className="px-6 py-4">{event.advance}</td>
+                <td className="px-4 py-4 sm:px-6">{event.title}</td>
+                <td className="px-4 py-4 sm:px-6">{event.advance}</td>
               </tr>
             ))}
           </tbody>
           <tfoot>
             <tr className="font-semibold text-gray-900 dark:text-white">
-              <th scope="row" className="px-6 py-3 text-base">Total</th>
-              <td className="px-6 py-3">{totalAttendance}</td>
-              <td className="px-6 py-3">{totalAdvance}</td>
+              <th scope="row" className="px-4 py-3 text-base sm:px-6">Total</th>
+              <td className="px-4 py-3 sm:px-6">{totalAttendance}</td>
+              <td className="px-4 py-3 sm:px-6">{totalAdvance}</td>
             </tr>
             <tr className="font-semibold text-gray-900 dark:text-white border-t-2">
-              <th scope="row" colSpan={2} className="px-6 py-3 text-right text-base">Amount</th>
-              <td className="px-6 py-3 font-bold text-base">{totalAmount}</td>
+              <th scope="row" colSpan={2} className="px-4 py-3 text-right text-base sm:px-6">Amount</th>
+              <td className="px-4 py-3 font-bold text-base sm:px-6">{totalAmount}</td>
             </tr>
           </tfoot>
         </table>

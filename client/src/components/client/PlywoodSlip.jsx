@@ -2,7 +2,13 @@ import { useState } from 'react';
 import PaymentModel from './PaymentModel';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
+
 const PlywoodSlip = ({ ply, id, setRefresh }) => {
+
+  const dispatch = useDispatch();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState('');
   const [currentId, setCurrentId] = useState('');
@@ -22,7 +28,7 @@ const PlywoodSlip = ({ ply, id, setRefresh }) => {
 
 
   const handlePayment = async() => {
-    // Here, you can handle the payment logic
+    dispatch(toggle(true))
     try {
       const res = await axios.patch(
         `${import.meta.env.VITE_BASE_URL}/api/v1/site/paymentPlywood`,
@@ -40,11 +46,15 @@ const PlywoodSlip = ({ ply, id, setRefresh }) => {
     } catch (error) {
       const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
       toast.error(errorMessage);
+    } finally{
+      dispatch(toggle(false))
     }
 
     setPaymentAmount("");
     setIsModalOpen(false); // Close modal after payment
   };
+
+  const totalPaid = ply?.paid?.reduce((acc, payment) => acc + Number(payment.amount), 0);
 
   return (
     <div className="border-t pt-2 mt-2">
@@ -93,18 +103,6 @@ const PlywoodSlip = ({ ply, id, setRefresh }) => {
         </tbody>
       </table>
 
-      <div className="text-right font-bold text-lg mt-3">
-        Amount Paid:{" "}
-        <span className="text-green-600">
-          ₹{amountPaid}
-        </span>
-      </div>
-      <div className="text-right font-bold text-lg mt-3">
-        Amount Remaing:{" "}
-        <span className="text-green-600">
-          ₹{totalAmount-amountPaid}
-        </span>
-      </div>
       
       <div>
         <button
@@ -113,6 +111,55 @@ const PlywoodSlip = ({ ply, id, setRefresh }) => {
         >
           Pay {ply?.plywood?.username}
         </button>
+      </div>
+
+            {/* Payment Slip Section */}
+            <div className="mt-6 p-6 border-2 border-gray-300 bg-white rounded-lg shadow-md">
+        <h2 className="text-xl font-bold text-[#ED2A4F]">Payment Slip</h2>
+        <div className="mt-4">
+          {ply?.paid?.length > 0 ? (
+            <table className="w-full border-collapse border border-gray-300">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="border border-gray-300 px-4 py-2">Date</th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    Amount Paid
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {ply?.paid?.map((payment) => (
+                  <tr key={payment._id} className="text-center">
+                    <td className="border border-gray-300 px-4 py-2">
+                      {new Date(payment.paidDate).toLocaleString("en-US", {
+                        weekday: "short", // Full name of the day
+                        year: "numeric",
+                        month: "short", // Full month name
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                        hour12: true, // 12-hour clock
+                      })}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      ₹{payment.amount}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="text-gray-600 text-center">No payments made yet.</p>
+          )}
+        </div>
+        <h2 className="mt-4 text-lg font-bold text-right text-[#ED2A4F]">
+          Total Paid: ₹{totalPaid}
+        </h2>
+        <h2 className="text-lg font-bold text-right text-[#ED2A4F]">
+            Remaining Balance: ₹
+            {(ply?.plywoodDetails?.reduce((total, item) => total + item.quantity * item.ratePerSheet, 0) || 0)-totalPaid}
+        </h2>
       </div>
 
       {/* Modal */}

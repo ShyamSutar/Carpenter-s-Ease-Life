@@ -246,6 +246,10 @@ const editPlywood = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "data updated successfully" });
 });
 
+const mistryHistory = asyncHandler(async(req, res)=>{
+  // const history = await find({_id: req.body.siteId})
+})
+
 export {
   addSite,
   fetchSites,
@@ -264,4 +268,5 @@ export {
   paymentPlywood,
   paymentHardware,
   paymentMistry,
+  mistryHistory,
 };

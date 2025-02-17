@@ -2,10 +2,14 @@ import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import AddHardwareModelList from "./AddHardwareModelList";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const AddHardwareModel = ({ setShowHardwareModel, site }) => {
   const [search, setSearch] = useState("");
   const [hardware, setHardware] = useState([]);
+
+  const dispatch = useDispatch();
 
   const handleOnClose = () => {
     setShowHardwareModel(false);
@@ -17,6 +21,7 @@ const AddHardwareModel = ({ setShowHardwareModel, site }) => {
     e.preventDefault();
 
     try {
+      dispatch(toggle(true))
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/users/hardwareSearch`,
         { username: search },
@@ -33,11 +38,14 @@ const AddHardwareModel = ({ setShowHardwareModel, site }) => {
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred";
       toast.error(errorMessage);
+    } finally{
+      dispatch(toggle(false))
     }
   };
 
   const sendNotification = async (hardware) => {
     try {
+      dispatch(toggle(true))
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/notification/notificationRequestHardware`,
         { hardwareId: hardware._id, site: site.siteName },
@@ -51,6 +59,8 @@ const AddHardwareModel = ({ setShowHardwareModel, site }) => {
     } catch (error) {
       const errorMessage = error.response?.data?.message || "An unexpected error occurred";
       toast.error(errorMessage);
+    } finally{
+      dispatch(toggle(false))
     }
   };
   

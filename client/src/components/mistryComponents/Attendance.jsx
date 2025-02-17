@@ -24,6 +24,7 @@ const Attendance = () => {
     advance: "",
   });
   const [isUpdate, setIsUpdate] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -72,6 +73,7 @@ const Attendance = () => {
     };
     fetchEvents();
   }, [refresh, id, dispatch]);
+
   const handleUpdate = (props) => {
     setShow(true);
     setSlot(props.event.date);
@@ -87,12 +89,7 @@ const Attendance = () => {
 
   const handleClose = () => {
     setShow(false);
-    setInputs({
-      start: "",
-      end: "",
-      status: "",
-      advance: "",
-    });
+    setInputs({ start: "", end: "", status: "", advance: "" });
     setIsUpdate(false);
   };
 
@@ -123,14 +120,7 @@ const Attendance = () => {
       }
       setRefresh((prev) => !prev);
       setShow(false);
-
-      setInputs({
-        start: "",
-        end: "",
-        status: "",
-        advance: "",
-      });
-      
+      setInputs({ start: "", end: "", status: "", advance: "" });
     } catch (error) {
       console.error(error);
     } finally {
@@ -141,11 +131,11 @@ const Attendance = () => {
   return (
     <div className="mt-24 p-6 max-w-5xl mx-auto space-y-6 bg-white shadow-md rounded-lg">
       <div className="p-4 bg-gray-100 rounded-lg shadow">
-        <h2 className="text-2xl font-semibold text-gray-800">Carpenter Details</h2>
-        <p className="text-lg text-gray-700"><b>Name:</b> {data?.carpenter?.username}</p>
-        <p className="text-lg text-gray-700"><b>Email:</b> {data?.carpenter?.email}</p>
-        <p className="text-lg text-gray-700"><b>Phone:</b> {data?.carpenter?.phone}</p>
-        <p className="text-lg text-gray-700"><b>Pay:</b> {data?.carpenter?.pay[user] || 600}</p>
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">Carpenter Details</h2>
+        <p className="text-sm sm:text-lg text-gray-700"><b>Name:</b> {data?.carpenter?.username}</p>
+        <p className="text-sm sm:text-lg text-gray-700"><b>Email:</b> {data?.carpenter?.email}</p>
+        <p className="text-sm sm:text-lg text-gray-700"><b>Phone:</b> {data?.carpenter?.phone}</p>
+        <p className="text-sm sm:text-lg text-gray-700"><b>Pay:</b> {data?.carpenter?.pay[user] || 600}</p>
       </div>
       <div className="overflow-x-auto bg-gray-50 p-4 rounded-lg shadow-md">
         <AttendanceCalendar
@@ -153,10 +143,10 @@ const Attendance = () => {
           components={{ event: (props) => (
             <div
               onClick={() => handleUpdate(props)}
-              className="p-2 cursor-pointer  rounded-md text-center shadow-md"
+              className="p-2 cursor-pointer rounded-md text-center shadow-md text-xs sm:text-sm"
             >
               <p className="font-semibold">{props.event.title}</p>
-              <p className="text-sm">{props.event.advance}</p>
+              <p className="text-[10px] sm:text-sm">{props.event.advance}</p>
             </div>
           )}}
           handleSelectSlot={(slot) => {

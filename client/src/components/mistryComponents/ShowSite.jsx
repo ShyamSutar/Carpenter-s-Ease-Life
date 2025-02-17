@@ -2,6 +2,8 @@ import { useState } from "react";
 import ShowSiteList from "./ShowSiteList";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { toggle } from "../../store/hiddenSlice";
 
 const ShowSite = () => {
   const [siteName, setSiteName] = useState("");
@@ -9,10 +11,13 @@ const ShowSite = () => {
   const [profitPercentage, setProfitPercentage] = useState("");
   const [refresh, setRefresh] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      dispatch(toggle(true))
       const site = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/site/addSite`,
         { siteName, location: siteLocation, profitPercentage },
@@ -26,6 +31,8 @@ const ShowSite = () => {
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred";
       toast.error(errorMessage);
+    } finally{
+      dispatch(toggle(false))
     }
   };
 
