@@ -24,7 +24,19 @@ const addSite = asyncHandler(async (req, res) => {
 });
 
 const fetchSites = asyncHandler(async (req, res) => {
-  const sites = await Site.find({ mistry: req.user._id });
+  const sites = await Site.find({ mistry: req.user._id })
+  .populate({
+    path: "plywood",
+    populate: {
+      path: "plywood",
+    },
+  })
+  .populate({
+    path: "hardware",
+    populate: {
+      path: "hardware",
+    },
+  })
   res.status(200).json(sites);
 });
 
@@ -246,9 +258,6 @@ const editPlywood = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "data updated successfully" });
 });
 
-const mistryHistory = asyncHandler(async(req, res)=>{
-  // const history = await find({_id: req.body.siteId})
-})
 
 export {
   addSite,
@@ -268,5 +277,4 @@ export {
   paymentPlywood,
   paymentHardware,
   paymentMistry,
-  mistryHistory,
 };

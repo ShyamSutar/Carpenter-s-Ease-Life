@@ -17,7 +17,7 @@ const ShowSite = () => {
     e.preventDefault();
 
     try {
-      dispatch(toggle(true))
+      dispatch(toggle(true));
       const site = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/site/addSite`,
         { siteName, location: siteLocation, profitPercentage },
@@ -26,25 +26,25 @@ const ShowSite = () => {
       toast.success(site.data.message);
       setSiteName("");
       setSiteLocation("");
-      setRefresh(prev=>!prev)
+      setRefresh((prev) => !prev);
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred";
       toast.error(errorMessage);
-    } finally{
-      dispatch(toggle(false))
+    } finally {
+      dispatch(toggle(false));
     }
   };
 
   return (
-    <div className="mt-24 w-full p-4">
+    <div className="mt-24 w-full h-screen p-4">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-[#ED2A4F] text-center mb-6">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#ED2A4F] text-center mb-6">
           Manage Sites
         </h1>
         <form
           onSubmit={handleOnSubmit}
-          className="bg-white shadow-lg rounded-lg p-6 flex flex-col gap-4 "
+          className="bg-white shadow-lg rounded-lg p-6 flex flex-col gap-4"
         >
           <input
             type="text"
@@ -80,7 +80,7 @@ const ShowSite = () => {
       </div>
 
       <div className="mt-8">
-        <ShowSiteList refresh={refresh}/>
+        <ShowSiteList refresh={refresh} />
       </div>
     </div>
   );

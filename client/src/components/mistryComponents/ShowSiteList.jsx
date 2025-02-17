@@ -4,16 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toggle } from "../../store/hiddenSlice";
 
-const ShowSiteList = ({refresh}) => {
+const ShowSiteList = ({ refresh }) => {
   const [sites, setSites] = useState([]);
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     (async () => {
       try {
-        dispatch(toggle(true))
+        dispatch(toggle(true));
         const showCarpenters = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/v1/site/fetchSites`,
           { withCredentials: true }
@@ -21,39 +21,42 @@ const ShowSiteList = ({refresh}) => {
         setSites(showCarpenters.data);
       } catch (error) {
         console.log(error);
-      } finally{
-        dispatch(toggle(false))
+      } finally {
+        dispatch(toggle(false));
       }
     })();
   }, [refresh]);
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-semibold mb-4">Site List</h2>
+    <>
+    {sites.length ? (
+      <div className="p-6 max-w-screen-xl mx-auto">
+      <h2 className="text-2xl font-semibold text-center mb-6">Site List</h2>
       {/* Flexbox container with wrapping */}
-      <div className="flex flex-wrap gap-4 justify-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {sites.map((site) => (
           <div
             key={site._id}
-            className="bg-white border border-gray-200 rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition"
-            style={{ flex: "1 1 380px", maxWidth: "400px" }} // Min width 280px, flex adjusts width
+            className="bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-6 cursor-pointer"
             onClick={() => navigate(`/mistry/siteSlug/${site._id}`)}
           >
-            <h3 className="text-lg font-semibold">{site.siteName}</h3>
-            <p className="text-gray-600">📍 {site.location}</p>
-            <p className="text-sm text-gray-500 mt-2">
-              <strong>Plywood Dealer:</strong> {site.plywoodDealer || "-"}
+            <h3 className="text-xl font-semibold text-gray-800 mb-2 truncate">{site.siteName}</h3>
+            <p className="text-sm text-gray-600 flex items-center space-x-2">
+              <span>📍</span>
+              <span>{site.location}</span>
             </p>
-            <p className="text-sm text-gray-500">
-              <strong>Hardware Dealer:</strong> {site.hardwareDealer || "-"}
-            </p>
-            <p className="text-sm text-gray-500">
-              <strong>Client:</strong> {"-"}
+            <p className="text-xs text-gray-500 mt-2">
+              <strong>Created:</strong> {new Date(site?.createdAt).toLocaleDateString()}
             </p>
           </div>
         ))}
       </div>
     </div>
+    )
+    :
+    (<div>No sites Available</div>)
+  }
+  </>
   );
 };
 

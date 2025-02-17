@@ -28,12 +28,6 @@ const SiteSlug = () => {
     location: "",
   });
 
-  // Dummy Payment Data
-  const payments = [
-    { id: 1, date: "2025-02-01", amount: 5000 },
-    { id: 2, date: "2025-02-10", amount: 3000 },
-    { id: 3, date: "2025-02-15", amount: 7000 },
-  ];
 
   useEffect(() => {
     (async () => {
@@ -143,9 +137,7 @@ const SiteSlug = () => {
           Site Name: {site.siteName}
         </h3>
         <h3 className="text-lg font-semibold">Location: {site.location}</h3>
-        <h3 className="text-lg font-semibold">Plywood Dealer: -</h3>
-        <h3 className="text-lg font-semibold">Plywood Dealer Email: -</h3>
-        <h3 className="text-lg font-semibold">Plywood Dealer Phone: -</h3>
+        <h3 className="text-lg font-semibold">Created At: {new Date(site.createdAt).toLocaleDateString()}</h3>
       </div>
 
       <div className="mt-6 flex flex-wrap gap-4 justify-center sm:justify-start">
