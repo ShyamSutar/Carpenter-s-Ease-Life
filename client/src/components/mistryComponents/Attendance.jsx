@@ -130,13 +130,28 @@ const Attendance = () => {
 
   return (
     <div className="mt-24 p-6 max-w-5xl mx-auto space-y-6 bg-white shadow-md rounded-lg">
-      <div className="p-4 bg-gray-100 rounded-lg shadow">
-        <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">Carpenter Details</h2>
-        <p className="text-sm sm:text-lg text-gray-700"><b>Name:</b> {data?.carpenter?.username}</p>
-        <p className="text-sm sm:text-lg text-gray-700"><b>Email:</b> {data?.carpenter?.email}</p>
-        <p className="text-sm sm:text-lg text-gray-700"><b>Phone:</b> {data?.carpenter?.phone}</p>
-        <p className="text-sm sm:text-lg text-gray-700"><b>Pay:</b> {data?.carpenter?.pay[user] || 600}</p>
+
+      {/* Header Section */}
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+        <h1 className="text-2xl sm:text-3xl font-bold text-red-600 mb-4">
+          Carpenter Details
+        </h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <DetailItem label="Name" value={data?.carpenter?.username} />
+          <DetailItem label="Email" value={data?.carpenter?.email} />
+          <DetailItem label="Phone" value={data?.carpenter?.phone} />
+          <DetailItem label="Pay" value={data?.carpenter?.pay[user] || 600} />
+          <DetailItem
+            label="Created At"
+            value={new Date(data?.createdAt).toLocaleDateString("en-IN", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          />
+        </div>
       </div>
+
       <div className="overflow-x-auto bg-gray-50 p-4 rounded-lg shadow-md">
         <AttendanceCalendar
           events={events}
@@ -175,3 +190,11 @@ const Attendance = () => {
 };
 
 export default Attendance;
+
+  // reusable componnent
+  const DetailItem = ({ label, value }) => (
+    <div className="space-y-1">
+      <span className="text-sm font-medium text-gray-500">{label}</span>
+      <p className="text-gray-900 font-medium">{value}</p>
+    </div>
+  );

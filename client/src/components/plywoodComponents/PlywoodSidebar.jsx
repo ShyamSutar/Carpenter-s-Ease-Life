@@ -57,23 +57,6 @@ const PlywoodSidebar = () => {
             </li>
           </NavLink>
 
-          <NavLink
-            to="slip"
-            className={({ isActive }) =>
-              `flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-90   ${
-                isActive ? "bg-myRed text-white" : "text-black"
-              } `
-            }
-          >
-            <li>
-              <div className="flex gap-2">
-                <span className="text-2xl">
-                  <AiFillCreditCard />
-                </span>{" "}
-                <span className="hidden sm:block">Slip</span>
-              </div>{" "}
-            </li>
-          </NavLink>
         </ol>
       </div>
     </div>

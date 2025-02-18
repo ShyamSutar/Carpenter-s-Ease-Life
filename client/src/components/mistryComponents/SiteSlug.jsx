@@ -9,6 +9,7 @@ import SiteSlugSlipHardware from "./SiteSlugSlipHardware";
 import AddClientModel from "./AddClientModel";
 import { useDispatch } from "react-redux";
 import { toggle } from "../../store/hiddenSlice";
+import { FiEdit, FiTrash2, FiPlus, FiUserPlus } from "react-icons/fi";
 
 const SiteSlug = () => {
   const id = useParams().id;
@@ -28,11 +29,10 @@ const SiteSlug = () => {
     location: "",
   });
 
-
   useEffect(() => {
     (async () => {
       try {
-        dispatch(toggle(true))
+        dispatch(toggle(true));
         const site = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/api/v1/site/fetchSite/${id}`,
           { withCredentials: true }
@@ -40,8 +40,8 @@ const SiteSlug = () => {
         setSite(site.data);
       } catch (error) {
         console.log(error);
-      } finally{
-        dispatch(toggle(false))
+      } finally {
+        dispatch(toggle(false));
       }
     })();
   }, [id]);
@@ -79,16 +79,19 @@ const SiteSlug = () => {
   }, 0);
 
   const carpenterProfit =
-  ((totalGrandTotalPlywood + totalGrandTotalHardware) *
-  site.profitPercentage) /
-  100;
-  
+    ((totalGrandTotalPlywood + totalGrandTotalHardware) *
+      site.profitPercentage) /
+    100;
+
   // const totalAmount = totalGrandTotalPlywood + totalGrandTotalHardware;
-  const totalPaid = site?.paid?.reduce((acc, payment) => acc + Number(payment.amount), 0);
+  const totalPaid = site?.paid?.reduce(
+    (acc, payment) => acc + Number(payment.amount),
+    0
+  );
   const remainingBalance = Math.round(carpenterProfit - totalPaid);
 
   const handleDelete = async () => {
-    dispatch(toggle(true))
+    dispatch(toggle(true));
     try {
       const site = await axios.delete(
         `${import.meta.env.VITE_BASE_URL}/api/v1/site/deletePlywood/${id}`,
@@ -100,8 +103,8 @@ const SiteSlug = () => {
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred";
       toast.error(errorMessage);
-    } finally{
-      dispatch(toggle(false))
+    } finally {
+      dispatch(toggle(false));
     }
   };
 
@@ -109,7 +112,7 @@ const SiteSlug = () => {
     e.preventDefault();
 
     try {
-      dispatch(toggle(true))
+      dispatch(toggle(true));
       const site = await axios.patch(
         `${import.meta.env.VITE_BASE_URL}/api/v1/site/editPlywood/${id}`,
         {
@@ -125,53 +128,39 @@ const SiteSlug = () => {
       toast.error(errorMessage);
     } finally {
       setShowEditModal(false);
-      dispatch(toggle(false))
+      dispatch(toggle(false));
     }
   };
+  
 
   return (
-    <div className="mt-24 p-6 bg-gray-100 min-h-screen">
-      <div className="border-2 border-[#ED2A4F] p-6 rounded-lg bg-white shadow-md">
-        <h1 className="text-2xl font-bold text-[#ED2A4F]">Site Details</h1>
-        <h3 className="text-lg font-semibold mt-2">
-          Site Name: {site.siteName}
-        </h3>
-        <h3 className="text-lg font-semibold">Location: {site.location}</h3>
-        <h3 className="text-lg font-semibold">Created At: {new Date(site.createdAt).toLocaleDateString()}</h3>
+    <div className="mt-24 p-6 bg-gray-100 min-h-screen max-w-7xl mx-auto">
+      {/* Header Section */}
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+        <h1 className="text-2xl sm:text-3xl font-bold text-red-600 mb-4">
+          Site Details
+        </h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <DetailItem label="Site Name" value={site.siteName} />
+          <DetailItem label="Location" value={site.location} />
+          <DetailItem
+            label="Created At"
+            value={new Date(site.createdAt).toLocaleDateString("en-IN", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          />
+        </div>
       </div>
 
-      <div className="mt-6 flex flex-wrap gap-4 justify-center sm:justify-start">
-        <button
-          onClick={handleAddPlywood}
-          className="w-full sm:w-auto px-6 py-2 bg-[#ED2A4F] text-white font-semibold rounded-lg shadow-md hover:bg-[#c92040] transition"
-        >
-          Add Plywood
-        </button>
-        <button
-          onClick={handleAddHardware}
-          className="w-full sm:w-auto px-6 py-2 bg-[#ED2A4F] text-white font-semibold rounded-lg shadow-md hover:bg-[#c92040] transition"
-        >
-          Add Hardware
-        </button>
-        <button
-          onClick={handleAddClient}
-          className="w-full sm:w-auto px-6 py-2 bg-[#ED2A4F] text-white font-semibold rounded-lg shadow-md hover:bg-[#c92040] transition"
-        >
-          Add Client
-        </button>
-        <button
-          className="w-full sm:w-auto px-6 py-2 bg-[#ED2A4F] text-white font-semibold rounded-lg shadow-md hover:bg-[#c92040] transition"
-          onClick={() => setShowDeleteModal(true)}
-        >
-          Remove
-        </button>
-        <button
-          className="w-full sm:w-auto px-6 py-2 bg-[#ED2A4F] text-white font-semibold rounded-lg shadow-md hover:bg-[#c92040] transition"
-          onClick={() => setShowEditModal(true)}
-        >
-          Edit
-        </button>
-      </div>
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
+          <ActionButton icon={<FiPlus />} label="Plywood" onClick={handleAddPlywood} />
+          <ActionButton icon={<FiPlus />} label="Hardware" onClick={handleAddHardware} />
+          <ActionButton icon={<FiUserPlus />} label="Client" onClick={handleAddClient} />
+          <ActionButton icon={<FiEdit />} label="Edit" onClick={() => setShowEditModal(true)} variant="blue" />
+          <ActionButton icon={<FiTrash2 />} label="Delete" onClick={() => setShowDeleteModal(true)} variant="red" />
+        </div>
 
       {/* Plywood List */}
       <div>
@@ -215,73 +204,32 @@ const SiteSlug = () => {
         ))}
       </div>
 
-      <div className="h-2 w-full bg-gray-500 border-2 border-t-red-500 border-b-red-500 mt-8"></div>
-
-      {/* Payment Slip Section */}
-      <div className="mt-6 p-6 border-2 border-gray-300 bg-white rounded-lg shadow-md">
-        <h2 className="text-xl font-bold text-[#ED2A4F]">Payment Slip</h2>
-        <div className="mt-4">
-          {site?.paid?.length > 0 ? (
-            <table className="w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="border border-gray-300 px-4 py-2">Date</th>
-                  <th className="border border-gray-300 px-4 py-2">
-                    Amount Paid
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {site?.paid.map((payment) => (
-                  <tr key={payment._id} className="text-center">
-                    <td className="border border-gray-300 px-4 py-2">
-                      {new Date(payment.paidDate).toLocaleString("en-US", {
-                        weekday: "short", // Full name of the day
-                        year: "numeric",
-                        month: "short", // Full month name
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                        hour12: true, // 12-hour clock
-                      })}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      ₹{payment.amount}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p className="text-gray-600 text-center">No payments made yet.</p>
-          )}
-        </div>
-        <h2 className="mt-4 text-lg font-bold text-right text-[#ED2A4F]">
-          Total Paid: ₹{totalPaid}
-        </h2>
-        <h2 className="text-lg font-bold text-right text-[#ED2A4F]">
-          Remaining Balance: ₹{remainingBalance}
-        </h2>
-      </div>
-
-      {/* Carpenter's Profit Calculation */}
-      <div className="mt-6 border-t-2 pt-4">
-        <h2 className="text-xl font-bold text-right pr-4 text-[#ED2A4F]">
-          Total of All Grand Totals: ₹
-          {totalGrandTotalPlywood + totalGrandTotalHardware}
-        </h2>
-
-        <div className="flex items-center justify-end pr-4 mt-2">
-          <label className="font-semibold mr-2">
-            Profit: {site.profitPercentage}%
-          </label>
+        {/* Payment Section */}
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mt-6">
+          <h2 className="text-xl font-bold text-red-600 mb-4">Payment Summary</h2>
+          <PaymentTable payments={site.paid} />
+          
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <SummaryItem label="Total Paid" value={`₹${totalPaid}`} />
+            <SummaryItem label="Remaining Balance" value={`₹${remainingBalance || 0}`} />
+          </div>
         </div>
 
-        <h2 className="text-lg font-semibold text-right pr-4 mt-2 text-[#ED2A4F]">
-          Carpenter&apos;s Profit: ₹{Math.round(carpenterProfit)}
-        </h2>
-      </div>
+        {/* Profit Section */}
+        <div className="bg-red-50 rounded-xl p-6 shadow-sm border border-red-200 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <SummaryItem 
+              label="Total Grand Total" 
+              value={`₹${totalGrandTotalPlywood + totalGrandTotalHardware}`} 
+              large
+            />
+            <SummaryItem 
+              label={`Profit (${site.profitPercentage}%)`} 
+              value={`₹${Math.round(carpenterProfit || 0)}`} 
+              large
+            />
+          </div>
+        </div>
 
       <div
         className={` ${
@@ -402,3 +350,73 @@ const SiteSlug = () => {
 };
 
 export default SiteSlug;
+
+  // reusable componnent
+  const DetailItem = ({ label, value }) => (
+    <div className="space-y-1">
+      <span className="text-sm font-medium text-gray-500">{label}</span>
+      <p className="text-gray-900 font-medium">{value}</p>
+    </div>
+  );
+
+  const ActionButton = ({ icon, label, onClick, variant = 'red' }) => {
+    const variants = {
+      red: 'bg-red-600 hover:bg-red-700',
+      blue: 'bg-blue-600 hover:bg-blue-700',
+      green: 'bg-green-600 hover:bg-green-700',
+    };
+    
+    return (
+      <button
+        onClick={onClick}
+        className={`${variants[variant]} text-white p-3 rounded-lg flex items-center justify-center gap-2 transition-colors`}
+      >
+        {icon}
+        <span >{label}</span>
+      </button>
+    );
+  };
+
+  const PaymentTable = ({ payments }) => (
+    <div className="overflow-x-auto rounded-lg border border-gray-200">
+      <table className="w-full">
+        <thead className="bg-gray-50">
+          <tr>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 min-w-[200px]">Date</th>
+            <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Amount</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200">
+          {payments?.length > 0 ? (
+            payments.map((payment) => (
+              <tr key={payment._id}>
+                <td className="px-4 py-3 text-sm text-gray-600">
+                  {new Date(payment.paidDate).toLocaleDateString('en-IN', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </td>
+                <td className="px-4 py-3 text-right text-sm font-medium text-gray-900">₹{payment.amount}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="2" className="px-4 py-6 text-center text-gray-500">
+                No payments recorded
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+  
+  const SummaryItem = ({ label, value, large = false }) => (
+    <div className={`p-4 rounded-lg ${large ? 'bg-white shadow-sm border border-gray-200' : ''}`}>
+      <div className="text-sm font-medium text-gray-500">{label}</div>
+      <div className={`${large ? 'text-2xl' : 'text-xl'} font-bold text-red-600`}>{value}</div>
+    </div>
+  );

@@ -82,121 +82,166 @@ const PlywoodSlug = () => {
   const totalPaid = data?.plywood?.[0]?.paid?.reduce((acc, payment) => acc + Number(payment.amount), 0);
 
   return (
-    <div className="mt-24 p-4">
-      <h1 className="text-2xl font-bold mb-4">{site.siteName}</h1>
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-lg">
-        <input
-          type="text"
-          name="plywoodType"
-          placeholder="Plywood Type"
-          value={formData.plywoodType}
-          onChange={handleChange}
-          className="border p-2 w-full"
-          required
-        />
-        <input
-          type="text"
-          name="brand"
-          placeholder="Brand"
-          value={formData.brand}
-          onChange={handleChange}
-          className="border p-2 w-full"
-          required
-        />
-        <input
-          type="number"
-          name="thickness"
-          placeholder="Thickness (mm)"
-          value={formData.thickness}
-          onChange={handleChange}
-          className="border p-2 w-full"
-          required
-        />
-        <input
-          type="text"
-          name="size"
-          placeholder="Size"
-          value={formData.size}
-          onChange={handleChange}
-          className="border p-2 w-full"
-          required
-        />
-        <input
-          type="number"
-          name="quantity"
-          placeholder="Quantity"
-          value={formData.quantity}
-          onChange={handleChange}
-          className="border p-2 w-full"
-          required
-        />
-        <input
-          type="number"
-          name="ratePerSheet"
-          placeholder="Rate per Sheet"
-          value={formData.ratePerSheet}
-          onChange={handleChange}
-          className="border p-2 w-full"
-          required
-        />
-        <button type="submit" className="bg-blue-500 text-white p-2 w-full">
-          Submit
-        </button>
-      </form>
+    <div className="mt-24 p-4 max-w-4xl mx-auto">
+    <div className="mb-8 border-b border-gray-200 pb-4">
+      <h1 className="text-3xl font-bold text-gray-800">{site.siteName}</h1>
+      <p className="text-gray-600 mt-2">Plywood Management</p>
+    </div>
 
-      <div>
-        <PlywoodSlugSlip data={data} id={id} />
+    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-md mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Plywood Type</label>
+          <input
+            type="text"
+            name="plywoodType"
+            placeholder="Enter plywood type"
+            value={formData.plywoodType}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED2A4F] focus:border-[#ED2A4F]"
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Brand</label>
+          <input
+            type="text"
+            name="brand"
+            placeholder="Enter brand name"
+            value={formData.brand}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED2A4F] focus:border-[#ED2A4F]"
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Thickness (mm)</label>
+          <input
+            type="number"
+            name="thickness"
+            placeholder="Enter thickness"
+            value={formData.thickness}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED2A4F] focus:border-[#ED2A4F]"
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Size</label>
+          <input
+            type="text"
+            name="size"
+            placeholder="Enter size"
+            value={formData.size}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED2A4F] focus:border-[#ED2A4F]"
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Quantity</label>
+          <input
+            type="number"
+            name="quantity"
+            placeholder="Enter quantity"
+            value={formData.quantity}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED2A4F] focus:border-[#ED2A4F]"
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Rate per Sheet</label>
+          <input
+            type="number"
+            name="ratePerSheet"
+            placeholder="Enter rate per sheet"
+            value={formData.ratePerSheet}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED2A4F] focus:border-[#ED2A4F]"
+            required
+          />
+        </div>
       </div>
 
-      {/* Payment Slip Section */}
-      <div className="mt-6 p-6 border-2 border-gray-300 bg-white rounded-lg shadow-md">
-        <h2 className="text-xl font-bold text-[#ED2A4F]">Payment Slip</h2>
-        <div className="mt-4">
-          {data?.plywood?.[0]?.paid?.length > 0 ? (
-            <table className="w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="border border-gray-300 px-4 py-2">Date</th>
-                  <th className="border border-gray-300 px-4 py-2">
-                    Amount Paid
-                  </th>
+      <button
+        type="submit"
+        className="mt-6 w-full bg-[#ED2A4F] hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
+      >
+        Add Plywood Details
+      </button>
+    </form>
+
+    <div className="mb-8">
+      <PlywoodSlugSlip data={data} id={id} />
+    </div>
+
+    {/* Payment Slip Section */}
+    <div className="bg-white p-6 rounded-xl shadow-md">
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">Payment History</h2>
+      
+      {data?.plywood?.[0]?.paid?.length > 0 ? (
+        <div className="overflow-x-auto rounded-lg border border-gray-200">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Date
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Amount
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {data?.plywood?.[0]?.paid?.map((payment) => (
+                <tr key={payment._id}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {new Date(payment.paidDate).toLocaleDateString("en-US", {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-right">
+                    ₹{payment.amount.toLocaleString()}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {data?.plywood?.[0]?.paid?.map((payment) => (
-                  <tr key={payment._id} className="text-center">
-                    <td className="border border-gray-300 px-4 py-2">
-                      {new Date(payment.paidDate).toLocaleString("en-US", {
-                        weekday: "short", // Full name of the day
-                        year: "numeric",
-                        month: "short", // Full month name
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                        hour12: true, // 12-hour clock
-                      })}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      ₹{payment.amount}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p className="text-gray-600 text-center">No payments made yet.</p>
-          )}
+              ))}
+            </tbody>
+          </table>
         </div>
-        <h2 className="mt-4 text-lg font-bold text-right text-[#ED2A4F]">
-          Total Paid: ₹{totalPaid}
-        </h2>
-        <h2 className="text-lg font-bold text-right text-[#ED2A4F]">
-            Remaining Balance: ₹
-            {(data.plywood?.[0]?.plywoodDetails?.reduce((total, item) => total + item.quantity * item.ratePerSheet, 0) || 0)-totalPaid}
-        </h2>
+      ) : (
+        <div className="text-center py-8 bg-gray-50 rounded-lg">
+          <p className="text-gray-500">No payments recorded yet</p>
+        </div>
+      )}
+
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-blue-50 p-4 rounded-lg">
+          <h3 className="text-sm font-medium text-blue-700">Total Paid</h3>
+          <p className="mt-1 text-2xl font-semibold text-blue-600">
+            ₹{totalPaid?.toLocaleString() || 0}
+          </p>
+        </div>
+        <div className="bg-red-50 p-4 rounded-lg">
+          <h3 className="text-sm font-medium text-red-700">Remaining Balance</h3>
+          <p className="mt-1 text-2xl font-semibold text-red-600">
+            ₹{(
+              (data.plywood?.[0]?.plywoodDetails?.reduce(
+                (total, item) => total + item.quantity * item.ratePerSheet, 0
+              ) || 0) - totalPaid
+            ).toLocaleString()}
+          </p>
+        </div>
       </div>
     </div>
+  </div>
   );
 };
 
