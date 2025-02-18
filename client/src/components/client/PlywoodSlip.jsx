@@ -128,7 +128,7 @@ const PlywoodSlip = ({ ply, id, setRefresh }) => {
     </button>
 
     {/* Payment Summary */}
-    <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+    <div className="bg-gray-50 rounded-xl py-4 px-2 md:p-6 border border-gray-200">
       <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
         <FiCalendar className="w-5 h-5 text-blue-600" />
         Payment History

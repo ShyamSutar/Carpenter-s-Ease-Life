@@ -93,7 +93,7 @@ const ClientSlug = () => {
   const amountPaid = site?.paid.reduce((acc, paid) => acc + Number(paid.amount), 0);
 
   return (
-<div className="mt-24 max-w-7xl md:p-6 mx-auto space-y-8">
+<div className="mt-24 max-w-7xl pr-2 md:p-6 mx-auto space-y-8">
       {/* Header Section */}
       <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
         <div className="flex items-center gap-3 mb-6">
@@ -119,7 +119,7 @@ const ClientSlug = () => {
       {/* Materials Section */}
       <div>
         {/* Plywood Details */}
-        <div className="bg-white rounded-2xl md:p-6 shadow-lg border border-gray-100 mt-8 mb-3">
+        <div className="bg-white rounded-2xl py-4 md:p-6 shadow-lg border border-gray-100 mt-8 mb-3">
           <div className="flex items-center gap-3 mb-6">
             <FiBox className="w-6 h-6 text-blue-600" />
             <h3 className="text-xl font-semibold text-gray-800">Plywood Records</h3>
@@ -141,7 +141,7 @@ const ClientSlug = () => {
         </div>
 
         {/* Hardware Details */}
-        <div className="bg-white rounded-2xl md:p-6 shadow-lg border border-gray-100 mt-6 mb-8">
+        <div className="bg-white rounded-2xl py-4 md:p-6 shadow-lg border border-gray-100 mt-6 mb-8">
           <div className="flex items-center gap-3 mb-6">
             <FiTool className="w-6 h-6 text-green-600" />
             <h3 className="text-xl font-semibold text-gray-800">Hardware Records</h3>
@@ -164,7 +164,7 @@ const ClientSlug = () => {
       </div>
 
       {/* Financial Summary */}
-      <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-2xl p-8 shadow-lg border border-red-100">
+      <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-2xl p-4 md:p-8 shadow-lg border border-red-100">
         <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
           <FiDollarSign className="w-6 h-6 text-red-600" />
           Financial Overview
