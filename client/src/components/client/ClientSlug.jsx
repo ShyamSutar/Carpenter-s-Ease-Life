@@ -93,7 +93,7 @@ const ClientSlug = () => {
   const amountPaid = site?.paid.reduce((acc, paid) => acc + Number(paid.amount), 0);
 
   return (
-<div className="mt-24 max-w-7xl p-6 mx-auto space-y-8">
+<div className="mt-24 max-w-7xl md:p-6 mx-auto space-y-8">
       {/* Header Section */}
       <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
         <div className="flex items-center gap-3 mb-6">
@@ -119,7 +119,7 @@ const ClientSlug = () => {
       {/* Materials Section */}
       <div>
         {/* Plywood Details */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mt-8 mb-3">
+        <div className="bg-white rounded-2xl md:p-6 shadow-lg border border-gray-100 mt-8 mb-3">
           <div className="flex items-center gap-3 mb-6">
             <FiBox className="w-6 h-6 text-blue-600" />
             <h3 className="text-xl font-semibold text-gray-800">Plywood Records</h3>
@@ -141,7 +141,7 @@ const ClientSlug = () => {
         </div>
 
         {/* Hardware Details */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mt-6 mb-8">
+        <div className="bg-white rounded-2xl md:p-6 shadow-lg border border-gray-100 mt-6 mb-8">
           <div className="flex items-center gap-3 mb-6">
             <FiTool className="w-6 h-6 text-green-600" />
             <h3 className="text-xl font-semibold text-gray-800">Hardware Records</h3>
