@@ -10,6 +10,7 @@
     "preview": "vite preview --port $PORT --host 0.0.0.0"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "@heroicons/react": "^2.2.0",
     "@reduxjs/toolkit": "^2.2.7",
     "animate.css": "^4.1.1",
