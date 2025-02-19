@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "flowbite";
 import Loading from "./components/defaultComponents/Loading.jsx";
 import "./App.css"
+import Chatbot from "./components/Chatbot.jsx";
 
 const App = () => {
   useEffect(() => {
@@ -72,6 +73,8 @@ const App = () => {
         pauseOnHover
         theme="light"
       />
+
+      <Chatbot/>
 
       {isLoading && <div><Loading /></div>}
     </div>
