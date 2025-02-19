@@ -36,7 +36,7 @@ const HardwareSupply = () => {
       }, [])
       
   return (
-    <div className="mt-24 p-6 h-screen">
+    <div className="mt-24 p-2 md:p-6 h-screen">
       <h2 className="text-2xl font-bold mb-6">Mistries Connected to You</h2>
       <HardwareSupplyCard sites={sites} />
     </div>

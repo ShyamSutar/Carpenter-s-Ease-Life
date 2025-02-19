@@ -25,7 +25,7 @@ export const CarpenterAttendance = () => {
   }, []);
 
   return (
-    <div className="mt-28 ml-4 min-h-screen">
+    <div className="mt-28 px-2 min-h-screen">
       <h1 className="font-bold text-2xl">Attendance</h1>
       <div className="mt-6 flex flex-wrap gap-4 justify-center">
         {showMistry &&

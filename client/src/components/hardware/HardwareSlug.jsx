@@ -73,7 +73,7 @@ const HardwareSlug = () => {
         { ...formData, siteId: id },
         { withCredentials: true }
       );
-      console.log("Hardware added:", response.data);
+      // console.log("Hardware added:", response.data);
     } catch (error) {
       console.error("Error adding hardware:", error);
     } finally {
@@ -85,13 +85,13 @@ const HardwareSlug = () => {
   const totalPaid = data?.hardware?.[0]?.paid?.reduce((acc, payment) => acc + Number(payment.amount), 0);
 
   return (
-    <div className="mt-24 p-4 max-w-4xl mx-auto">
+    <div className="mt-24 py-4 px-2 md:p-4 max-w-4xl mx-auto">
       <div className="mb-8 border-b border-gray-200 pb-4">
         <h1 className="text-3xl font-bold text-gray-800">{site.siteName}</h1>
         <p className="text-gray-600 mt-2">Hardware Management</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-md mb-8">
+      <form onSubmit={handleSubmit} className="bg-white py-4 px-2 md:p-6 rounded-xl shadow-md mb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">Item Name</label>
@@ -189,7 +189,7 @@ const HardwareSlug = () => {
       </div>
 
       {/* Payment Slip Section */}
-      <div className="bg-white p-6 rounded-xl shadow-md">
+      <div className="bg-white py-4 px-2 md:p-6 rounded-xl shadow-md">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Payment History</h2>
         
         {data?.hardware?.[0]?.paid?.length > 0 ? (

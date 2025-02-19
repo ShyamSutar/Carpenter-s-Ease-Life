@@ -2,15 +2,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CarpenterSlip from "../mistryComponents/CarpenterSlip";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toggle } from "../../store/hiddenSlice";
 
 const CarpenterAttendanceSlug = () => {
   const id = useParams().id;
-  const user = useSelector(state => state?.auth?.userData)
   const [data, setData] = useState(null);
   const [events, setEvents] = useState([]);
-  const [refresh, setRefresh] = useState(false);
+  const [refresh] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -58,20 +57,40 @@ const CarpenterAttendanceSlug = () => {
     }
   }, [refresh, id]);
 
+
   return (
-    <div className="min-h-screen">
-      <div className="mt-24 p-4 bg-slate-200 rounded mr-4">
-        <h1 className="text-xl ">
-          <b>Name:</b> {data?.mistry?.username}
+    <div className="min-h-screen p-2">
+      {/* Header Section */}
+      <div className="mt-24 bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+        <h1 className="text-2xl sm:text-3xl font-bold text-red-600 mb-4">
+          Mistry Details
         </h1>
-        <h1 className="text-xl ">
-          <b>Email:</b> {data?.mistry?.email}
-        </h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <DetailItem label="Name" value={data?.Mistry?.username} />
+          <DetailItem label="Email" value={data?.Mistry?.email} />
+          <DetailItem label="Phone" value={data?.Mistry?.phone} />
+          <DetailItem
+            label="Created At"
+            value={new Date(data?.createdAt).toLocaleDateString("en-IN", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          />
+        </div>
       </div>
 
-      <CarpenterSlip events={events} data={data} id={id} refresh={refresh}/>
+      <div className="mt-6"><CarpenterSlip events={events} data={data} id={id} refresh={refresh}/></div>
     </div>
   );
 };
 
 export default CarpenterAttendanceSlug;
+
+  // reusable componnent
+  const DetailItem = ({ label, value }) => (
+    <div className="space-y-1">
+      <span className="text-sm font-medium text-gray-500">{label}</span>
+      <p className="text-gray-900 font-medium">{value}</p>
+    </div>
+  );

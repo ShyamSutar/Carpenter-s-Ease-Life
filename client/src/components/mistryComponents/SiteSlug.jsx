@@ -134,7 +134,7 @@ const SiteSlug = () => {
   
 
   return (
-    <div className="mt-24 p-6 bg-gray-100 min-h-screen max-w-7xl mx-auto">
+    <div className="mt-24 px-2 py-4 md:p-6 bg-gray-100 min-h-screen max-w-7xl mx-auto">
       {/* Header Section */}
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
         <h1 className="text-2xl sm:text-3xl font-bold text-red-600 mb-4">
@@ -167,7 +167,7 @@ const SiteSlug = () => {
         {site?.plywood?.map((item) => (
           <div
             key={item.plywood._id}
-            className="mt-6 p-4 bg-white rounded-lg shadow-md border border-gray-200"
+            className="mt-6 p-1 md:p-4 bg-white rounded-lg shadow-md border border-gray-200"
           >
             <div className="mb-4 p-4 border rounded-lg shadow-sm bg-gray-50">
               <h4 className="text-lg font-semibold text-blue-600">
@@ -188,7 +188,7 @@ const SiteSlug = () => {
         {site?.hardware?.map((item) => (
           <div
             key={item.hardware._id}
-            className="mt-6 p-4 bg-white rounded-lg shadow-md border border-gray-200"
+            className="mt-6 p-1 md:p-4 bg-white rounded-lg shadow-md border border-gray-200"
           >
             <div className="mb-4 p-4 border rounded-lg shadow-sm bg-gray-50">
               <h4 className="text-lg font-semibold text-blue-600">
@@ -205,7 +205,7 @@ const SiteSlug = () => {
       </div>
 
         {/* Payment Section */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mt-6">
+        <div className="bg-white rounded-xl p-1 md:p-4 shadow-sm border border-gray-200 mt-6">
           <h2 className="text-xl font-bold text-red-600 mb-4">Payment Summary</h2>
           <PaymentTable payments={site.paid} />
           

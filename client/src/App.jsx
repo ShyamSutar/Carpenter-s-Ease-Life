@@ -44,6 +44,8 @@ const App = () => {
     getUser();
   }, [dispatch, navigate]);
 
+
+
   return (
     <div className="overflow-x-auto relative">
       {/* Animated Background */}

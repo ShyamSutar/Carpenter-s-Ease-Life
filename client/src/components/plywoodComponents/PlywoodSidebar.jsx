@@ -6,7 +6,7 @@ import { FaHome } from "react-icons/fa";
 const PlywoodSidebar = () => {
 
   return (
-    <div className="mr-16 sm:mr-44 md:mr-56 ">
+    <div className="mr-14 sm:mr-44 md:mr-56 ">
       <div className="h-screen fixed top-0 left-0 mt-16 bg-white border-r border-gray-50 shadow-lg py-4 md:p-4 md:px-6 text-gray-700 text-lg font-semibold">
         <ol>
           <Link

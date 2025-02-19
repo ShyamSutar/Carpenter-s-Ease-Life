@@ -22,7 +22,7 @@ const findCarpenterById2 = asyncHandler(async (req, res) => {
   const carpenter = await Attendance.find({
     carpenter: req.user._id,
     mistry: req.params.id,
-  }).populate("carpenter");
+  }).populate("carpenter").populate("mistry");
   res.status(200).json({ carpenter });
 });
 
