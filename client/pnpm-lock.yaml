@@ -12,7 +12,7 @@ dependencies:
     specifier: ^2.2.0
     version: 2.2.0(react@18.3.1)
   '@reduxjs/toolkit':
-    specifier: ^2.2.7
+    specifier: ^2.5.1
     version: 2.5.1(react-redux@9.2.0)(react@18.3.1)
   animate.css:
     specifier: ^4.1.1
@@ -21,13 +21,13 @@ dependencies:
     specifier: 3.0.0-beta.6
     version: 3.0.0-beta.6
   axios:
-    specifier: ^1.7.2
+    specifier: ^1.7.9
     version: 1.7.9
   flowbite:
-    specifier: ^2.4.1
+    specifier: ^2.5.2
     version: 2.5.2
   flowbite-react:
-    specifier: ^0.10.1
+    specifier: ^0.10.2
     version: 0.10.2(react-dom@18.3.1)(react@18.3.1)(tailwindcss@3.4.17)
   lucide-react:
     specifier: ^0.475.0
@@ -39,66 +39,66 @@ dependencies:
     specifier: ^18.3.1
     version: 18.3.1
   react-big-calendar:
-    specifier: ^1.13.2
+    specifier: ^1.17.1
     version: 1.17.1(react-dom@18.3.1)(react@18.3.1)
   react-dom:
     specifier: ^18.3.1
     version: 18.3.1(react@18.3.1)
   react-icons:
-    specifier: ^5.2.1
+    specifier: ^5.5.0
     version: 5.5.0(react@18.3.1)
   react-redux:
-    specifier: ^9.1.2
+    specifier: ^9.2.0
     version: 9.2.0(@types/react@18.3.18)(react@18.3.1)(redux@5.0.1)
   react-responsive:
     specifier: ^10.0.0
     version: 10.0.0(react@18.3.1)
   react-router-dom:
-    specifier: ^6.24.1
+    specifier: ^6.29.0
     version: 6.29.0(react-dom@18.3.1)(react@18.3.1)
   react-time-picker:
     specifier: ^7.0.0
     version: 7.0.0(@types/react-dom@18.3.5)(@types/react@18.3.18)(react-dom@18.3.1)(react@18.3.1)
   react-toastify:
-    specifier: ^10.0.5
+    specifier: ^10.0.6
     version: 10.0.6(react-dom@18.3.1)(react@18.3.1)
   react-tooltip:
-    specifier: ^5.27.1
+    specifier: ^5.28.0
     version: 5.28.0(react-dom@18.3.1)(react@18.3.1)
 
 devDependencies:
   '@types/react':
-    specifier: ^18.3.3
+    specifier: ^18.3.18
     version: 18.3.18
   '@types/react-dom':
-    specifier: ^18.3.0
+    specifier: ^18.3.5
     version: 18.3.5(@types/react@18.3.18)
   '@vitejs/plugin-react':
-    specifier: ^4.3.1
+    specifier: ^4.3.4
     version: 4.3.4(vite@5.4.14)
   autoprefixer:
-    specifier: ^10.4.19
+    specifier: ^10.4.20
     version: 10.4.20(postcss@8.5.3)
   eslint:
-    specifier: ^8.57.0
+    specifier: ^8.57.1
     version: 8.57.1
   eslint-plugin-react:
-    specifier: ^7.34.2
+    specifier: ^7.37.4
     version: 7.37.4(eslint@8.57.1)
   eslint-plugin-react-hooks:
     specifier: ^4.6.2
     version: 4.6.2(eslint@8.57.1)
   eslint-plugin-react-refresh:
-    specifier: ^0.4.7
+    specifier: ^0.4.19
     version: 0.4.19(eslint@8.57.1)
   postcss:
-    specifier: ^8.4.39
+    specifier: ^8.5.3
     version: 8.5.3
   tailwindcss:
-    specifier: ^3.4.4
+    specifier: ^3.4.17
     version: 3.4.17
   vite:
-    specifier: ^5.3.1
+    specifier: ^5.4.14
     version: 5.4.14
 
 packages:
