@@ -94,14 +94,14 @@ const Settings = () => {
                 className={`w-full px-3 py-2 rounded-md border ${
                   key === "role"
                     ? "bg-gray-50 text-gray-500"
-                    : "border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    : "border-gray-300 focus:border-myRed focus:ring-1 focus:ring-myRed"
                 } outline-none transition-colors`}
               />
             </div>
           ))}
           <button
             onClick={handleSave}
-            className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+            className="w-full mt-4 px-4 py-2 bg-myRed text-white rounded-md hover:bg-red-600 transition-colors font-medium"
           >
             Save Changes
           </button>
