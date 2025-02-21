@@ -13,43 +13,44 @@ const Chatbot = () => {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
   const genAI = new GoogleGenerativeAI(apiKey);
 
+  const userRole = "mistry";
+
+  const getSystemInstruction = (role) => {
+    switch (role) {
+      case "Mistry":
+        return `
+          You are assisting a **Mistry (Site Manager)**. Provide relevant responses:
+          - "How do I create a new site?"
+          - "Show me the plywood received for Site A."
+          - "Mark Carpenter Raj as 'Half-day' for today."
+        `;
+      case "Dealer":
+        return `
+          You are assisting a **Plywood/Hardware Dealer**. Provide relevant responses:
+          - "How do I accept a site request?"
+          - "List all pending plywood delivery requests."
+          - "Update the status of hardware sent to Site B."
+        `;
+      case "Carpenter":
+        return `
+          You are assisting a **Carpenter**. Provide relevant responses:
+          - "What is my attendance status this month?"
+          - "Show me plywood details for my site."
+        `;
+      case "Client":
+        return `
+          You are assisting a **Client**. Provide relevant responses:
+          - "How much plywood was used at Site X?"
+          - "Show me the total expenses for this month."
+        `;
+      default:
+        return "You are a general assistant. Ask how you can help!";
+    }
+  };
+
   const model = genAI.getGenerativeModel({
     model: "gemini-1.5-flash",
-    systemInstruction: `
-      You are a chatbot designed to assist users with tasks related to Carpenter's Ease Life. You must provide role-based responses and follow these rules:
-      - Role-Based Responses: Answer based on the user's role (Mistry, Plywood & Hardware Dealers, Carpenters, Clients).
-      - Real-Time Updates: Notify users of new requests, approvals, and changes.
-      - Security & Access Control: Ensure users can only access relevant data.
-      - Friendly & Efficient: Keep responses clear and to the point.
-      - Multi-Language Support (Optional): Provide responses in Hindi & English if needed.
-
-      Example Queries and Responses:
-      - Mistry (Site Manager):
-        - "How do I create a new site?"
-        - "Show me the plywood received for Site A."
-        - "Mark Carpenter Raj as 'Half-day' for today."
-      - Plywood & Hardware Dealers:
-        - "How do I accept a site request?"
-        - "List all pending plywood delivery requests."
-        - "Update the status of hardware sent to Site B."
-      - Carpenters:
-        - "What is my attendance status this month?"
-        - "Show me plywood details for my site."
-      - Clients:
-        - "How much plywood was used at Site X?"
-        - "Show me the total expenses for this month."
-
-      Example Conversation:
-      - User (Mistry): "How do I add a plywood dealer to my site?"
-      - Chatbot: "Go to ‘Manage Sites’ → Select your site → Click ‘Add Dealer’ → Enter dealer details and send a request. The dealer must accept before sending materials."
-      - User (Dealer): "How do I send plywood to a site?"
-      - Chatbot: "Go to ‘Site Requests’ → Accept the request → Click ‘Send Plywood’ → Enter quantity, type, and price → Confirm dispatch."
-
-      Additional Features:
-      - Notifications for material delivery, expense updates, and attendance records.
-      - Guided Steps for complex actions like site creation and expense tracking.
-      - Chat Support to connect users for real-time discussions.
-    `,
+    systemInstruction: getSystemInstruction(userRole), // Dynamic instruction
   });
 
   const generationConfig = {

@@ -37,7 +37,7 @@ const ShowSite = () => {
   };
 
   return (
-    <div className="mt-24 w-full h-screen p-4">
+    <div className="mt-24 w-full min-h-screen p-4">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#ED2A4F] text-center mb-6">
           Manage Sites

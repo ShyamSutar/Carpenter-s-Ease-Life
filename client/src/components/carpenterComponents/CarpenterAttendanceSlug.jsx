@@ -66,9 +66,9 @@ const CarpenterAttendanceSlug = () => {
           Mistry Details
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <DetailItem label="Name" value={data?.Mistry?.username} />
-          <DetailItem label="Email" value={data?.Mistry?.email} />
-          <DetailItem label="Phone" value={data?.Mistry?.phone} />
+          <DetailItem label="Name" value={data?.mistry?.username} />
+          <DetailItem label="Email" value={data?.mistry?.email} />
+          <DetailItem label="Phone" value={data?.mistry?.phone} />
           <DetailItem
             label="Created At"
             value={new Date(data?.createdAt).toLocaleDateString("en-IN", {

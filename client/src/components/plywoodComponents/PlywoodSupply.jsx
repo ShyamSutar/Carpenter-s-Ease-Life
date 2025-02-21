@@ -35,7 +35,7 @@ const PlywoodSupply = () => {
       }, [])
       
   return (
-    <div className="mt-24 h-screen p-2 md:p-6">
+    <div className="mt-24 min-h-screen p-2 md:p-6">
       <h2 className="text-2xl font-bold mb-6">Mistries Connected to You</h2>
       <PlywoodSupplyCard sites={sites} />
     </div>

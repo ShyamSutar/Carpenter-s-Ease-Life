@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { toggle } from "../../store/hiddenSlice";
 
 const HardwareSlug = () => {
-
   const dispatch = useDispatch();
 
   const { id } = useParams();
@@ -24,7 +23,7 @@ const HardwareSlug = () => {
 
   useEffect(() => {
     (async () => {
-      dispatch(toggle(true))
+      dispatch(toggle(true));
       try {
         const siteResponse = await axios.get(
           `${
@@ -35,15 +34,15 @@ const HardwareSlug = () => {
         setSite(siteResponse.data);
       } catch (error) {
         console.log(error);
-      } finally{
-        dispatch(toggle(false))
+      } finally {
+        dispatch(toggle(false));
       }
     })();
   }, [id, refresh]);
 
   useEffect(() => {
     (async () => {
-      dispatch(toggle(true))
+      dispatch(toggle(true));
       try {
         const siteResponse = await axios.get(
           `${
@@ -54,8 +53,8 @@ const HardwareSlug = () => {
         setData(siteResponse.data);
       } catch (error) {
         console.log(error);
-      } finally{
-        dispatch(toggle(false))
+      } finally {
+        dispatch(toggle(false));
       }
     })();
   }, [id, refresh]);
@@ -67,7 +66,7 @@ const HardwareSlug = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch(toggle(true))
+      dispatch(toggle(true));
       const response = await axios.patch(
         `${import.meta.env.VITE_BASE_URL}/api/v1/site/addHardwareDetails`,
         { ...formData, siteId: id },
@@ -78,11 +77,23 @@ const HardwareSlug = () => {
       console.error("Error adding hardware:", error);
     } finally {
       setRefresh((prev) => !prev);
-      dispatch(toggle(false))
+      dispatch(toggle(false));
+
+      setFormData({
+        itemName: "",
+        brand: "",
+        size: "",
+        quantity: "",
+        unit: "",
+        ratePerUnit: "",
+      });
     }
   };
 
-  const totalPaid = data?.hardware?.[0]?.paid?.reduce((acc, payment) => acc + Number(payment.amount), 0);
+  const totalPaid = data?.hardware?.[0]?.paid?.reduce(
+    (acc, payment) => acc + Number(payment.amount),
+    0
+  );
 
   return (
     <div className="mt-24 py-4 px-2 md:p-4 max-w-4xl mx-auto">
@@ -91,10 +102,15 @@ const HardwareSlug = () => {
         <p className="text-gray-600 mt-2">Hardware Management</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white py-4 px-2 md:p-6 rounded-xl shadow-md mb-8">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white py-4 px-2 md:p-6 rounded-xl shadow-md mb-8"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Item Name</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Item Name
+            </label>
             <input
               type="text"
               name="itemName"
@@ -107,7 +123,9 @@ const HardwareSlug = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Brand</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Brand
+            </label>
             <input
               type="text"
               name="brand"
@@ -120,7 +138,9 @@ const HardwareSlug = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Size</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Size
+            </label>
             <input
               type="text"
               name="size"
@@ -133,7 +153,9 @@ const HardwareSlug = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Quantity</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Quantity
+            </label>
             <input
               type="number"
               name="quantity"
@@ -146,7 +168,9 @@ const HardwareSlug = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Unit</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Unit
+            </label>
             <select
               name="unit"
               value={formData.unit}
@@ -163,7 +187,9 @@ const HardwareSlug = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Rate per Unit</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Rate per Unit
+            </label>
             <input
               type="number"
               name="ratePerUnit"
@@ -190,8 +216,10 @@ const HardwareSlug = () => {
 
       {/* Payment Slip Section */}
       <div className="bg-white py-4 px-2 md:p-6 rounded-xl shadow-md">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Payment History</h2>
-        
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          Payment History
+        </h2>
+
         {data?.hardware?.[0]?.paid?.length > 0 ? (
           <div className="overflow-x-auto rounded-lg border border-gray-200">
             <table className="min-w-full divide-y divide-gray-200">
@@ -210,9 +238,9 @@ const HardwareSlug = () => {
                   <tr key={payment._id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                       {new Date(payment.paidDate).toLocaleDateString("en-US", {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
                       })}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-right">
@@ -237,11 +265,15 @@ const HardwareSlug = () => {
             </p>
           </div>
           <div className="bg-red-50 p-4 rounded-lg">
-            <h3 className="text-sm font-medium text-red-700">Remaining Balance</h3>
+            <h3 className="text-sm font-medium text-red-700">
+              Remaining Balance
+            </h3>
             <p className="mt-1 text-2xl font-semibold text-red-600">
-              ₹{(
+              ₹
+              {(
                 (data.hardware?.[0]?.hardwareDetails?.reduce(
-                  (total, item) => total + item.quantity * item.ratePerUnit, 0
+                  (total, item) => total + item.quantity * item.ratePerUnit,
+                  0
                 ) || 0) - totalPaid
               ).toLocaleString()}
             </p>

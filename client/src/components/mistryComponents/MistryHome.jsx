@@ -1,6 +1,6 @@
 const MistryHome = () => {
   return (
-    <div className="w-full h-screen flex justify-center items-center">
+    <div className="w-full min-h-screen flex justify-center items-center">
         <div className="text-center h-screen flex justify-center items-center gap-4">
             <div className="px-2 sm:px-4 md:px-6">
               <div className="w-full flex justify-center">

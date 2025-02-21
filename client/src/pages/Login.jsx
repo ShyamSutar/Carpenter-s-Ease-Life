@@ -59,7 +59,7 @@ const Login = () => {
         </ul>
       </div>
       <section className=" mt-12">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:min-h-screen lg:py-0">
           <Link
             to='/'
             className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"

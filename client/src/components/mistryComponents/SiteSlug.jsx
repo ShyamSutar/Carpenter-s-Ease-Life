@@ -10,6 +10,7 @@ import AddClientModel from "./AddClientModel";
 import { useDispatch } from "react-redux";
 import { toggle } from "../../store/hiddenSlice";
 import { FiEdit, FiTrash2, FiPlus, FiUserPlus } from "react-icons/fi";
+import { FiBox, FiTool } from "react-icons/fi";
 
 const SiteSlug = () => {
   const id = useParams().id;
@@ -131,10 +132,9 @@ const SiteSlug = () => {
       dispatch(toggle(false));
     }
   };
-  
 
   return (
-    <div className="mt-24 px-2 py-4 md:p-6 bg-gray-100 min-h-screen max-w-7xl mx-auto">
+    <div className="mt-24 px-2 py-4 md:p-6 bg-gray-100 rounded min-h-screen max-w-7xl mx-auto">
       {/* Header Section */}
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
         <h1 className="text-2xl sm:text-3xl font-bold text-red-600 mb-4">
@@ -155,15 +155,44 @@ const SiteSlug = () => {
       </div>
 
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
-          <ActionButton icon={<FiPlus />} label="Plywood" onClick={handleAddPlywood} />
-          <ActionButton icon={<FiPlus />} label="Hardware" onClick={handleAddHardware} />
-          <ActionButton icon={<FiUserPlus />} label="Client" onClick={handleAddClient} />
-          <ActionButton icon={<FiEdit />} label="Edit" onClick={() => setShowEditModal(true)} variant="blue" />
-          <ActionButton icon={<FiTrash2 />} label="Delete" onClick={() => setShowDeleteModal(true)} variant="red" />
-        </div>
+        <ActionButton
+          icon={<FiPlus />}
+          label="Plywood"
+          onClick={handleAddPlywood}
+        />
+        <ActionButton
+          icon={<FiPlus />}
+          label="Hardware"
+          onClick={handleAddHardware}
+        />
+        <ActionButton
+          icon={<FiUserPlus />}
+          label="Client"
+          onClick={handleAddClient}
+        />
+        <ActionButton
+          icon={<FiEdit />}
+          label="Edit"
+          onClick={() => setShowEditModal(true)}
+          variant="blue"
+        />
+        <ActionButton
+          icon={<FiTrash2 />}
+          label="Delete"
+          onClick={() => setShowDeleteModal(true)}
+          variant="red"
+        />
+      </div>
 
       {/* Plywood List */}
-      <div>
+      <div className="bg-white rounded-2xl py-4 md:p-6 shadow-lg border border-gray-100 mt-8 mb-3">
+        <div className="flex items-center gap-3 mb-6">
+          <FiBox className="w-6 h-6 text-blue-600" />
+          <h3 className="text-xl font-semibold text-gray-800">
+            Plywood Records
+          </h3>
+        </div>
+
         {site?.plywood?.map((item) => (
           <div
             key={item.plywood._id}
@@ -184,7 +213,13 @@ const SiteSlug = () => {
       </div>
 
       {/* Hardware List */}
-      <div>
+      <div className="bg-white rounded-2xl py-4 md:p-6 shadow-lg border border-gray-100 mt-8 mb-3">
+        <div className="flex items-center gap-3 mb-6">
+          <FiTool className="w-6 h-6 text-green-600" />
+          <h3 className="text-xl font-semibold text-gray-800">
+            Hardware Records
+          </h3>
+        </div>
         {site?.hardware?.map((item) => (
           <div
             key={item.hardware._id}
@@ -204,32 +239,35 @@ const SiteSlug = () => {
         ))}
       </div>
 
-        {/* Payment Section */}
-        <div className="bg-white rounded-xl p-1 md:p-4 shadow-sm border border-gray-200 mt-6">
-          <h2 className="text-xl font-bold text-red-600 mb-4">Payment Summary</h2>
-          <PaymentTable payments={site.paid} />
-          
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <SummaryItem label="Total Paid" value={`₹${totalPaid}`} />
-            <SummaryItem label="Remaining Balance" value={`₹${remainingBalance || 0}`} />
-          </div>
-        </div>
+      {/* Payment Section */}
+      <div className="bg-white rounded-xl p-1 md:p-4 shadow-sm border border-gray-200 mt-6">
+        <h2 className="text-xl font-bold text-red-600 mb-4">Payment Summary</h2>
+        <PaymentTable payments={site.paid} />
 
-        {/* Profit Section */}
-        <div className="bg-red-50 rounded-xl p-6 shadow-sm border border-red-200 mt-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <SummaryItem 
-              label="Total Grand Total" 
-              value={`₹${totalGrandTotalPlywood + totalGrandTotalHardware}`} 
-              large
-            />
-            <SummaryItem 
-              label={`Profit (${site.profitPercentage}%)`} 
-              value={`₹${Math.round(carpenterProfit || 0)}`} 
-              large
-            />
-          </div>
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <SummaryItem label="Total Paid" value={`₹${totalPaid}`} />
+          <SummaryItem
+            label="Remaining Balance"
+            value={`₹${remainingBalance || 0}`}
+          />
         </div>
+      </div>
+
+      {/* Profit Section */}
+      <div className="bg-red-50 rounded-xl p-6 shadow-sm border border-red-200 mt-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <SummaryItem
+            label="Total Grand Total"
+            value={`₹${totalGrandTotalPlywood + totalGrandTotalHardware}`}
+            large
+          />
+          <SummaryItem
+            label={`Profit (${site.profitPercentage}%)`}
+            value={`₹${Math.round(carpenterProfit || 0)}`}
+            large
+          />
+        </div>
+      </div>
 
       <div
         className={` ${
@@ -351,72 +389,84 @@ const SiteSlug = () => {
 
 export default SiteSlug;
 
-  // reusable componnent
-  const DetailItem = ({ label, value }) => (
-    <div className="space-y-1">
-      <span className="text-sm font-medium text-gray-500">{label}</span>
-      <p className="text-gray-900 font-medium">{value}</p>
-    </div>
-  );
+// reusable componnent
+const DetailItem = ({ label, value }) => (
+  <div className="space-y-1">
+    <span className="text-sm font-medium text-gray-500">{label}</span>
+    <p className="text-gray-900 font-medium">{value}</p>
+  </div>
+);
 
-  const ActionButton = ({ icon, label, onClick, variant = 'red' }) => {
-    const variants = {
-      red: 'bg-red-600 hover:bg-red-700',
-      blue: 'bg-blue-600 hover:bg-blue-700',
-      green: 'bg-green-600 hover:bg-green-700',
-    };
-    
-    return (
-      <button
-        onClick={onClick}
-        className={`${variants[variant]} text-white p-3 rounded-lg flex items-center justify-center gap-2 transition-colors`}
-      >
-        {icon}
-        <span >{label}</span>
-      </button>
-    );
+const ActionButton = ({ icon, label, onClick, variant = "red" }) => {
+  const variants = {
+    red: "bg-red-600 hover:bg-red-700",
+    blue: "bg-blue-600 hover:bg-blue-700",
+    green: "bg-green-600 hover:bg-green-700",
   };
 
-  const PaymentTable = ({ payments }) => (
-    <div className="overflow-x-auto rounded-lg border border-gray-200">
-      <table className="w-full">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 min-w-[200px]">Date</th>
-            <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Amount</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200">
-          {payments?.length > 0 ? (
-            payments.map((payment) => (
-              <tr key={payment._id}>
-                <td className="px-4 py-3 text-sm text-gray-600">
-                  {new Date(payment.paidDate).toLocaleDateString('en-IN', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </td>
-                <td className="px-4 py-3 text-right text-sm font-medium text-gray-900">₹{payment.amount}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="2" className="px-4 py-6 text-center text-gray-500">
-                No payments recorded
+  return (
+    <button
+      onClick={onClick}
+      className={`${variants[variant]} text-white p-3 rounded-lg flex items-center justify-center gap-2 transition-colors`}
+    >
+      {icon}
+      <span>{label}</span>
+    </button>
+  );
+};
+
+const PaymentTable = ({ payments }) => (
+  <div className="overflow-x-auto rounded-lg border border-gray-200">
+    <table className="w-full">
+      <thead className="bg-gray-50">
+        <tr>
+          <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 min-w-[200px]">
+            Date
+          </th>
+          <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">
+            Amount
+          </th>
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-gray-200">
+        {payments?.length > 0 ? (
+          payments.map((payment) => (
+            <tr key={payment._id}>
+              <td className="px-4 py-3 text-sm text-gray-600">
+                {new Date(payment.paidDate).toLocaleDateString("en-IN", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </td>
+              <td className="px-4 py-3 text-right text-sm font-medium text-gray-900">
+                ₹{payment.amount}
               </td>
             </tr>
-          )}
-        </tbody>
-      </table>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="2" className="px-4 py-6 text-center text-gray-500">
+              No payments recorded
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  </div>
+);
+
+const SummaryItem = ({ label, value, large = false }) => (
+  <div
+    className={`p-4 rounded-lg ${
+      large ? "bg-white shadow-sm border border-gray-200" : ""
+    }`}
+  >
+    <div className="text-sm font-medium text-gray-500">{label}</div>
+    <div className={`${large ? "text-2xl" : "text-xl"} font-bold text-red-600`}>
+      {value}
     </div>
-  );
-  
-  const SummaryItem = ({ label, value, large = false }) => (
-    <div className={`p-4 rounded-lg ${large ? 'bg-white shadow-sm border border-gray-200' : ''}`}>
-      <div className="text-sm font-medium text-gray-500">{label}</div>
-      <div className={`${large ? 'text-2xl' : 'text-xl'} font-bold text-red-600`}>{value}</div>
-    </div>
-  );
+  </div>
+);
