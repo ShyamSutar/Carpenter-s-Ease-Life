@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { toggle } from "../../store/hiddenSlice";
 
 const Settings = () => {
   const [user, setUser] = useState({
-    name: "John Doe",
-    email: "john@example.com",
-    phone: "1234567890",
-    role: "Carpenter",
-    address: "123 Street, City",
+    name: "",
+    email: "",
+    phone: "",
+    role: ""
   });
-  
+
   const [passwords, setPasswords] = useState({
     oldPassword: "",
     newPassword: "",
@@ -17,17 +19,66 @@ const Settings = () => {
   });
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [id, setId] = useState("");
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/api/v1/users/getUser`,
+          { withCredentials: true }
+        );
+
+        const {name, email, phone, role} = res.data
+        setId(res.data._id)
+        
+        setUser({ name: name || "", email: email || "", phone: phone || "", role: role || "" });
+        
+      } catch (error) {
+        const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
+        toast.error(errorMessage);
+      } finally{
+        dispatch(toggle(false))
+      }
+    })();
+  }, []);
 
   const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setUser((prevUser) => ({
+      ...prevUser,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const handlePasswordChange = (e) => {
     setPasswords({ ...passwords, [e.target.name]: e.target.value });
   };
 
-  const handleSave = () => {
-    console.log("Profile updated");
+  const handleSave = async() => {
+
+    dispatch(toggle(true))
+          try {
+            const res = await axios.patch(
+              `${import.meta.env.VITE_BASE_URL}/api/v1/users/updateUser/${id}`,
+              {...user},
+              { withCredentials: true }
+            );
+      
+            if(res.status === 200){
+              toast.success(res.data.message);
+            }else{
+              toast.error(res.data.message)
+            }
+
+          } catch (error) {
+            const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
+            toast.error(errorMessage);
+          } finally{
+            dispatch(toggle(false))
+          }
+
   };
 
   const handleChangePassword = () => {
@@ -42,10 +93,12 @@ const Settings = () => {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-lg max-w-md w-full p-6">
-          <h3 className="text-xl font-semibold text-gray-900">Delete Account</h3>
+          <h3 className="text-xl font-semibold text-gray-900">
+            Delete Account
+          </h3>
           <p className="mt-2 text-sm text-gray-500">
-            Are you sure you want to delete your account? This action cannot be undone.
-            All of your data will be permanently removed.
+            Are you sure you want to delete your account? This action cannot be
+            undone. All of your data will be permanently removed.
           </p>
           <div className="mt-4 flex gap-2 justify-end">
             <button
@@ -74,7 +127,9 @@ const Settings = () => {
       {/* Profile Settings */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900">Profile Settings</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            Profile Settings
+          </h2>
           <p className="mt-1 text-sm text-gray-500">
             Manage your personal information and account preferences
           </p>
@@ -111,7 +166,9 @@ const Settings = () => {
       {/* Password Settings */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900">Password Settings</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            Password Settings
+          </h2>
           <p className="mt-1 text-sm text-gray-500">
             Update your password to keep your account secure
           </p>

@@ -136,6 +136,23 @@ const totalAmount = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "successfully updated" });
 });
 
+
+const updateUser = asyncHandler(async (req, res) => {
+  
+  const {name, email, phone} = req.body
+  const updatedUser = await User.updateOne({_id: req.params.id}, {
+    $set: {
+      username: name, 
+      email: email, 
+      phone: phone
+    },
+  });
+
+  if (!updatedUser) return res.status(404).json({message: "User not found"});
+
+  res.status(200).json({ message: "successfully updated" });
+});
+
 export {
   register,
   login,
@@ -146,5 +163,6 @@ export {
   totalAmount,
   plywoodSearch,
   hardwareSearch,
-  clientSearch
+  clientSearch,
+  updateUser
 };
