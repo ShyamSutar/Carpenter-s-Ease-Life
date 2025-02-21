@@ -53,3 +53,16 @@
 .background li:nth-child(13) { animation-delay: 12s; left: 10vw; top: 20vh; }
 .background li:nth-child(14) { animation-delay: 13s; left: 30vw; top: 68vh; }
 .background li:nth-child(15) { animation-delay: 14s; left: 87vw; top: 12vh; }
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  .loading-dots {
+    display: inline-block;
+    font-weight: bold;
+    animation: blink 1s infinite;
+  }
+  

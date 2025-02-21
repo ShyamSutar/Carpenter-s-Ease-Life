@@ -4,132 +4,161 @@ import { MdCoPresent } from "react-icons/md";
 import { FaHome } from "react-icons/fa";
 import { AiFillCreditCard } from "react-icons/ai";
 import { GiWoodBeam } from "react-icons/gi";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import { toggle } from "../../store/hiddenSlice";
+import { useEffect, useState, useRef } from "react";
+import { IoSettingsSharp } from "react-icons/io5";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 const MistryHeader = () => {
-  const [notificationsLength, setNotificationsLength] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const sidebarRef = useRef(null);
+  const menuButtonRef = useRef(null);
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        window.innerWidth < 768 && // Only handle click outside on small screens
+        sidebarRef.current && 
+        !sidebarRef.current.contains(event.target) &&
+        !menuButtonRef.current?.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
 
-  const fetchNotifications = async () => {
-    try {
-      dispatch(toggle(true))
-      const notifications = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/api/v1/notification/showNotification`,
-        { withCredentials: true }
-      );
-      setNotificationsLength(notifications.data.length);
-    } catch (error) {
-      console.log(error);
-    } finally{
-      dispatch(toggle(false))
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleNavClick = () => {
+    if (window.innerWidth < 768) {
+      setIsOpen(false);
     }
   };
 
-  useEffect(() => {
-    fetchNotifications(); 
-
-    const interval = setInterval(() => {
-      fetchNotifications(); 
-    }, 30000);
-
-    return () => clearInterval(interval); 
-  }, []);
-
   return (
-    <div className="mr-12 sm:mr-44 md:mr-56 z-35">
-      <div className="h-screen fixed top-0 left-0 mt-16 bg-white border-r border-gray-50 shadow-lg py-4 md:p-4 md:px-6 text-gray-700 text-lg font-semibold">
-        <ol>
+    <div className="relative">
+      <button
+        ref={menuButtonRef}
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed top-4 left-4 z-50 p-2 rounded-lg hover:bg-gray-100 sm:hidden" // Hide button on md and above
+      >
+        <GiHamburgerMenu  className="text-2xl" />
+      </button>
+
+      <div
+        ref={sidebarRef}
+        className={`z-30 fixed sm:static top-0 left-0 h-screen bg-white border-r border-gray-50 shadow-lg py-4 md:p-4 md:px-6 text-gray-700 text-lg font-semibold transition-transform duration-300 ease-in-out sm:translate-x-0 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <ol className="mt-16">
           <Link
             to=""
             className="flex text-2xl font-bold border-b-2 mb-4 pb-2 justify-center"
+            onClick={handleNavClick}
           >
-            <span className="sm:hidden block text-3xl">
+            <span className=" text-3xl">
               <FaHome />
-            </span>{" "}
-            <span className="hidden sm:block">Home</span>
+            </span>
+            <span>Home</span>
           </Link>
 
           <NavLink
             to="notifications"
+            onClick={handleNavClick}
             className={({ isActive }) =>
-              `relative flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-90   ${
+              `relative flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-90 ${
                 isActive ? "bg-myRed text-white" : "text-black"
-              } `
+              }`
             }
           >
             <li>
               <div className="flex gap-2">
                 <span className="text-2xl">
                   <IoIosNotificationsOutline />
-                </span>{" "}
-                <span className="hidden sm:block">
-                  Notifications{" "}
-                  <span className="absolute -top-3 -right-2 bg-red-500 w-7 text-center h-7 rounded-full border-2 border-yellow-300">
-                    {notificationsLength}
-                  </span>
+                </span>
+                <span>
+                  Notifications
+                  
                 </span>
               </div>
             </li>
           </NavLink>
+
           <NavLink
             to="show-attendance"
+            onClick={handleNavClick}
             className={({ isActive }) =>
-              `flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-90   ${
+              `flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-90 ${
                 isActive ? "bg-myRed text-white" : "text-black"
-              } `
+              }`
             }
           >
             <li>
               <div className="flex gap-2">
                 <span className="text-2xl">
                   <MdCoPresent />
-                </span>{" "}
-                <span className="hidden sm:block">Attendance</span>
-              </div>{" "}
+                </span>
+                <span>Attendance</span>
+              </div>
             </li>
-            
           </NavLink>
 
           <NavLink
             to="site"
+            onClick={handleNavClick}
             className={({ isActive }) =>
-              `flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-90   ${
+              `flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-90 ${
                 isActive ? "bg-myRed text-white" : "text-black"
-              } `
+              }`
             }
           >
             <li>
               <div className="flex gap-2">
                 <span className="text-2xl">
                   <GiWoodBeam />
-                </span>{" "}
-                <span className="hidden sm:block">Site</span>
-              </div>{" "}
+                </span>
+                <span>Site</span>
+              </div>
             </li>
-            
           </NavLink>
 
           <NavLink
             to="slip"
+            onClick={handleNavClick}
             className={({ isActive }) =>
-              `flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-90   ${
+              `flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-90 ${
                 isActive ? "bg-myRed text-white" : "text-black"
-              } `
+              }`
             }
           >
             <li>
               <div className="flex gap-2">
                 <span className="text-2xl">
                   <AiFillCreditCard />
-                </span>{" "}
-                <span className="hidden sm:block">Slip</span>
-              </div>{" "}
+                </span>
+                <span>Slip</span>
+              </div>
             </li>
-            
+          </NavLink>
+
+          <NavLink
+            to="settings"
+            onClick={handleNavClick}
+            className={({ isActive }) =>
+              `flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-90 ${
+                isActive ? "bg-myRed text-white" : "text-black"
+              }`
+            }
+          >
+            <li>
+              <div className="flex gap-2">
+                <span className="text-2xl">
+                  <IoSettingsSharp />
+                </span>
+                <span>Settings</span>
+              </div>
+            </li>
           </NavLink>
         </ol>
       </div>

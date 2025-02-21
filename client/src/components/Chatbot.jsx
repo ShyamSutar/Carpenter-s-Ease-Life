@@ -8,6 +8,7 @@ const Chatbot = () => {
     { role: "system", text: "Hello how can I help you?" },
   ]);
   const [inputText, setInputText] = useState("");
+  const [isLoading, setIsLoading] = useState("");
   const chatBoxRef = useRef(null);
 
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -61,43 +62,49 @@ const Chatbot = () => {
     responseMimeType: "text/plain",
   };
 
-  useEffect(() => {
-    if (chatBoxRef.current) {
-      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-    }
-  }, [messages]);
+  // useEffect(() => {
+  //   if (chatBoxRef.current) {
+  //     chatBoxRef.current.scrollTop = 0; // Changed from scrollHeight to 0
+  //   }
+  // }, [messages]);
 
   const formatResponse = (response) => {
     return response
-      .split('\n')
-      .map(line => {
-        if (line.trim().startsWith('*')) {
+      .split("\n")
+      .map((line) => {
+        if (line.trim().startsWith("*")) {
           const content = line.trim().substring(1).trim();
           const formattedContent = content
-            .replace(/`([^`]+)`/g, '<code>$1</code>')  
-            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') 
-            .replace(/\*([^*]+)\*/g, '<strong>$1</strong>'); 
+            .replace(/`([^`]+)`/g, "<code>$1</code>")
+            .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+            .replace(/\*([^*]+)\*/g, "<strong>$1</strong>");
           return `<li>${formattedContent}</li>`;
         }
-        
+
         if (line.trim() === "") {
           return "<br/>";
         }
 
         const formattedLine = line
-          .replace(/`([^`]+)`/g, '<code>$1</code>')  
-          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>'); 
+          .replace(/`([^`]+)`/g, "<code>$1</code>")
+          .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
         return `<p>${formattedLine}</p>`;
       })
-      .join('');
+      .join("");
   };
 
   const sendMessage = async (e) => {
     e.preventDefault();
 
+    if (!inputText.trim()) return; // Prevent empty messages
+
     const userMessage = { role: "user", text: inputText };
     setMessages((prev) => [...prev, userMessage]);
     setInputText("");
+
+    // Add "..." to indicate that the chatbot is typing
+    setIsLoading(true);
+    setMessages((prev) => [...prev, { role: "model", text: "..." }]);
 
     try {
       const chatHistory = messages
@@ -109,26 +116,34 @@ const Chatbot = () => {
 
       const chatSession = model.startChat({
         generationConfig,
-        history: [...chatHistory, { role: "user", parts: [{ text: inputText }] }],
+        history: [
+          ...chatHistory,
+          { role: "user", parts: [{ text: inputText }] },
+        ],
       });
 
       const result = await chatSession.sendMessage(inputText);
 
       if (result && result.response) {
         const responseText = await result.response.text();
-
         const formattedResponse = formatResponse(responseText);
+
         setMessages((prev) => [
-          ...prev,
+          ...prev.slice(0, -1), // Remove "..."
           { role: "model", text: formattedResponse },
         ]);
       }
     } catch (error) {
       console.error("Failed to send message:", error);
       setMessages((prev) => [
-        ...prev,
-        { role: "system", text: "Oops! Something went wrong. Please try again." },
+        ...prev.slice(0, -1), // Remove "..."
+        {
+          role: "system",
+          text: "Oops! Something went wrong. Please try again.",
+        },
       ]);
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -148,7 +163,10 @@ const Chatbot = () => {
           {/* Chat Header */}
           <div className="flex justify-between items-center border-b pb-2">
             <h2 className="text-lg font-semibold">Chat Support</h2>
-            <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-700">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-gray-500 hover:text-gray-700"
+            >
               <X size={20} />
             </button>
           </div>
@@ -168,10 +186,15 @@ const Chatbot = () => {
                   <strong className="block font-semibold">
                     {msg.role === "user" ? "You" : "Chatbot"}:
                   </strong>
-                  <div
-                    className="message-content"
-                    dangerouslySetInnerHTML={{ __html: msg.text }}
-                  ></div>
+                  <div className="message-content">
+                    {msg.text === "..." ? (
+                      <span className="loading-dots">...</span> // Apply animation class
+                    ) : (
+                      <span
+                        dangerouslySetInnerHTML={{ __html: msg.text }}
+                      ></span>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
