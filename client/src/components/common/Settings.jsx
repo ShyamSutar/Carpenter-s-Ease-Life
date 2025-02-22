@@ -5,6 +5,8 @@ import axios from "axios";
 import { toggle } from "../../store/hiddenSlice";
 
 const Settings = () => {
+
+
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -19,7 +21,6 @@ const Settings = () => {
   });
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [id, setId] = useState("");
 
   const dispatch = useDispatch();
 
@@ -31,8 +32,7 @@ const Settings = () => {
           { withCredentials: true }
         );
 
-        const {name, email, phone, role} = res.data
-        setId(res.data._id)
+        const {name, email, phone, role} = res.data;
         
         setUser({ name: name || "", email: email || "", phone: phone || "", role: role || "" });
         
@@ -61,7 +61,7 @@ const Settings = () => {
     dispatch(toggle(true))
           try {
             const res = await axios.patch(
-              `${import.meta.env.VITE_BASE_URL}/api/v1/users/updateUser/${id}`,
+              `${import.meta.env.VITE_BASE_URL}/api/v1/users/updateUser`,
               {...user},
               { withCredentials: true }
             );
@@ -81,13 +81,64 @@ const Settings = () => {
 
   };
 
-  const handleChangePassword = () => {
+  const handleChangePassword = async() => {
     if (passwords.newPassword !== passwords.confirmNewPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-    console.log("Password changed");
+    
+    dispatch(toggle(true))
+          try {
+            const res = await axios.patch(
+              `${import.meta.env.VITE_BASE_URL}/api/v1/users/changePassword`,
+              {oldPassword: passwords.oldPassword, newPassword: passwords.newPassword},
+              { withCredentials: true }
+            );
+      
+            if(res.status === 200){
+              toast.success(res.data.message);
+            }else{
+              toast.error(res.data.message)
+            }
+
+          } catch (error) {
+            const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
+            toast.error(errorMessage);
+          } finally{
+            setPasswords({
+              oldPassword: "",
+              newPassword: "",
+              confirmNewPassword: "",
+            })
+            dispatch(toggle(false));
+          }
   };
+
+  const handleDelete = async() => {
+
+    dispatch(toggle(true))
+          try {
+            const res = await axios.delete(
+              `${import.meta.env.VITE_BASE_URL}/api/v1/users/deleteUser`,
+              { withCredentials: true }
+            );
+      
+            if(res.status === 200){
+              toast.success(res.data.message);
+            }else{
+              toast.error(res.data.message)
+            }
+
+          } catch (error) {
+            const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
+            toast.error(errorMessage);
+          } finally{
+            dispatch(toggle(false));
+            setShowDeleteModal(false);
+            window.location.href = "/"
+          }
+
+  }
 
   const DeleteConfirmationModal = () => {
     return (
@@ -108,10 +159,7 @@ const Settings = () => {
               Cancel
             </button>
             <button
-              onClick={() => {
-                console.log("Account deleted");
-                setShowDeleteModal(false);
-              }}
+              onClick={handleDelete}
               className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700"
             >
               Delete Account
@@ -145,10 +193,10 @@ const Settings = () => {
                 name={key}
                 value={value}
                 onChange={handleChange}
-                disabled={key === "role"}
+                disabled={key === "role" || key === "email"}
                 className={`w-full px-3 py-2 rounded-md border ${
-                  key === "role"
-                    ? "bg-gray-50 text-gray-500"
+                  key === "role" || key === "email"
+                    ? "bg-gray-50 text-gray-500 cursor-not-allowed"
                     : "border-gray-300 focus:border-myRed focus:ring-1 focus:ring-myRed"
                 } outline-none transition-colors`}
               />

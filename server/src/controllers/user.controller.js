@@ -1,5 +1,10 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/user.model.js";
+import Attendance from "../models/attendance.model.js";
+import Notification from "../models/notification.model.js";
+import Site from "../models/site.model.js";
+import Calendar from "../models/calendar.model.js";
+import Slip from "../models/slip.model.js";
 
 const register = asyncHandler(async (req, res) => {
   let pay;
@@ -139,11 +144,10 @@ const totalAmount = asyncHandler(async (req, res) => {
 
 const updateUser = asyncHandler(async (req, res) => {
   
-  const {name, email, phone} = req.body
-  const updatedUser = await User.updateOne({_id: req.params.id}, {
+  const {name, phone} = req.body
+  const updatedUser = await User.updateOne({_id: req.user._id}, {
     $set: {
       username: name, 
-      email: email, 
       phone: phone
     },
   });
@@ -152,6 +156,49 @@ const updateUser = asyncHandler(async (req, res) => {
 
   res.status(200).json({ message: "successfully updated" });
 });
+
+const changePassword = asyncHandler(async (req, res) => {
+  
+  const {oldPassword, newPassword} = req.body
+  const user = await User.findById({_id: req.user._id});
+
+  if (!user) return res.status(404).json({message: "User not found"});
+
+  const checkPassword = await user.comparePassword(oldPassword)
+
+  if(!checkPassword) return res.status(404).json({message: "Old password is incorrect"});
+
+  user.password = newPassword;
+
+  await user.save();
+
+  res.status(200).json({ message: "Password updated successfully" });
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+
+
+  const user = await User.findById({_id: userId});
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  // Delete user from the User collection
+  await User.findByIdAndDelete({_id: userId});
+
+  // Remove user from related models
+  await Attendance.deleteMany({ $or: [{ mistry: userId }, { carpenter: userId }] });
+  await Calendar.deleteMany({ $or: [{ mistry: userId }, { carpenter: userId }] });
+  await Notification.deleteMany({ 
+    $or: [{ mistry: userId }, { carpenter: userId }, { plywood: userId }, { hardware: userId }, { client: userId }]
+  });
+  await Site.deleteMany({ mistry: userId });
+  await Slip.deleteMany({ $or: [{ mistry: userId }, { carpenter: userId }] });
+
+  res.status(200).json({ message: "User and all related data deleted successfully" });
+});
+
 
 export {
   register,
@@ -164,5 +211,7 @@ export {
   plywoodSearch,
   hardwareSearch,
   clientSearch,
-  updateUser
+  updateUser,
+  changePassword,
+  deleteUser,
 };

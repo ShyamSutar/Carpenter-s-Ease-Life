@@ -46,7 +46,6 @@ const MistryHeader = () => {
       </button>
 
       <div className="">
-        {" "}
         <div
           ref={sidebarRef}
           className={`z-30 fixed top-0 left-0 min-h-screen bg-white border-r border-gray-50 shadow-lg py-4 md:p-4 px-6 sm:px-1 md:px-6 text-gray-700 text-lg font-semibold transition-transform duration-300 ease-in-out sm:translate-x-0 ${

@@ -44,7 +44,7 @@ import ClientHome from "./components/client/ClientHome.jsx";
 import NotificationClient from "./components/client/NotificationClient.jsx";
 import ClientSupply from "./components/client/ClientSupply.jsx";
 import ClientSlug from "./components/client/ClientSlug.jsx";
-import MistrySettings from "./components/mistryComponents/MistrySettings.jsx";
+import Settings from "./components/common/Settings.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -63,6 +63,7 @@ const router = createBrowserRouter(
         <Route path="attendance" element={<CarpenterAttendance />} />
         <Route path="attendance/:id" element={<CarpenterAttendanceSlug />} />
         <Route path="slip" element={<CarpenterSlip />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="/mistry" element={<Mistry />}>
         <Route path="" element={<MistryHome />} />
@@ -71,7 +72,7 @@ const router = createBrowserRouter(
         <Route path="attendance/:id" element={<Attendance />} />
         <Route path="slip" element={<Slip />} />
         <Route path="site" element={<ShowSite />} />
-        <Route path="settings" element={<MistrySettings />} />
+        <Route path="settings" element={<Settings />} />
         <Route path="siteSlug/:id" element={<SiteSlug />} />
       </Route>
       <Route path="/plywood" element={<Plywood/>}>

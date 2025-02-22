@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login, getUser, logout, mistrySearch, updatePay, totalAmount, plywoodSearch, hardwareSearch, clientSearch, updateUser } from "../controllers/user.controller.js";
+import { register, login, getUser, logout, mistrySearch, updatePay, totalAmount, plywoodSearch, hardwareSearch, clientSearch, updateUser, changePassword, deleteUser } from "../controllers/user.controller.js";
 import { protect } from "../middlewares/auth.middleware.js";
 
 const router = Router();
@@ -20,7 +20,9 @@ router.route('/updatePay/:id').patch(protect, updatePay);
 
 router.route('/totalAmount/:id').patch(protect, totalAmount)
 
-router.route('/updateUser/:id').patch(protect, updateUser)
+router.route('/updateUser').patch(protect, updateUser)
+router.route('/changePassword').patch(protect, changePassword)
+router.route('/deleteUser').delete(protect, deleteUser)
 
 
 export default router;

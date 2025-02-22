@@ -115,6 +115,7 @@ const Header = () => {
               <li>
                 <NavLink
                   to="/"
+                  onClick={toggleNavbar}
                   className={({ isActive }) =>
                     `block py-2 px-3 ${isActive ? 'bg-myRed text-white' : 'text-black'} rounded md:bg-transparent ${isActive ? "md:text-myRed" : "md:text-black"} md:p-0 md:dark:text-blue-500`
                   }
@@ -127,6 +128,7 @@ const Header = () => {
               <li>
                 <Link
                   to="/#services"
+                  onClick={toggleNavbar}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   Services
@@ -135,6 +137,7 @@ const Header = () => {
               <li>
                 <Link
                   to="/#about"
+                  onClick={toggleNavbar}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   About
@@ -143,33 +146,34 @@ const Header = () => {
               <li>
                 <Link
                   to="/#contact"
+                  onClick={toggleNavbar}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   Contact
                 </Link>
               </li>
               {user === "mistry" && (
-                <NavLink to="/mistry" className={({ isActive }) => `${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900'}`}>
+                <NavLink to="/mistry" onClick={toggleNavbar} className={({ isActive }) => `${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900'}`}>
                   <li className="block py-2 px-3 rounded md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Mistry</li>
                 </NavLink>
               )}
               {user === "carpenter" && (
-                <NavLink to={'/carpenter'} className={({ isActive }) => `${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900'}`}>
+                <NavLink to={'/carpenter'} onClick={toggleNavbar} className={({ isActive }) => `${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900'}`}>
                   <li className="block py-2 px-3 rounded md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Carpenter</li>
                 </NavLink>
               )}
               {user === "plywood" && (
-                <NavLink to={'/plywood'} className={({ isActive }) => `${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900'}`}>
+                <NavLink to={'/plywood'} onClick={toggleNavbar} className={({ isActive }) => `${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900'}`}>
                   <li className="block py-2 px-3 rounded md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Plywood</li>
                 </NavLink>
               )}
               {user === "hardware" && (
-                <NavLink to={'/hardware'} className={({ isActive }) => `${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900'}`}>
+                <NavLink to={'/hardware'} onClick={toggleNavbar} className={({ isActive }) => `${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900'}`}>
                   <li className="block py-2 px-3 rounded md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Hardware</li>
                 </NavLink>
               )}
               {user === "client" && (
-                <NavLink to={'/client'} className={({ isActive }) => `${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900'}`}>
+                <NavLink to={'/client'} onClick={toggleNavbar} className={({ isActive }) => `${isActive ? 'bg-myRed md:bg-transparent md:text-myRed text-white rounded' : 'text-gray-900'}`}>
                   <li className="block py-2 px-3 rounded md:hover:bg-transparent md:hover:text-myRed md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Client</li>
                 </NavLink>
               )}
