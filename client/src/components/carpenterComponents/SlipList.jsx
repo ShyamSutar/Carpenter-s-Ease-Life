@@ -1,6 +1,6 @@
 const SlipList = ({slip}) => {
     return (
-      <div className="mt-4 mr-2 rounded-md border bg-slate-100 shadow-md">
+      <div className="mt-4 mr-4 rounded-md border bg-slate-100 shadow-md">
           <div className="w-full p-4">
             <h2 className="font-semibold">
               Received {slip.totalAmount} from {slip?.mistry?.username} 

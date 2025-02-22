@@ -4,7 +4,7 @@ import { MdCoPresent } from "react-icons/md";
 import { FaHome } from "react-icons/fa";
 import { AiFillCreditCard } from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
-import { GiHamburgerMenu } from "react-icons/gi";
+import { BiDotsVerticalRounded } from "react-icons/bi";
 import { IoSettingsSharp } from "react-icons/io5";
 
 const CarpenterSidebar = () => {
@@ -40,9 +40,9 @@ const CarpenterSidebar = () => {
       <button
         ref={menuButtonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-4 left-4 z-50 p-2 rounded-lg hover:bg-gray-100 sm:hidden" // Hide button on md and above
+        className="fixed top-4 left-2 z-50 p-2 rounded-lg hover:bg-gray-100 sm:hidden" // Hide button on md and above
       >
-        <GiHamburgerMenu className="text-2xl" />
+        <BiDotsVerticalRounded className="text-2xl" />
       </button>
 
       <div className="">

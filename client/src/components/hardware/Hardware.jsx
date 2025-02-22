@@ -13,7 +13,7 @@ const Hardware = () => {
         </div>
       </div>
 
-      <div className="ml-16 sm:ml-52 overflow-hidden">
+      <div className="sm:ml-[10.625rem] md:ml-[13rem] overflow-hidden">
         <Footer />
       </div>
     </>

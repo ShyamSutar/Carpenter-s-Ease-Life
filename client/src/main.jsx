@@ -79,18 +79,21 @@ const router = createBrowserRouter(
         <Route path="" element={<PlywoodHome />}/>
         <Route path="notification" element={<NotificationPlywood />} />
         <Route path="supply" element={<PlywoodSupply />} />
+        <Route path="settings" element={<Settings />} />
         <Route path="plywoodSlug/:id" element={<PlywoodSlug />} />
       </Route>
       <Route path="/hardware" element={<Hardware/>}>
         <Route path="" element={<HardwareHome />}/>
         <Route path="notification" element={<NotificationHardware />} />
         <Route path="supply" element={<HardwareSupply />} />
+        <Route path="settings" element={<Settings />} />
         <Route path="hardwareSlug/:id" element={<HardwareSlug />} />
       </Route>
       <Route path="/client" element={<Client/>}>
         <Route path="" element={<ClientHome />}/>
         <Route path="notification" element={<NotificationClient />}/>
         <Route path="supply" element={<ClientSupply />} />
+        <Route path="settings" element={<Settings />} />
         <Route path="clientSlug/:id" element={<ClientSlug />} />
       </Route>
       </Route>

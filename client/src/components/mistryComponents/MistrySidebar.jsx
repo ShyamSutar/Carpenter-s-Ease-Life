@@ -6,7 +6,7 @@ import { AiFillCreditCard } from "react-icons/ai";
 import { GiWoodBeam } from "react-icons/gi";
 import { useEffect, useState, useRef } from "react";
 import { IoSettingsSharp } from "react-icons/io5";
-import { GiHamburgerMenu } from "react-icons/gi";
+import { BiDotsVerticalRounded } from "react-icons/bi";
 
 const MistryHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,9 +40,9 @@ const MistryHeader = () => {
       <button
         ref={menuButtonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-4 left-4 z-50 p-2 rounded-lg hover:bg-gray-100 sm:hidden" // Hide button on md and above
+        className="fixed top-4 left-2 z-50 p-2 rounded-lg hover:bg-gray-100 sm:hidden" // Hide button on md and above
       >
-        <GiHamburgerMenu className="text-2xl" />
+        <BiDotsVerticalRounded className="text-2xl" />
       </button>
 
       <div className="">
