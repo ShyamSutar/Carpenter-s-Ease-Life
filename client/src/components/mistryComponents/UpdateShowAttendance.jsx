@@ -3,28 +3,39 @@ import { useState } from "react";
 import { toggle } from "../../store/hiddenSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { z } from "zod";
 
 const UpdateShowAttendance = ({ setShow, carpenter, setRefresh }) => {
   const [pay, setPay] = useState(carpenter?.carpenter?.pay || 600);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
+
+  // Define Zod schema
+  const schema = z.object({
+    pay: z
+      .number()
+      .min(1, "Enter a valid amount greater than 0")
+      .refine((val) => val > 0, {
+        message: "Pay amount must be a positive number",
+      }),
+  });
 
   const handleApply = async (e) => {
     e.stopPropagation(); // Prevent <Link> from triggering
     e.preventDefault();
 
-    if (!pay || pay <= 0) {
-      toast.error("Pay amount must be greater than zero!");
-      return;
-    }
-
     try {
+      // Validate inputs
+      schema.parse({ pay: Number(pay) }); // Convert pay to a number before validation
+      setErrors({}); // Clear errors if validation passes
+
       setLoading(true);
       dispatch(toggle(true));
 
       const response = await axios.patch(
         `${import.meta.env.VITE_BASE_URL}/api/v1/users/updatePay/${carpenter.carpenter._id}`,
-        { pay },
+        { pay: Number(pay) }, // Ensure pay is sent as a number
         { withCredentials: true }
       );
 
@@ -32,7 +43,16 @@ const UpdateShowAttendance = ({ setShow, carpenter, setRefresh }) => {
       setRefresh(true);
       setShow(false);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to update pay");
+      if (error instanceof z.ZodError) {
+        // Map Zod errors to state
+        const fieldErrors = {};
+        error.errors.forEach((err) => {
+          fieldErrors[err.path[0]] = err.message;
+        });
+        setErrors(fieldErrors);
+      } else {
+        toast.error(error.response?.data?.message || "Failed to update pay");
+      }
     } finally {
       setLoading(false);
       dispatch(toggle(false));
@@ -60,6 +80,7 @@ const UpdateShowAttendance = ({ setShow, carpenter, setRefresh }) => {
           onChange={(e) => setPay(e.target.value)}
           value={pay}
         />
+        {errors.pay && <p className="text-red-500 text-sm mt-1">{errors.pay}</p>}
 
         <div className="flex justify-between">
           <button

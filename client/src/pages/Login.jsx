@@ -1,67 +1,80 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios"
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { authActions } from "../store/authentication";
 import { toast } from "react-toastify";
 import { toggle } from "../store/hiddenSlice";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Define Zod schema for validation
+const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+});
 
 const Login = () => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [inputs, setInputs] = useState({
-    "email": '',
-    "password": ""
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
   });
 
-  const handleChange = (e) => {
-    const {name, value} = e.target;
-    setInputs({...inputs, [name]: value})
-  }
+  const getUser = async () => {
+    const user = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/api/v1/users/getUser`,
+      { withCredentials: true }
+    );
+    dispatch(authActions.login({ userData: user.data }));
+  };
 
-  const getUser = async() => {
-    const user = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/users/getUser`, {withCredentials: true});
-    dispatch(authActions.login({userData: user.data}))
-  }
-
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-
+  const onSubmit = async (data) => {
     try {
-      dispatch(toggle(true))
-      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/login`, inputs, {withCredentials: true});
-      
-      if(res.status === 200){
-        getUser()
-        navigate("/")
-        toast.success(res.data.message)
-      }else{
-        toast.error(res.data.message)
+      dispatch(toggle(true));
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/users/login`,
+        data,
+        { withCredentials: true }
+      );
+
+      if (res.status === 200) {
+        getUser();
+        navigate("/");
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
       }
 
-      dispatch(toggle(false))
+      dispatch(toggle(false));
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
-      toast.error(errorMessage)
-      dispatch(toggle(false))
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred";
+      toast.error(errorMessage);
+      dispatch(toggle(false));
     }
-  }
+  };
+
   return (
     <div className="relative">
-    {/* Animated Background */}
-    <div className="background">
+      {/* Animated Background */}
+      <div className="background">
         <ul className="background">
           {[...Array(25)].map((_, index) => (
             <li key={index}></li>
           ))}
         </ul>
       </div>
-      <section className=" mt-12">
+      <section className="mt-12">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:min-h-screen lg:py-0">
           <Link
-            to='/'
+            to="/"
             className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
           >
             <img
@@ -73,10 +86,10 @@ const Login = () => {
           </Link>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              {/* <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Create an account
-              </h1> */}
-              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6" action="#">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-4 md:space-y-6"
+              >
                 <div>
                   <label
                     htmlFor="email"
@@ -86,14 +99,20 @@ const Login = () => {
                   </label>
                   <input
                     type="email"
-                    name="email"
                     id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className={`bg-gray-50 border ${
+                      errors.email
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    } text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white`}
                     placeholder="name@company.com"
-                    required=""
-                    onChange={handleChange}
-                    value={inputs.email}
+                    {...register("email")}
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label
@@ -104,19 +123,25 @@ const Login = () => {
                   </label>
                   <input
                     type="password"
-                    name="password"
                     id="password"
                     placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
-                    onChange={handleChange}
-                    value={inputs.password}
+                    className={`bg-gray-50 border ${
+                      errors.password
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    } text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white`}
+                    {...register("password")}
                   />
+                  {errors.password && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full text-white bg-myRed hover:bg-red-700  focus:outline-none focus:ring-myRed font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="w-full text-white bg-myRed hover:bg-red-700 focus:outline-none focus:ring-myRed font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
                   Login
                 </button>
@@ -139,3 +164,18 @@ const Login = () => {
 };
 
 export default Login;
+
+
+// key Changes:
+// Zod Schema:
+// Added a loginSchema using Zod to validate the email and password fields.
+
+// React Hook Form:
+// Integrated react-hook-form with zodResolver for validation.
+// Used register to bind inputs to the form.
+
+// Error Handling:
+// Displayed error messages below the input fields if validation fails.
+
+// Styling:
+// Added conditional styling to highlight invalid fields with a red border.

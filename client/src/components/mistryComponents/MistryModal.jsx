@@ -1,4 +1,56 @@
+import { z } from "zod";
+import { useState } from "react";
+
 const MistryModal = ({ slot, handleOnChange, inputs, handleApply, handleClose }) => {
+  const [errors, setErrors] = useState({});
+
+  // Define Zod schema
+  const schema = z.object({
+    start: z.string().optional().refine(
+      (val) => val || inputs.status === "A",
+      {
+        message: "Start time is required unless attendance is 'A'.",
+      }
+    ),
+    end: z.string().optional().refine(
+      (val) => val || inputs.status === "A",
+      {
+        message: "End time is required unless attendance is 'A'.",
+      }
+    ),
+    status: z.enum(["P", "H", "A", "O"], {
+      errorMap: () => ({ message: "Attendance is required." }),
+    }),
+    advance: z
+      .string()
+      .optional()
+      .refine((val) => !val || !isNaN(Number(val)), {
+        message: "Advance must be a valid number.",
+      }),
+  });
+
+  const validateAndApply = (e) => {
+    if (e && e.preventDefault) {
+      e.preventDefault(); // Prevent default form submission behavior
+    }
+
+    try {
+      // Validate inputs
+      schema.parse(inputs);
+      setErrors({});
+      handleApply(e); // Pass the event object to handleApply
+    } catch (err) {
+      if (err.errors) {
+        // Map Zod errors to state
+        const newErrors = {};
+        err.errors.forEach((error) => {
+          newErrors[error.path[0]] = error.message;
+        });
+        setErrors(newErrors);
+      }
+    }
+  };
+
   return (
     <div className="bg-slate-200 rounded-xl shadow-lg mb-8 w-full max-w-3xl p-4 sm:p-6 md:p-8 flex flex-col gap-6">
       <h3 className="text-lg sm:text-xl font-bold text-right text-gray-800">Date: {slot}</h3>
@@ -33,8 +85,8 @@ const MistryModal = ({ slot, handleOnChange, inputs, handleApply, handleClose })
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             onChange={handleOnChange}
             value={inputs.start}
-            required
           />
+          {errors.start && <p className="text-red-500 text-sm">{errors.start}</p>}
         </div>
       </div>
 
@@ -68,8 +120,8 @@ const MistryModal = ({ slot, handleOnChange, inputs, handleApply, handleClose })
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             onChange={handleOnChange}
             value={inputs.end}
-            required
           />
+          {errors.end && <p className="text-red-500 text-sm">{errors.end}</p>}
         </div>
       </div>
 
@@ -93,6 +145,7 @@ const MistryModal = ({ slot, handleOnChange, inputs, handleApply, handleClose })
           <option value="A">A</option>
           <option value="O">O</option>
         </select>
+        {errors.status && <p className="text-red-500 text-sm">{errors.status}</p>}
       </div>
 
       <div>
@@ -109,12 +162,13 @@ const MistryModal = ({ slot, handleOnChange, inputs, handleApply, handleClose })
           onChange={handleOnChange}
           value={inputs.advance}
         />
+        {errors.advance && <p className="text-red-500 text-sm">{errors.advance}</p>}
       </div>
 
       <div className="flex gap-6 flex-wrap justify-center sm:justify-start">
         <button
           className="py-2 px-6 bg-green-500 rounded-lg text-white font-semibold hover:scale-105 transition-all w-full sm:w-auto"
-          onClick={handleApply}
+          onClick={(e) => validateAndApply(e)} // Pass the event object
         >
           Apply
         </button>

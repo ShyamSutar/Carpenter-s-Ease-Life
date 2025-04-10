@@ -1,36 +1,41 @@
 import axios from "axios";
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { toggle } from "../store/hiddenSlice";
 import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Define Zod schema for validation
+const registerSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters long"),
+  email: z.string().email("Invalid email address"),
+  phone: z
+    .string()
+    .regex(/^\d{10}$/, "Phone number must be 10 digits"),
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+  role: z.string().nonempty("Role is required"),
+});
 
 const Register = () => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [inputs, setInputs] = useState({
-    username: "",
-    email: "",
-    phone: "",
-    password: "",
-    role: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(registerSchema),
   });
 
-  const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    setInputs({ ...inputs, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const onSubmit = async (data) => {
     try {
-      dispatch(toggle(true))
+      dispatch(toggle(true));
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/users/register`,
-        inputs,
+        data,
         { withCredentials: true }
       );
       if (res.status === 201) {
@@ -39,12 +44,12 @@ const Register = () => {
       } else {
         toast.error(res.data.message);
       }
-      dispatch(toggle(false))
+      dispatch(toggle(false));
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred";
       toast.error(errorMessage);
-      dispatch(toggle(false))
+      dispatch(toggle(false));
     }
   };
 
@@ -69,11 +74,8 @@ const Register = () => {
           </Link>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              {/* <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Create an account
-              </h1> */}
               <form
-                onSubmit={handleSubmit}
+                onSubmit={handleSubmit(onSubmit)}
                 className="space-y-4 md:space-y-6"
                 action="#"
               >
@@ -86,14 +88,20 @@ const Register = () => {
                   </label>
                   <input
                     type="text"
-                    name="username"
                     id="username"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className={`bg-gray-50 border ${
+                      errors.username
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    } text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white`}
                     placeholder="Enter username"
-                    required=""
-                    value={inputs.username}
-                    onChange={handleOnChange}
+                    {...register("username")}
                   />
+                  {errors.username && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.username.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -105,14 +113,20 @@ const Register = () => {
                   </label>
                   <input
                     type="email"
-                    name="email"
                     id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className={`bg-gray-50 border ${
+                      errors.email
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    } text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white`}
                     placeholder="name@company.com"
-                    required=""
-                    value={inputs.email}
-                    onChange={handleOnChange}
+                    {...register("email")}
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label
@@ -122,15 +136,21 @@ const Register = () => {
                     Phone
                   </label>
                   <input
-                    type="number"
-                    name="phone"
+                    type="text"
                     id="phone"
                     placeholder="Enter phone number"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
-                    value={inputs.phone}
-                    onChange={handleOnChange}
+                    className={`bg-gray-50 border ${
+                      errors.phone
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    } text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white`}
+                    {...register("phone")}
                   />
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.phone.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -142,14 +162,20 @@ const Register = () => {
                   </label>
                   <input
                     type="password"
-                    name="password"
                     id="password"
                     placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
-                    value={inputs.password}
-                    onChange={handleOnChange}
+                    className={`bg-gray-50 border ${
+                      errors.password
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    } text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white`}
+                    {...register("password")}
                   />
+                  {errors.password && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -160,12 +186,13 @@ const Register = () => {
                     Role
                   </label>
                   <select
-                    name="role"
                     id="role"
-                    value={inputs.role}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
-                    onChange={handleOnChange}
+                    className={`bg-gray-50 border ${
+                      errors.role
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    } text-gray-900 text-sm rounded-lg focus:ring-myRed focus:border-myRed block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white`}
+                    {...register("role")}
                   >
                     <option value="">Select...</option>
                     <option value="mistry">Mistry</option>
@@ -174,6 +201,11 @@ const Register = () => {
                     <option value="hardware">Hardware Material</option>
                     <option value="client">Client</option>
                   </select>
+                  {errors.role && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.role.message}
+                    </p>
+                  )}
                 </div>
 
                 <button

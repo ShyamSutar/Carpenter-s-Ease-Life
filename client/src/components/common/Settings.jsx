@@ -3,26 +3,62 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { toggle } from "../../store/hiddenSlice";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Zod schema for Profile Settings validation
+const profileSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters long"),
+  phone: z
+    .string()
+    .regex(/^\d{10}$/, "Phone number must be 10 digits"),
+});
+
+// Zod schema for Password Update validation
+const passwordSchema = z.object({
+  oldPassword: z.string().min(6, "Current password must be at least 6 characters long"),
+  newPassword: z.string().min(6, "New password must be at least 6 characters long"),
+  confirmNewPassword: z
+    .string()
+    .min(6, "Confirm password must be at least 6 characters long"),
+}).refine((data) => data.newPassword === data.confirmNewPassword, {
+  message: "Passwords do not match",
+  path: ["confirmNewPassword"],
+});
 
 const Settings = () => {
-
-
   const [user, setUser] = useState({
     name: "",
     email: "",
     phone: "",
-    role: ""
-  });
-
-  const [passwords, setPasswords] = useState({
-    oldPassword: "",
-    newPassword: "",
-    confirmNewPassword: "",
+    role: "",
   });
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const dispatch = useDispatch();
+
+  // React Hook Form for Profile Settings
+  const {
+    register: profileRegister,
+    handleSubmit: handleProfileSubmit,
+    formState: { errors: profileErrors },
+    setValue: setProfileValue,
+  } = useForm({
+    resolver: zodResolver(profileSchema),
+    defaultValues: user,
+  });
+
+  // React Hook Form for Password Update
+  const {
+    register: passwordRegister,
+    handleSubmit: handlePasswordSubmit,
+    formState: { errors: passwordErrors },
+    reset: resetPasswordForm,
+  } = useForm({
+    resolver: zodResolver(passwordSchema),
+  });
 
   useEffect(() => {
     (async () => {
@@ -32,113 +68,88 @@ const Settings = () => {
           { withCredentials: true }
         );
 
-        const {name, email, phone, role} = res.data;
-        
+        const { name, email, phone, role } = res.data;
         setUser({ name: name || "", email: email || "", phone: phone || "", role: role || "" });
-        
+
+        // Set default values for the form
+        setProfileValue("name", name || "");
+        setProfileValue("phone", phone || "");
       } catch (error) {
-        const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
+        const errorMessage = error.response?.data?.message || "An unexpected error occurred";
         toast.error(errorMessage);
-      } finally{
-        dispatch(toggle(false))
+      } finally {
+        dispatch(toggle(false));
       }
     })();
   }, []);
 
-  const handleChange = (e) => {
-    setUser((prevUser) => ({
-      ...prevUser,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  const handleSave = async (data) => {
+    dispatch(toggle(true));
+    try {
+      const res = await axios.patch(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/users/updateUser`,
+        data,
+        { withCredentials: true }
+      );
 
-  const handlePasswordChange = (e) => {
-    setPasswords({ ...passwords, [e.target.name]: e.target.value });
-  };
-
-  const handleSave = async() => {
-
-    dispatch(toggle(true))
-          try {
-            const res = await axios.patch(
-              `${import.meta.env.VITE_BASE_URL}/api/v1/users/updateUser`,
-              {...user},
-              { withCredentials: true }
-            );
-      
-            if(res.status === 200){
-              toast.success(res.data.message);
-            }else{
-              toast.error(res.data.message)
-            }
-
-          } catch (error) {
-            const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
-            toast.error(errorMessage);
-          } finally{
-            dispatch(toggle(false))
-          }
-
-  };
-
-  const handleChangePassword = async() => {
-    if (passwords.newPassword !== passwords.confirmNewPassword) {
-      toast.error("Passwords do not match!");
-      return;
+      if (res.status === 200) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "An unexpected error occurred";
+      toast.error(errorMessage);
+    } finally {
+      dispatch(toggle(false));
     }
-    
-    dispatch(toggle(true))
-          try {
-            const res = await axios.patch(
-              `${import.meta.env.VITE_BASE_URL}/api/v1/users/changePassword`,
-              {oldPassword: passwords.oldPassword, newPassword: passwords.newPassword},
-              { withCredentials: true }
-            );
-      
-            if(res.status === 200){
-              toast.success(res.data.message);
-            }else{
-              toast.error(res.data.message)
-            }
-
-          } catch (error) {
-            const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
-            toast.error(errorMessage);
-          } finally{
-            setPasswords({
-              oldPassword: "",
-              newPassword: "",
-              confirmNewPassword: "",
-            })
-            dispatch(toggle(false));
-          }
   };
 
-  const handleDelete = async() => {
+  const handleChangePassword = async (data) => {
+    dispatch(toggle(true));
+    try {
+      const res = await axios.patch(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/users/changePassword`,
+        { oldPassword: data.oldPassword, newPassword: data.newPassword },
+        { withCredentials: true }
+      );
 
-    dispatch(toggle(true))
-          try {
-            const res = await axios.delete(
-              `${import.meta.env.VITE_BASE_URL}/api/v1/users/deleteUser`,
-              { withCredentials: true }
-            );
-      
-            if(res.status === 200){
-              toast.success(res.data.message);
-            }else{
-              toast.error(res.data.message)
-            }
+      if (res.status === 200) {
+        toast.success(res.data.message);
+        resetPasswordForm();
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "An unexpected error occurred";
+      toast.error(errorMessage);
+    } finally {
+      dispatch(toggle(false));
+    }
+  };
 
-          } catch (error) {
-            const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
-            toast.error(errorMessage);
-          } finally{
-            dispatch(toggle(false));
-            setShowDeleteModal(false);
-            window.location.href = "/"
-          }
+  const handleDelete = async () => {
+    dispatch(toggle(true));
+    try {
+      const res = await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/users/deleteUser`,
+        { withCredentials: true }
+      );
 
-  }
+      if (res.status === 200) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "An unexpected error occurred";
+      toast.error(errorMessage);
+    } finally {
+      dispatch(toggle(false));
+      setShowDeleteModal(false);
+      window.location.href = "/";
+    }
+  };
 
   const DeleteConfirmationModal = () => {
     return (
@@ -175,95 +186,108 @@ const Settings = () => {
       {/* Profile Settings */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900">
-            Profile Settings
-          </h2>
+          <h2 className="text-xl font-semibold text-gray-900">Profile Settings</h2>
           <p className="mt-1 text-sm text-gray-500">
             Manage your personal information and account preferences
           </p>
         </div>
         <div className="px-6 pb-6">
-          {Object.entries(user).map(([key, value]) => (
-            <div key={key} className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">
-                {key}
-              </label>
-              <input
-                type="text"
-                name={key}
-                value={value}
-                onChange={handleChange}
-                disabled={key === "role" || key === "email"}
-                className={`w-full px-3 py-2 rounded-md border ${
-                  key === "role" || key === "email"
-                    ? "bg-gray-50 text-gray-500 cursor-not-allowed"
-                    : "border-gray-300 focus:border-myRed focus:ring-1 focus:ring-myRed"
-                } outline-none transition-colors`}
-              />
-            </div>
-          ))}
-          <button
-            onClick={handleSave}
-            className="w-full mt-4 px-4 py-2 bg-myRed text-white rounded-md hover:bg-red-600 transition-colors font-medium"
-          >
-            Save Changes
-          </button>
+          <form onSubmit={handleProfileSubmit(handleSave)}>
+            {Object.entries(user).map(([key, value]) => (
+              <div key={key} className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">
+                  {key}
+                </label>
+                <input
+                  type="text"
+                  name={key}
+                  disabled={key === "role" || key === "email"}
+                  {...(key === "name" || key === "phone" ? profileRegister(key) : {})}
+                  className={`w-full px-3 py-2 rounded-md border ${
+                    key === "role" || key === "email"
+                      ? "bg-gray-50 text-gray-500 cursor-not-allowed"
+                      : profileErrors[key]
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:border-myRed focus:ring-myRed"
+                  } outline-none transition-colors`}
+                />
+                {profileErrors[key] && (
+                  <p className="text-red-500 text-sm mt-1">{profileErrors[key]?.message}</p>
+                )}
+              </div>
+            ))}
+            <button
+              type="submit"
+              className="w-full mt-4 px-4 py-2 bg-myRed text-white rounded-md hover:bg-red-600 transition-colors font-medium"
+            >
+              Save Changes
+            </button>
+          </form>
         </div>
       </div>
 
       {/* Password Settings */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900">
-            Password Settings
-          </h2>
+          <h2 className="text-xl font-semibold text-gray-900">Password Settings</h2>
           <p className="mt-1 text-sm text-gray-500">
             Update your password to keep your account secure
           </p>
         </div>
-        <div className="px-6 pb-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Current Password
-            </label>
-            <input
-              type="password"
-              name="oldPassword"
-              value={passwords.oldPassword}
-              onChange={handlePasswordChange}
-              className="w-full px-3 py-2 rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              New Password
-            </label>
-            <input
-              type="password"
-              name="newPassword"
-              value={passwords.newPassword}
-              onChange={handlePasswordChange}
-              className="w-full px-3 py-2 rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Confirm New Password
-            </label>
-            <input
-              type="password"
-              name="confirmNewPassword"
-              value={passwords.confirmNewPassword}
-              onChange={handlePasswordChange}
-              className="w-full px-3 py-2 rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
-            />
-          </div>
-          <button
-            onClick={handleChangePassword}
-            className="w-full px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900 transition-colors font-medium"
-          >
-            Update Password
-          </button>
+        <div className="px-6 pb-6">
+          <form onSubmit={handlePasswordSubmit(handleChangePassword)}>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+              <input
+                type="password"
+                {...passwordRegister("oldPassword")}
+                className={`w-full px-3 py-2 rounded-md border ${
+                  passwordErrors.oldPassword
+                    ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:border-myRed focus:ring-myRed"
+                } outline-none transition-colors`}
+              />
+              {passwordErrors.oldPassword && (
+                <p className="text-red-500 text-sm mt-1">{passwordErrors.oldPassword.message}</p>
+              )}
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+              <input
+                type="password"
+                {...passwordRegister("newPassword")}
+                className={`w-full px-3 py-2 rounded-md border ${
+                  passwordErrors.newPassword
+                    ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:border-myRed focus:ring-myRed"
+                } outline-none transition-colors`}
+              />
+              {passwordErrors.newPassword && (
+                <p className="text-red-500 text-sm mt-1">{passwordErrors.newPassword.message}</p>
+              )}
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+              <input
+                type="password"
+                {...passwordRegister("confirmNewPassword")}
+                className={`w-full px-3 py-2 rounded-md border ${
+                  passwordErrors.confirmNewPassword
+                    ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:border-myRed focus:ring-myRed"
+                } outline-none transition-colors`}
+              />
+              {passwordErrors.confirmNewPassword && (
+                <p className="text-red-500 text-sm mt-1">{passwordErrors.confirmNewPassword.message}</p>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="w-full px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900 transition-colors font-medium"
+            >
+              Update Password
+            </button>
+          </form>
         </div>
       </div>
 

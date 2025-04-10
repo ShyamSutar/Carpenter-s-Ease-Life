@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import PlywoodSlugSlip from "./PlywoodSlugSlip";
 import { useDispatch } from "react-redux";
 import { toggle } from "../../store/hiddenSlice";
+import { z } from "zod";
 
 const PlywoodSlug = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,32 @@ const PlywoodSlug = () => {
     size: "",
     quantity: "",
     ratePerSheet: "",
+  });
+  const [errors, setErrors] = useState({});
+
+  // Define Zod schema
+  const schema = z.object({
+    plywoodType: z.string().min(1, "Plywood Type is required"),
+    brand: z.string().min(1, "Brand is required"),
+    thickness: z
+      .string()
+      .min(1, "Thickness is required")
+      .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+        message: "Thickness must be a positive number",
+      }),
+    size: z.string().min(1, "Size is required"),
+    quantity: z
+      .string()
+      .min(1, "Quantity is required")
+      .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+        message: "Quantity must be a positive number",
+      }),
+    ratePerSheet: z
+      .string()
+      .min(1, "Rate per Sheet is required")
+      .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+        message: "Rate per Sheet must be a positive number",
+      }),
   });
 
   useEffect(() => {
@@ -62,7 +89,12 @@ const PlywoodSlug = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
+      // Validate inputs
+      schema.parse(formData);
+      setErrors({}); // Clear errors if validation passes
+
       dispatch(toggle(true));
       const response = await axios.patch(
         `${import.meta.env.VITE_BASE_URL}/api/v1/site/addPlywoodDetails`,
@@ -71,7 +103,16 @@ const PlywoodSlug = () => {
       );
       console.log("Plywood added:", response.data);
     } catch (error) {
-      console.error("Error adding plywood:", error);
+      if (error instanceof z.ZodError) {
+        // Map Zod errors to state
+        const fieldErrors = {};
+        error.errors.forEach((err) => {
+          fieldErrors[err.path[0]] = err.message;
+        });
+        setErrors(fieldErrors);
+      } else {
+        console.error("Error adding plywood:", error);
+      }
     } finally {
       setRefresh((prev) => !prev);
       dispatch(toggle(false));
@@ -115,8 +156,10 @@ const PlywoodSlug = () => {
               value={formData.plywoodType}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED2A4F] focus:border-[#ED2A4F]"
-              required
             />
+            {errors.plywoodType && (
+              <p className="text-red-500 text-sm mt-1">{errors.plywoodType}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -130,8 +173,10 @@ const PlywoodSlug = () => {
               value={formData.brand}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED2A4F] focus:border-[#ED2A4F]"
-              required
             />
+            {errors.brand && (
+              <p className="text-red-500 text-sm mt-1">{errors.brand}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -145,8 +190,10 @@ const PlywoodSlug = () => {
               value={formData.thickness}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED2A4F] focus:border-[#ED2A4F]"
-              required
             />
+            {errors.thickness && (
+              <p className="text-red-500 text-sm mt-1">{errors.thickness}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -160,8 +207,10 @@ const PlywoodSlug = () => {
               value={formData.size}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED2A4F] focus:border-[#ED2A4F]"
-              required
             />
+            {errors.size && (
+              <p className="text-red-500 text-sm mt-1">{errors.size}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -175,8 +224,10 @@ const PlywoodSlug = () => {
               value={formData.quantity}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED2A4F] focus:border-[#ED2A4F]"
-              required
             />
+            {errors.quantity && (
+              <p className="text-red-500 text-sm mt-1">{errors.quantity}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -190,8 +241,12 @@ const PlywoodSlug = () => {
               value={formData.ratePerSheet}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ED2A4F] focus:border-[#ED2A4F]"
-              required
             />
+            {errors.ratePerSheet && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.ratePerSheet}
+              </p>
+            )}
           </div>
         </div>
 
