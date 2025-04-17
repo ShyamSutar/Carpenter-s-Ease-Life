@@ -4,9 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { toggle } from "../store/hiddenSlice";
 import { useDispatch } from "react-redux";
+import * as Yup from "yup";
 
 const Register = () => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,6 +18,22 @@ const Register = () => {
     role: "",
   });
 
+  const [errors, setErrors] = useState({});
+
+  const validationSchema = Yup.object({
+    username: Yup.string().required("Username is required"),
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    phone: Yup.string()
+      .matches(/^\d{10}$/, "Phone number must be 10 digits")
+      .required("Phone is required"),
+    password: Yup.string()
+      .min(6, "Password must be at least 6 characters")
+      .required("Password is required"),
+    role: Yup.string().required("Role is required"),
+  });
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setInputs({ ...inputs, [name]: value });
@@ -27,7 +43,21 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      dispatch(toggle(true))
+      await validationSchema.validate(inputs, { abortEarly: false });
+    } catch (error) {
+      const newError1 = {};
+      error.inner.forEach((err) => {
+        console.log(err.path);
+        newError1[err.path] = err.message;
+      });
+    }
+
+    try {
+
+      await validationSchema.validate(inputs, { abortEarly: false });
+      setErrors({}); // Clear any previous errors
+
+      dispatch(toggle(true));
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/users/register`,
         inputs,
@@ -39,12 +69,19 @@ const Register = () => {
       } else {
         toast.error(res.data.message);
       }
-      dispatch(toggle(false))
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "An unexpected error occurred";
-      toast.error(errorMessage);
-      dispatch(toggle(false))
+      dispatch(toggle(false));
+    } catch (err) {
+      if (err.name === "ValidationError") {
+        const newErrors = {};
+        err.inner.forEach((e) => {
+          newErrors[e.path] = e.message;
+        });
+        setErrors(newErrors);
+      } else {
+        const errorMessage =
+          err.response?.data?.message || "An unexpected error occurred";
+        toast.error(errorMessage);
+      }
     }
   };
 
@@ -69,9 +106,6 @@ const Register = () => {
           </Link>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              {/* <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Create an account
-              </h1> */}
               <form
                 onSubmit={handleSubmit}
                 className="space-y-4 md:space-y-6"
@@ -94,6 +128,12 @@ const Register = () => {
                     value={inputs.username}
                     onChange={handleOnChange}
                   />
+
+                  {errors.username && (
+                    <div className="mt-2 flex items-center gap-2 bg-red-100 text-red-600 text-sm rounded-md px-3 py-2 border border-red-300 dark:bg-red-400/10 dark:text-red-400">
+                      <span>{errors.username}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -113,6 +153,11 @@ const Register = () => {
                     value={inputs.email}
                     onChange={handleOnChange}
                   />
+                  {errors.email && (
+                    <div className="mt-2 flex items-center gap-2 bg-red-100 text-red-600 text-sm rounded-md px-3 py-2 border border-red-300 dark:bg-red-400/10 dark:text-red-400">
+                      <span>{errors.email}</span>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label
@@ -131,6 +176,11 @@ const Register = () => {
                     value={inputs.phone}
                     onChange={handleOnChange}
                   />
+                  {errors.phone && (
+                    <div className="mt-2 flex items-center gap-2 bg-red-100 text-red-600 text-sm rounded-md px-3 py-2 border border-red-300 dark:bg-red-400/10 dark:text-red-400">
+                      <span>{errors.phone}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -150,6 +200,11 @@ const Register = () => {
                     value={inputs.password}
                     onChange={handleOnChange}
                   />
+                  {errors.password && (
+                    <div className="mt-2 flex items-center gap-2 bg-red-100 text-red-600 text-sm rounded-md px-3 py-2 border border-red-300 dark:bg-red-400/10 dark:text-red-400">
+                      <span>{errors.password}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -174,6 +229,11 @@ const Register = () => {
                     <option value="hardware">Hardware Material</option>
                     <option value="client">Client</option>
                   </select>
+                  {errors.role && (
+                    <div className="mt-2 flex items-center gap-2 bg-red-100 text-red-600 text-sm rounded-md px-3 py-2 border border-red-300 dark:bg-red-400/10 dark:text-red-400">
+                      <span>{errors.role}</span>
+                    </div>
+                  )}
                 </div>
 
                 <button

@@ -1,4 +1,5 @@
-const MistryModal = ({ slot, handleOnChange, inputs, handleApply, handleClose }) => {
+const MistryModal = ({ slot, handleOnChange, inputs, handleApply, handleClose, errors }) => {
+
   return (
     <div className="bg-slate-200 rounded-xl shadow-lg mb-8 w-full max-w-3xl p-4 sm:p-6 md:p-8 flex flex-col gap-6">
       <h3 className="text-lg sm:text-xl font-bold text-right text-gray-800">Date: {slot}</h3>
@@ -35,6 +36,11 @@ const MistryModal = ({ slot, handleOnChange, inputs, handleApply, handleClose })
             value={inputs.start}
             required
           />
+          {errors.start && (
+                    <div className="mt-2 flex items-center gap-2 bg-red-100 text-red-600 text-sm rounded-md px-3 py-2 border border-red-300 dark:bg-red-400/10 dark:text-red-400">
+                      <span>{errors.start}</span>
+                    </div>
+                  )}
         </div>
       </div>
 
@@ -70,6 +76,11 @@ const MistryModal = ({ slot, handleOnChange, inputs, handleApply, handleClose })
             value={inputs.end}
             required
           />
+          {errors.end && (
+                    <div className="mt-2 flex items-center gap-2 bg-red-100 text-red-600 text-sm rounded-md px-3 py-2 border border-red-300 dark:bg-red-400/10 dark:text-red-400">
+                      <span>{errors.end}</span>
+                    </div>
+                  )}
         </div>
       </div>
 
@@ -93,6 +104,11 @@ const MistryModal = ({ slot, handleOnChange, inputs, handleApply, handleClose })
           <option value="A">A</option>
           <option value="O">O</option>
         </select>
+        {errors.status && (
+                    <div className="mt-2 flex items-center gap-2 bg-red-100 text-red-600 text-sm rounded-md px-3 py-2 border border-red-300 dark:bg-red-400/10 dark:text-red-400">
+                      <span>{errors.status}</span>
+                    </div>
+                  )}
       </div>
 
       <div>
@@ -109,6 +125,11 @@ const MistryModal = ({ slot, handleOnChange, inputs, handleApply, handleClose })
           onChange={handleOnChange}
           value={inputs.advance}
         />
+        {errors.advance && (
+                    <div className="mt-2 flex items-center gap-2 bg-red-100 text-red-600 text-sm rounded-md px-3 py-2 border border-red-300 dark:bg-red-400/10 dark:text-red-400">
+                      <span>{errors.advance}</span>
+                    </div>
+                  )}
       </div>
 
       <div className="flex gap-6 flex-wrap justify-center sm:justify-start">

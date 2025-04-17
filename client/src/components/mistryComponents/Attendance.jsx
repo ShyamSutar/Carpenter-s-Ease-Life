@@ -7,6 +7,7 @@ import MistryModal from "./MistryModal";
 import CarpenterSlip from "./CarpenterSlip";
 import { useDispatch, useSelector } from "react-redux";
 import { toggle } from "../../store/hiddenSlice";
+import * as Yup from "yup";
 
 const Attendance = () => {
   const { id } = useParams();
@@ -25,12 +26,30 @@ const Attendance = () => {
   });
   const [isUpdate, setIsUpdate] = useState(false);
 
+  const [errors, setErrors] = useState({});
+
+  const validationSchema = Yup.object({
+    status: Yup.string().required("Status is required"),
+    start: Yup.string().when("status", {
+      is: (val) => val && val !== "A",
+      then: () => Yup.string().required("Start time is required"),
+      otherwise: () => Yup.string().nullable(),
+    }),
+    end: Yup.string().when("status", {
+      is: (val) => val && val !== "A",
+      then: () => Yup.string().required("End time is required"),
+      otherwise: () => Yup.string().nullable(),
+    }),
+  });
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         dispatch(toggle(true));
         const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/api/v1/attendance/findCarpenterById/${id}`,
+          `${
+            import.meta.env.VITE_BASE_URL
+          }/api/v1/attendance/findCarpenterById/${id}`,
           { withCredentials: true }
         );
         setData(response.data.carpenter[0]);
@@ -89,6 +108,7 @@ const Attendance = () => {
 
   const handleClose = () => {
     setShow(false);
+    setErrors({});
     setInputs({ start: "", end: "", status: "", advance: "" });
     setIsUpdate(false);
   };
@@ -96,6 +116,8 @@ const Attendance = () => {
   const handleApply = async (e) => {
     e.preventDefault();
     try {
+      await validationSchema.validate(inputs, { abortEarly: false });
+      setErrors({});
       dispatch(toggle(true));
       const requestData = {
         carpenter: id,
@@ -107,7 +129,9 @@ const Attendance = () => {
       };
       if (isUpdate) {
         await axios.put(
-          `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/updateEvent/${inputs.id}`,
+          `${import.meta.env.VITE_BASE_URL}/api/v1/calendar/updateEvent/${
+            inputs.id
+          }`,
           requestData,
           { withCredentials: true }
         );
@@ -121,8 +145,18 @@ const Attendance = () => {
       setRefresh((prev) => !prev);
       setShow(false);
       setInputs({ start: "", end: "", status: "", advance: "" });
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      if (err.name === "ValidationError") {
+        const newErrors = {};
+        err.inner.forEach((e) => {
+          newErrors[e.path] = e.message;
+        });
+        setErrors(newErrors);
+      } else {
+        const errorMessage =
+          err.response?.data?.message || "An unexpected error occurred";
+        console.error(errorMessage);
+      }
     } finally {
       dispatch(toggle(false));
     }
@@ -130,7 +164,6 @@ const Attendance = () => {
 
   return (
     <div className="mt-24 p-6 max-w-5xl mx-auto space-y-6 bg-white shadow-md rounded-lg">
-
       {/* Header Section */}
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
         <h1 className="text-2xl sm:text-3xl font-bold text-red-600 mb-4">
@@ -155,15 +188,17 @@ const Attendance = () => {
       <div className="overflow-x-auto bg-gray-50 p-4 rounded-lg shadow-md">
         <AttendanceCalendar
           events={events}
-          components={{ event: (props) => (
-            <div
-              onClick={() => handleUpdate(props)}
-              className="p-2 cursor-pointer rounded-md text-center shadow-md text-xs sm:text-sm"
-            >
-              <p className="font-semibold">{props.event.title}</p>
-              <p className="text-[10px] sm:text-sm">{props.event.advance}</p>
-            </div>
-          )}}
+          components={{
+            event: (props) => (
+              <div
+                onClick={() => handleUpdate(props)}
+                className="p-2 cursor-pointer rounded-md text-center shadow-md text-xs sm:text-sm"
+              >
+                <p className="font-semibold">{props.event.title}</p>
+                <p className="text-[10px] sm:text-sm">{props.event.advance}</p>
+              </div>
+            ),
+          }}
           handleSelectSlot={(slot) => {
             const slotDate = new Date(slot.slots).toLocaleDateString("en-GB");
             if (!events.some((event) => slotDate === event.date)) {
@@ -178,9 +213,12 @@ const Attendance = () => {
           <MistryModal
             slot={slot}
             inputs={inputs}
-            handleOnChange={(e) => setInputs({ ...inputs, [e.target.name]: e.target.value })}
+            handleOnChange={(e) =>
+              setInputs({ ...inputs, [e.target.name]: e.target.value })
+            }
             handleApply={handleApply}
             handleClose={handleClose}
+            errors={errors}
           />
         </div>
       )}
@@ -191,10 +229,10 @@ const Attendance = () => {
 
 export default Attendance;
 
-  // reusable componnent
-  const DetailItem = ({ label, value }) => (
-    <div className="space-y-1">
-      <span className="text-sm font-medium text-gray-500">{label}</span>
-      <p className="text-gray-900 font-medium">{value}</p>
-    </div>
-  );
+// reusable componnent
+const DetailItem = ({ label, value }) => (
+  <div className="space-y-1">
+    <span className="text-sm font-medium text-gray-500">{label}</span>
+    <p className="text-gray-900 font-medium">{value}</p>
+  </div>
+);

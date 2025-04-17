@@ -29,7 +29,8 @@
     "react-router-dom": "^6.29.0",
     "react-time-picker": "^7.0.0",
     "react-toastify": "^10.0.6",
-    "react-tooltip": "^5.28.0"
+    "react-tooltip": "^5.28.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.18",

@@ -1,57 +1,83 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios"
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { authActions } from "../store/authentication";
 import { toast } from "react-toastify";
 import { toggle } from "../store/hiddenSlice";
+import * as Yup from "yup";
 
 const Login = () => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [inputs, setInputs] = useState({
-    "email": '',
-    "password": ""
+    email: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    password: Yup.string().required("Password is required"),
   });
 
   const handleChange = (e) => {
-    const {name, value} = e.target;
-    setInputs({...inputs, [name]: value})
-  }
+    const { name, value } = e.target;
+    setInputs({ ...inputs, [name]: value });
+  };
 
-  const getUser = async() => {
-    const user = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/users/getUser`, {withCredentials: true});
-    dispatch(authActions.login({userData: user.data}))
-  }
+  const getUser = async () => {
+    const user = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/api/v1/users/getUser`,
+      { withCredentials: true }
+    );
+    dispatch(authActions.login({ userData: user.data }));
+  };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      dispatch(toggle(true))
-      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/login`, inputs, {withCredentials: true});
-      
-      if(res.status === 200){
-        getUser()
-        navigate("/")
-        toast.success(res.data.message)
-      }else{
-        toast.error(res.data.message)
+      await validationSchema.validate(inputs, { abortEarly: false });
+      setErrors({});
+      dispatch(toggle(true));
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/users/login`,
+        inputs,
+        { withCredentials: true }
+      );
+
+      if (res.status === 200) {
+        getUser();
+        navigate("/");
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
       }
 
-      dispatch(toggle(false))
-    } catch (error) {
-      const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
-      toast.error(errorMessage)
+    } catch (err) {
+      if (err.name === "ValidationError") {
+        const newErrors = {};
+        err.inner.forEach((e) => {
+          newErrors[e.path] = e.message;
+        });
+        setErrors(newErrors);
+      } else {
+        const errorMessage =
+          err.response?.data?.message || "An unexpected error occurred";
+        toast.error(errorMessage);
+      }
+    }finally{
       dispatch(toggle(false))
     }
-  }
+  };
   return (
     <div className="relative">
-    {/* Animated Background */}
-    <div className="background">
+      {/* Animated Background */}
+      <div className="background">
         <ul className="background">
           {[...Array(25)].map((_, index) => (
             <li key={index}></li>
@@ -61,22 +87,19 @@ const Login = () => {
       <section className=" mt-12">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:min-h-screen lg:py-0">
           <Link
-            to='/'
+            to="/"
             className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
           >
-            <img
-              className="w-12 h-12 mr-2"
-              src="/images/logo.svg"
-              alt="logo"
-            />
+            <img className="w-12 h-12 mr-2" src="/images/logo.svg" alt="logo" />
             Login
           </Link>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              {/* <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Create an account
-              </h1> */}
-              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6" action="#">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-4 md:space-y-6"
+                action="#"
+              >
                 <div>
                   <label
                     htmlFor="email"
@@ -94,6 +117,11 @@ const Login = () => {
                     onChange={handleChange}
                     value={inputs.email}
                   />
+                  {errors.email && (
+                    <div className="mt-2 flex items-center gap-2 bg-red-100 text-red-600 text-sm rounded-md px-3 py-2 border border-red-300 dark:bg-red-400/10 dark:text-red-400">
+                      <span>{errors.email}</span>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label
@@ -112,6 +140,11 @@ const Login = () => {
                     onChange={handleChange}
                     value={inputs.password}
                   />
+                  {errors.password && (
+                    <div className="mt-2 flex items-center gap-2 bg-red-100 text-red-600 text-sm rounded-md px-3 py-2 border border-red-300 dark:bg-red-400/10 dark:text-red-400">
+                      <span>{errors.password}</span>
+                    </div>
+                  )}
                 </div>
 
                 <button
