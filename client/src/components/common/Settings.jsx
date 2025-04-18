@@ -3,15 +3,14 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { toggle } from "../../store/hiddenSlice";
+import * as Yup from "yup";
 
 const Settings = () => {
-
-
   const [user, setUser] = useState({
     name: "",
     email: "",
     phone: "",
-    role: ""
+    role: "",
   });
 
   const [passwords, setPasswords] = useState({
@@ -19,6 +18,8 @@ const Settings = () => {
     newPassword: "",
     confirmNewPassword: "",
   });
+
+  const [errors, setErrors] = useState({});
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -32,15 +33,20 @@ const Settings = () => {
           { withCredentials: true }
         );
 
-        const {name, email, phone, role} = res.data;
-        
-        setUser({ name: name || "", email: email || "", phone: phone || "", role: role || "" });
-        
+        const { name, email, phone, role } = res.data;
+
+        setUser({
+          name: name || "",
+          email: email || "",
+          phone: phone || "",
+          role: role || "",
+        });
       } catch (error) {
-        const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
+        const errorMessage =
+          error.response?.data?.message || "An unexpected error occurred";
         toast.error(errorMessage);
-      } finally{
-        dispatch(toggle(false))
+      } finally {
+        dispatch(toggle(false));
       }
     })();
   }, []);
@@ -56,89 +62,105 @@ const Settings = () => {
     setPasswords({ ...passwords, [e.target.name]: e.target.value });
   };
 
-  const handleSave = async() => {
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
+    phone: Yup.string()
+      .matches(/^\d{10}$/, "Phone number must be 10 digits")
+      .required("Phone is required"),
+  });
 
-    dispatch(toggle(true))
-          try {
-            const res = await axios.patch(
-              `${import.meta.env.VITE_BASE_URL}/api/v1/users/updateUser`,
-              {...user},
-              { withCredentials: true }
-            );
-      
-            if(res.status === 200){
-              toast.success(res.data.message);
-            }else{
-              toast.error(res.data.message)
-            }
+  const handleSave = async () => {
+    dispatch(toggle(true));
+    try {
+      await validationSchema.validate(user, { abortEarly: false });
+      const res = await axios.patch(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/users/updateUser`,
+        { ...user },
+        { withCredentials: true }
+      );
 
-          } catch (error) {
-            const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
-            toast.error(errorMessage);
-          } finally{
-            dispatch(toggle(false))
-          }
-
+      if (res.status === 200) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (err) {
+      if (err.name === "ValidationError") {
+        const newErrors = {};
+        err.inner.forEach((e) => {
+          newErrors[e.path] = e.message;
+        });
+        setErrors(newErrors);
+      } else {
+        const errorMessage =
+          err.response?.data?.message || "An unexpected error occurred";
+        toast.error(errorMessage);
+      }
+    } finally {
+      dispatch(toggle(false));
+    }
   };
 
-  const handleChangePassword = async() => {
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
     if (passwords.newPassword !== passwords.confirmNewPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-    
-    dispatch(toggle(true))
-          try {
-            const res = await axios.patch(
-              `${import.meta.env.VITE_BASE_URL}/api/v1/users/changePassword`,
-              {oldPassword: passwords.oldPassword, newPassword: passwords.newPassword},
-              { withCredentials: true }
-            );
-      
-            if(res.status === 200){
-              toast.success(res.data.message);
-            }else{
-              toast.error(res.data.message)
-            }
 
-          } catch (error) {
-            const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
-            toast.error(errorMessage);
-          } finally{
-            setPasswords({
-              oldPassword: "",
-              newPassword: "",
-              confirmNewPassword: "",
-            })
-            dispatch(toggle(false));
-          }
+    dispatch(toggle(true));
+    try {
+      const res = await axios.patch(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/users/changePassword`,
+        {
+          oldPassword: passwords.oldPassword,
+          newPassword: passwords.newPassword,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.status === 200) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred";
+      toast.error(errorMessage);
+    } finally {
+      setPasswords({
+        oldPassword: "",
+        newPassword: "",
+        confirmNewPassword: "",
+      });
+      dispatch(toggle(false));
+    }
   };
 
-  const handleDelete = async() => {
+  const handleDelete = async () => {
+    dispatch(toggle(true));
+    try {
+      const res = await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/api/v1/users/deleteUser`,
+        { withCredentials: true }
+      );
 
-    dispatch(toggle(true))
-          try {
-            const res = await axios.delete(
-              `${import.meta.env.VITE_BASE_URL}/api/v1/users/deleteUser`,
-              { withCredentials: true }
-            );
-      
-            if(res.status === 200){
-              toast.success(res.data.message);
-            }else{
-              toast.error(res.data.message)
-            }
-
-          } catch (error) {
-            const errorMessage = error.response?.data?.message || 'An unexpected error occurred';
-            toast.error(errorMessage);
-          } finally{
-            dispatch(toggle(false));
-            setShowDeleteModal(false);
-            window.location.href = "/"
-          }
-
-  }
+      if (res.status === 200) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred";
+      toast.error(errorMessage);
+    } finally {
+      dispatch(toggle(false));
+      setShowDeleteModal(false);
+      window.location.href = "/";
+    }
+  };
 
   const DeleteConfirmationModal = () => {
     return (
@@ -200,6 +222,11 @@ const Settings = () => {
                     : "border-gray-300 focus:border-myRed focus:ring-1 focus:ring-myRed"
                 } outline-none transition-colors`}
               />
+              {errors[key] && (
+                <div className="mt-2 flex items-center gap-2 bg-red-100 text-red-600 text-sm rounded-md px-3 py-2 border border-red-300 dark:bg-red-400/10 dark:text-red-400">
+                  <span>{errors[key]}</span>
+                </div>
+              )}
             </div>
           ))}
           <button
@@ -221,7 +248,7 @@ const Settings = () => {
             Update your password to keep your account secure
           </p>
         </div>
-        <div className="px-6 pb-6 space-y-4">
+        <form onSubmit={handleChangePassword} className="px-6 pb-6 space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Current Password
@@ -232,6 +259,7 @@ const Settings = () => {
               value={passwords.oldPassword}
               onChange={handlePasswordChange}
               className="w-full px-3 py-2 rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              required
             />
           </div>
           <div>
@@ -244,6 +272,7 @@ const Settings = () => {
               value={passwords.newPassword}
               onChange={handlePasswordChange}
               className="w-full px-3 py-2 rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              required
             />
           </div>
           <div>
@@ -256,15 +285,15 @@ const Settings = () => {
               value={passwords.confirmNewPassword}
               onChange={handlePasswordChange}
               className="w-full px-3 py-2 rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              required
             />
           </div>
           <button
-            onClick={handleChangePassword}
             className="w-full px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900 transition-colors font-medium"
           >
             Update Password
           </button>
-        </div>
+        </form>
       </div>
 
       {/* Danger Zone */}

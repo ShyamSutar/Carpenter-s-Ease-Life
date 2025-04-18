@@ -19,7 +19,7 @@ const CarpenterSearch = () => {
       dispatch(toggle(true))
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/v1/users/mistrySearch`,
-        { username: search },
+        { username: search.trim() },
         { withCredentials: true }
       );
 
