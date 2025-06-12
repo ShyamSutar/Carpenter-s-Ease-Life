@@ -30,8 +30,7 @@ const About = () => {
                   Team Lead & Full Stack Developer
                 </span>
                 <p className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">
-                  Bonnie drives the technical strategy of the flowbite platform
-                  and brand.
+                  A passionate and skilled Web Developer with 2 years of experience in building full-stack web applications. Creator of Carpenter’s Ease Life, a role-based project management platform for the carpentry industry. Proficient in React, Node.js, Express, MongoDB, and focused on delivering scalable, user-friendly solutions.
                 </p>
                 <ul className="flex space-x-4 sm:mt-0">
                   <li>
@@ -70,7 +69,8 @@ const About = () => {
                   </li>
                   <li>
                     <a
-                      href="#"
+                      href="https:www.github.com/shyamsutar"
+                      target="_blank"
                       className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
                     >
                       <svg

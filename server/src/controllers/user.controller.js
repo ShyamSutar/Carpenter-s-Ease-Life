@@ -83,8 +83,9 @@ const logout = asyncHandler(async (req, res) => {
 
 //mistry search by carpenter
 const mistrySearch = asyncHandler(async (req, res) => {
+  const keyword = req.body.username || "";
   const mistry = await User.find({
-    username: req.body.username,
+    username: { $regex: keyword, $options: "i" },
     role: "mistry",
   }).select("-password");
   res.status(200).json(mistry);

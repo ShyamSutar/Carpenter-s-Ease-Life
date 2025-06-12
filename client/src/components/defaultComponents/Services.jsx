@@ -27,14 +27,14 @@ const services = [
       "Clients can track the progress of their projects with updates on milestones, completed tasks, and remaining work.",
   },
   {
-    title: "Carpenter Selection Feature",
+    title: "Site Management",
     description:
-      "Clients can browse a curated list of available carpenters, filter by skills, experience, and ratings, and select the best fit for their project.",
+      "The Site Management module allows mistries to create and manage sites, assign dealers, track materials, and monitor work progress efficiently.",
   },
   {
-    title: "Real-Time Chat Functionality",
+    title: "User Access Control",
     description:
-      "Integrated chat feature allows clients and carpenters to communicate in real-time, facilitating quick discussions and clarifications.",
+      "Manage role-based access for mistries, dealers, carpenters, and clients securely.",
   },
   {
     title: "User-Friendly Experience",
