@@ -125,8 +125,7 @@ const About = () => {
                   Full Stack Developer
                 </span>
                 <p className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">
-                  Jese drives the technical strategy of the flowbite platform
-                  and brand.
+                  A dedicated and talented Full Stack Web Developer, skilled in technologies like React, Node.js, Express, and MongoDB. With hands-on experience in building real-world projects, Mayur focuses on writing clean, efficient code and developing user-centric solutions. Passionate about learning and growing in the field of web development.
                 </p>
                 <ul className="flex space-x-4 sm:mt-0">
                   <li>
@@ -220,8 +219,7 @@ const About = () => {
                   UIUX / Testing
                 </span>
                 <p className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">
-                  Michael drives the technical strategy of the flowbite platform
-                  and brand.
+                  A creative UI/UX Designer and detail-oriented Software Tester, Mahesh specializes in designing intuitive user interfaces and ensuring application quality through thorough testing. With a strong eye for design and usability, he plays a key role in enhancing user experience and delivering bug-free, polished products.
                 </p>
                 <ul className="flex space-x-4 sm:mt-0">
                   <li>
@@ -315,8 +313,7 @@ const About = () => {
                   UIUX / R&D
                 </span>
                 <p className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">
-                  Lana drives the technical strategy of the flowbite platform
-                  and brand.
+                  An innovative UI/UX Designer and curious R&D Enthusiast, Pranay focuses on creating user-friendly interfaces and exploring new ideas to improve product design and functionality. With a strong understanding of user behavior and emerging tech, he bridges creativity and research to build meaningful digital experiences.
                 </p>
                 <ul className="flex space-x-4 sm:mt-0">
                   <li>
